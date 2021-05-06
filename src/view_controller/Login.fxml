@@ -52,14 +52,14 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </HBox>
-      <VBox alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="280.0" spacing="10.0">
+      <VBox alignment="CENTER" prefHeight="73.0" prefWidth="280.0" spacing="10.0">
          <children>
-            <Label fx:id="loginZone" text="loginZone">
+            <Label fx:id="loginZone">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="loginErrorMessage" text="loginError" textFill="#e80c0c">
+            <Label fx:id="loginErrorMessage" textFill="#e80c0c">
                <font>
                   <Font name="System Italic" size="14.0" />
                </font>

@@ -1,0 +1,94 @@
+* {
+    primary-bg: #FFFFFF;
+    light-grey: #F1F1F1;
+    dark-blue: #1C4E80;
+    light-blue: #0091D5;
+    orange-accent: #EA6A47;
+    steel-accent: #7E909A;
+    aqua-accent: #A5D8DD;
+}
+.root {
+    -fx-background-color: primary-bg;
+    -fx-text-fill: dark-blue;
+}
+/*
+    TableView styling options.
+*/
+.table-view {
+    -fx-background-color: transparent;
+}
+
+/* Used for the top corner above scroll bar. */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+/* Used for the bottom right corner between scroll bars. */
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+/*
+    Header information for the table
+*/
+
+/* Global header background -> sits on bottom layer */
+.table-view .column-header-background {
+    -fx-background-color: dark-blue;
+    -fx-background-radius: 7px 7px 0px 0px;
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0;
+}
+
+/* Individual column headers -> sits on top of the global header layer */
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+/* To style the labels in the header */
+.table-view .column-header .label {
+    -fx-text-fill: light-grey;
+}
+
+/* Style the rows */
+.table-view .table-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 2 0 2 10px;
+}
+
+/*.table-row-cell:hover {*/
+/*    -fx-background-color: */
+/*}*/
+
+.table-view:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: light-blue;
+    -fx-text-fill: primary-bg;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: primary-bg;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-row-cell:even {
+    -fx-background-color: light-grey;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+/* The Buttons */
+.button {
+    -fx-background-color: dark-blue;
+    -fx-text-fill: light-grey;
+}
+
+.button:hover {
+    -fx-background-color: light-blue;
+    -fx-text-fill: primary-bg;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent dark-blue transparent;
+}

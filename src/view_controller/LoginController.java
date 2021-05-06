@@ -45,8 +45,8 @@ public class LoginController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     this.resources = resources;
     detectZoneID();
-  }
 
+  }
 
   /**
    * Sends request to server to validate provided login credentials for user
@@ -61,7 +61,7 @@ public class LoginController implements Initializable {
     String user = userNameField.getText();
     String password = passwordField.getText();
     List<String> errorMessages = new ArrayList<>();
-
+    // TODO Implement UserDAO and UserDAOImpl
     if(user.isEmpty() || password.isEmpty()) {
       errorMessages.add("User Name and Password must be filled in.");
       ErrorHandler.warningPopup("Invalid Credentials",errorMessages);

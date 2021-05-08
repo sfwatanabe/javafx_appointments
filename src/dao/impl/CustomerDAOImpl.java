@@ -36,7 +36,7 @@ public class CustomerDAOImpl implements CustomerDAO {
   //===========================================================================
 
   @Override
-  public Customer getCustomer(int id) {
+  public Customer getById(int id) {
     Customer customer = null;
     String queryById = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID"
                       + " FROM customers WHERE Customer_ID = ?";
@@ -56,7 +56,7 @@ public class CustomerDAOImpl implements CustomerDAO {
   }
 
   @Override
-  public ObservableList<Customer> getAllCustomers() {
+  public ObservableList<Customer> getAll() {
     ObservableList<Customer> customers = FXCollections.observableArrayList();
     Customer customer = null;
 
@@ -73,6 +73,24 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     return customers;
+  }
+
+  @Override
+  public int addCustomer(Customer customer, String user) {
+    // TODO implement addCustomer and return customer id of record
+    return 0;
+  }
+
+  @Override
+  public int deleteCustomer(Customer customer, String user) {
+    // TODO Must implement delete appointment by customer first
+    return 0;
+  }
+
+  @Override
+  public int updateCustomer(Customer customer, String user) {
+    // TODO implement updateCustomer and return customer id of record
+    return 0;
   }
 
   /**
@@ -94,23 +112,5 @@ public class CustomerDAOImpl implements CustomerDAO {
         phoneNumber, divisionId);
 
     return customer;
-  }
-
-  @Override
-  public int addCustomer(Customer customer, String user) {
-    // TODO implement addCustomer and return customer id of record
-    return 0;
-  }
-
-  @Override
-  public int deleteCustomer(Customer customer, String user) {
-    // TODO Must implement delete appointment by customer first
-    return 0;
-  }
-
-  @Override
-  public int updateCustomer(Customer customer, String user) {
-    // TODO implement updateCustomer and return customer id of record
-    return 0;
   }
 }

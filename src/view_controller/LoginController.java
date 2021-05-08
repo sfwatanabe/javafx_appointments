@@ -80,10 +80,10 @@ public class LoginController implements Initializable {
 
 
     CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    Customer customer = customerDAO.getCustomer(1);
+    Customer customer = customerDAO.getById(1);
     System.out.println(customer);
 
-    ObservableList<Customer> customers = customerDAO.getAllCustomers();
+    ObservableList<Customer> customers = customerDAO.getAll();
     customers.forEach(c -> System.out.println(c));
 
   }

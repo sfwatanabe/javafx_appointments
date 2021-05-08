@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.SQLException;
 import model.User;
 
 /**
@@ -16,5 +15,5 @@ public interface UserDAO {
    * @param userName User name to use in query.
    * @return User object representing matching record.
    */
-  public User getUserByName(String userName) throws SQLException;
+  public User getUserByName(String userName);
 }

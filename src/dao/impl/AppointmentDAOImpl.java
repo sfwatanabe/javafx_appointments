@@ -1,26 +1,73 @@
 package dao.impl;
 
 import dao.AppointmentDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
 import model.User;
+import utils.DBConnector;
 
 /**
  * @author Sakae Watanabe
  */
 public class AppointmentDAOImpl implements AppointmentDAO {
 
+  //===========================================================================
+  // Data Members
+  //===========================================================================
+
+  /** Connection instance for accessing application database. */
+  private Connection conn;
+
+  /**
+   * Constructor for AppointmentDAOImpl obtains connection reference from the
+   * DBConnector class.
+   */
+  public AppointmentDAOImpl() { this.conn = DBConnector.getConnection(); }
+  
+  //===========================================================================
+  // Methods
+  //===========================================================================
+
   @Override
   public Appointment getById(int appointmentId) {
-    return null;
+    Appointment appointment = null;
+    String queryById = "SELECT * FROM appointments WHERE Appointment_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(queryById)) {
+      ps.setInt(1, appointmentId);
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          appointment = parseAppointment(rs);
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return appointment;
   }
 
   @Override
   public ObservableList<Appointment> getAll() {
-    return null;
+    ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    String queryAll = "SELECT * FROM appointments";
+
+    try (PreparedStatement ps = conn.prepareStatement(queryAll);
+        ResultSet rs = ps.executeQuery()) {
+      while (rs.next()) {
+        appointments.add(parseAppointment(rs));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return appointments;
   }
 
   @Override
@@ -53,6 +100,13 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return 0;
   }
 
+
+  /**
+   * Helper method for parsing result set data into Appointment objects.
+   *
+   * @param rs Result set form appointment DAO query.
+   * @return Appointment object with parsed information.
+   */
   private Appointment parseAppointment(ResultSet rs) throws SQLException {
     Appointment appointment = null;
 
@@ -66,6 +120,9 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     String location = rs.getString("Location");
     LocalDateTime startTime = rs.getTimestamp("Start").toLocalDateTime();
     LocalDateTime endTime = rs.getTimestamp("End").toLocalDateTime();
+
+    appointment = new Appointment(id, customerId, contactId, userId, title, description, type,
+                                  location, startTime, endTime);
 
     return appointment;
   }

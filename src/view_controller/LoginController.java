@@ -1,5 +1,6 @@
 package view_controller;
 
+import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import dao.impl.UserDAOImpl;
 import java.net.URL;
@@ -17,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import model.Appointment;
 import model.Customer;
 import model.User;
 import utils.ErrorHandler;
@@ -74,17 +76,20 @@ public class LoginController implements Initializable {
     this.resources = resources;
     detectZoneID();
 
-    // TODO Implement and test addCustomer
-    // TODO Implement and test updateCustomer
-    // TODO Implement and test deleteCustomer
-
-
+    // TODO remember to delete these manual tests.
     CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    Customer customer = customerDAO.getById(1);
-    System.out.println(customer);
+//    Customer customer = customerDAO.getById(1);
+//    System.out.println(customer);
 
     ObservableList<Customer> customers = customerDAO.getAll();
     customers.forEach(c -> System.out.println(c));
+
+    AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+//    Appointment appt = apptDAO.getById(1);
+//    System.out.println(appt);
+    ObservableList<Appointment> appointments = apptDAO.getAll();
+    appointments.forEach(System.out::println);
+    passwordField.setOnAction(this::verifyLogin);
 
   }
 
@@ -135,6 +140,7 @@ public class LoginController implements Initializable {
     // TODO add Appointment Class
     // TODO add Appointment DAO and DAOImpl
     System.out.println("We loaded the main view.");
+    System.out.println(user);
   }
 
   /**

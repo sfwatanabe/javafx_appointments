@@ -1,5 +1,8 @@
 package model;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 /**
  * Users accounts are stored on the server for accessing the database. New user
  * accounts may only be added by server admin.
@@ -12,6 +15,9 @@ public class User extends Person {
   //===========================================================================
   /** String representing the user password. */
   private String password;
+
+  /** LocalDateTime representing start of user session. */
+  private LocalDateTime start;
 
   //===========================================================================
   // Constructor
@@ -27,6 +33,7 @@ public class User extends Person {
   public User(int id, String name, String password) {
     super(id, name);
     this.password = password;
+    this.start = LocalDateTime.now();
   }
 
   //===========================================================================
@@ -39,6 +46,11 @@ public class User extends Person {
     return password;
   }
 
+  /**
+   * @return LocalDateTime representing start of user session.
+   */
+  public LocalDateTime getStart() { return start; }
+
   //===========================================================================
   // Default Overrides
   //===========================================================================
@@ -49,7 +61,9 @@ public class User extends Person {
   @Override
   public String toString() {
     return "User{" +
-        "password='" + password + '\'' +
+        "name='" + super.getName() + '\'' +
+        ", password='" + password + '\'' +
+        ", start='" + start.truncatedTo(ChronoUnit.SECONDS).toString() + '\'' +
         '}';
   }
 }

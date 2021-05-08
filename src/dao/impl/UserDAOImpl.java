@@ -40,7 +40,6 @@ public class UserDAOImpl implements UserDAO {
    *
    * @param userName String value of user name to be queried.
    * @return User object reference or null if not found.
-   * @throws SQLException if unable to prepare statement.
    */
   @Override
   public User getUserByName(String userName) {

@@ -26,9 +26,13 @@ public class Appointment {
    */
   private ObjectProperty<Integer> customerId = new SimpleObjectProperty();
   /**
-   * String property representing the contact name for appointment.
+   * Integer property representing the contact id for appointment.
    */
-  private StringProperty contactName = new SimpleStringProperty();
+  private ObjectProperty<Integer> contactId = new SimpleObjectProperty();
+  /**
+   * Integer property representing the contact id for appointment.
+   */
+  private ObjectProperty<Integer> userId = new SimpleObjectProperty();
   /**
    * String property representing the appointment's title.
    */
@@ -63,7 +67,7 @@ public class Appointment {
    *
    * @param id          Integer representing appointment's id number.
    * @param customerId  Integer representing associated customer's id number.
-   * @param contactName String representing associated contacts name.
+   * @param contactId   Integer representing associated contacts id number.
    * @param title       String representing title for the appointment.
    * @param description String representing description of appointment.
    * @param type        String representing the type of appointment.
@@ -72,11 +76,12 @@ public class Appointment {
    * @param endTime     LocalDateTime representing appointment end time.
    */
 
-  public Appointment(int id, int customerId, String contactName, String title, String description,
-      String type, String location, LocalDateTime startTime, LocalDateTime endTime) {
+  public Appointment(int id, int customerId, int contactId, int userId, String title, String description,
+                      String type, String location, LocalDateTime startTime, LocalDateTime endTime) {
     this.id.set(id);
     this.customerId.set(customerId);
-    this.contactName.set(contactName);
+    this.contactId.set(contactId);
+    this.userId.set(userId);
     this.title.set(title);
     this.description.set(description);
     this.type.set(type);
@@ -136,26 +141,49 @@ public class Appointment {
   }
 
   /**
-   * @return String representing associated contact name for appointment.
+   * @return Associated contact id number as Integer.
    */
-  public String getContactName() {
-    return contactName.get();
+  public Integer getContactId() {
+    return contactId.get();
   }
 
   /**
-   * @return StringProperty representing contact name for appointment.
+   * @return ObjectProperty representing the contact id number.
    */
-  public StringProperty contactNameProperty() {
-    return contactName;
+  public ObjectProperty<Integer> contactIdProperty() {
+    return contactId;
   }
 
   /**
-   *  Sets the value for the associated contact name to given String value.
+   * Sets the value for the associated contact id to given integer value.
    *
-   * @param contactName String representing contact name.
+   * @param contactId Integer value for contact id.
    */
-  public void setContactName(String contactName) {
-    this.contactName.set(contactName);
+  public void setContactId(int contactId) {
+    this.contactId.set(contactId);
+  }
+
+  /**
+   * @return Associated user id number as Integer.
+   */
+  public Integer getUserId() {
+    return userId.get();
+  }
+
+  /**
+   * @return ObjectProperty representing the user id number.
+   */
+  public ObjectProperty<Integer> userIdProperty() {
+    return userId;
+  }
+
+  /**
+   * Sets the value for the associated user id to given integer value.
+   *
+   * @param userId Integer value for user id.
+   */
+  public void setUserId(int userId) {
+    this.userId.set(userId);
   }
 
   /**
@@ -308,7 +336,8 @@ public class Appointment {
     return "Appointment{" +
         "id=" + id.get() +
         ", customerId=" + customerId.get() +
-        ", contactName=" + contactName.get() +
+        ", contactId=" + contactId.get() +
+        ", userId=" + userId.get() +
         ", title=" + title.get() +
         ", description=" + description.get() +
         ", type=" + type.get() +

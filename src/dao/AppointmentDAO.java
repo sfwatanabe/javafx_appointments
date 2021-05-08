@@ -3,6 +3,7 @@ package dao;
 import java.time.LocalDateTime;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import model.User;
 
 /**
  * AppointmentDAO interface specifies methods to be implemented for apointment
@@ -57,29 +58,29 @@ public interface AppointmentDAO {
    * addAppointment will insert new appointment records into database.
    *
    * @param appointment Appointment object to be added to database.
-   * @param user User name submitting the appointment to be added.
+   * @param user name submitting the appointment to be added.
    * @return Integer value representing primary key of added appointment.
    */
-  public int addAppointment(Appointment appointment, String user);
+  public int addAppointment(Appointment appointment, User user);
 
   /**
    * deleteAppointment will be used to delete appointment record from database that
    * matches appointment id of supplied object.
    *
    * @param appointment Appointment object to be removed from database.
-   * @param user User name submitting the appointment to be deleted.
+   * @param user User submitting the appointment to be deleted.
    * @return Integer value representing number of affected rows.
    */
-  public int deleteAppointment(Appointment appointment, String user);
+  public int deleteAppointment(Appointment appointment, User user);
 
   /**
    * updateAppointment will be used to update appointment record in database
-   * matching apointment id of supplied object.
+   * matching appointment id of supplied object.
    *
    * @param appointment Appointment object to be updated in database.
-   * @param user User name submitting the appointment to be updated.
+   * @param user User submitting the appointment to be updated.
    * @return Integer value representing number of affected rows.
    */
-  public int updateAppointment(Appointment appointment, String user);
+  public int updateAppointment(Appointment appointment, User user);
 
 }

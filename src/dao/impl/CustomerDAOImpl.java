@@ -32,7 +32,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 
   //===========================================================================
-  // Inteface Override Methods
+  // Methods
   //===========================================================================
 
   @Override
@@ -98,16 +98,19 @@ public class CustomerDAOImpl implements CustomerDAO {
 
   @Override
   public int addCustomer(Customer customer, String user) {
+    // TODO implement addCustomer and return customer id of record
     return 0;
   }
 
   @Override
   public int deleteCustomer(Customer customer, String user) {
+    // TODO Must implement delete appointment by customer first
     return 0;
   }
 
   @Override
   public int updateCustomer(Customer customer, String user) {
+    // TODO implement updateCustomer and return customer id of record
     return 0;
   }
 }

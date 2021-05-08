@@ -13,6 +13,9 @@ public class User extends Person {
   /** String representing the user password. */
   private String password;
 
+  //===========================================================================
+  // Constructor
+  //===========================================================================
   /**
    * Constructor for the user class. Users must have a password for accessing
    * the system functionality.

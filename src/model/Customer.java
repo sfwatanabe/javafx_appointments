@@ -25,6 +25,9 @@ public class Customer extends Person {
   /** Integer representing the customer division id. */
   private ObjectProperty<Integer> divisionId = new SimpleObjectProperty();
 
+  //===========================================================================
+  // Constructor
+  //===========================================================================
 
   /**
    * Customer fully parameterized constructor.
@@ -59,7 +62,7 @@ public class Customer extends Person {
   /**
    * @return StringProperty representing customer street address.
    */
-  public StringProperty getAddressProperty() {
+  public StringProperty addressProperty() {
     return address;
   }
 
@@ -78,7 +81,7 @@ public class Customer extends Person {
   /**
    * @return StringProperty representing customer postal code.
    */
-  public StringProperty getPostalCodeProperty() {
+  public StringProperty postalCodeProperty() {
     return postalCode;
   }
 
@@ -97,7 +100,7 @@ public class Customer extends Person {
   /**
    * @return StringProperty representing customer phone number.
    */
-  public StringProperty getPhoneNumberProperty() {
+  public StringProperty phoneNumberProperty() {
     return phoneNumber;
   }
 
@@ -116,7 +119,7 @@ public class Customer extends Person {
   /**
    * @return ObjectProperty with integer value representing customer division id.
    */
-  public ObjectProperty<Integer> getDivisionIdProperty() {
+  public ObjectProperty<Integer> divisionIdProperty() {
     return divisionId;
   }
 
@@ -125,6 +128,9 @@ public class Customer extends Person {
     this.divisionId.set(divisionId);
   }
 
+  //===========================================================================
+  // Default Overrides
+  //===========================================================================
   /**
    * @return Customer object information in a string format.
    */

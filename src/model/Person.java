@@ -34,7 +34,7 @@ public abstract class Person {
   }
 
   /** Returns ObjectProperty representing value of customer id. */
-  public ObjectProperty<Integer> getIdProperty() {
+  public ObjectProperty<Integer> idProperty() {
     return id;
   }
 
@@ -53,7 +53,7 @@ public abstract class Person {
   }
 
   /** Returns StringProperty representing value of customer name. */
-  public StringProperty getNameProperty() {
+  public StringProperty nameProperty() {
     return name;
   }
 

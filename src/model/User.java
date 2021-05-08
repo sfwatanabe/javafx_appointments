@@ -36,4 +36,17 @@ public class User extends Person {
     return password;
   }
 
+  //===========================================================================
+  // Default Overrides
+  //===========================================================================
+
+  /**
+   * @return String representation of the user object for console use.
+   */
+  @Override
+  public String toString() {
+    return "User{" +
+        "password='" + password + '\'' +
+        '}';
+  }
 }

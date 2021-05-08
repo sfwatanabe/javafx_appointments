@@ -1,5 +1,6 @@
 package utils;
 
+import java.sql.SQLException;
 import java.util.List;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,7 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 public class ErrorHandler {
 
   //===========================================================================
-  // Popup Dialog Helper Methods
+  // Error Handlers
   //===========================================================================
 
   /**

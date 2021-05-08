@@ -124,4 +124,19 @@ public class Customer extends Person {
   public void setDivisionId(Integer divisionId) {
     this.divisionId.set(divisionId);
   }
+
+  /**
+   * @return Customer object information in a string format.
+   */
+  @Override
+  public String toString() {
+    return "Customer{" +
+        "id=" + super.getId() +
+        ", name=" + super.getName() +
+        ", address=" + address.get() +
+        ", postalCode=" + postalCode.get() +
+        ", phoneNumber=" + phoneNumber.get() +
+        ", divisionId=" + divisionId.get() +
+        '}';
+  }
 }

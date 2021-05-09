@@ -1,6 +1,8 @@
 package view_controller;
 
 import dao.impl.ContactDAOImpl;
+import dao.impl.CountryDAOImpl;
+import dao.impl.DivisionDAOImpl;
 import dao.impl.UserDAOImpl;
 import java.net.URL;
 import java.time.ZoneId;
@@ -18,6 +20,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.Contact;
+import model.Country;
+import model.Division;
 import model.User;
 import utils.ErrorHandler;
 
@@ -75,9 +79,9 @@ public class LoginController implements Initializable {
     detectZoneID();
 
     // TODO remember to delete these manual tests.
-    ContactDAOImpl contactDAO = new ContactDAOImpl();
-    ObservableList<Contact> contacts = contactDAO.getAll();
-    contacts.forEach(System.out::println);
+    CountryDAOImpl countryDAO = new CountryDAOImpl();
+    ObservableList<Country> countries = countryDAO.getAll();
+    countries.forEach(System.out::println);
     passwordField.setOnAction(this::verifyLogin);
 
   }

@@ -13,7 +13,16 @@ import model.Country;
 public interface CountryDAO {
 
   /**
+   * getById returns a list of countries matching the given country id.
+   *
+   * @return ObservableList of countries matching the given id.
+   * @param countryId Integer value representing countryID.
+   */
+  public ObservableList<Country> getById(int countryId);
+
+  /**
    * @return Observable list of all countries in the database.
    */
   public ObservableList<Country> getAll();
+
 }

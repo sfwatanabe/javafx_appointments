@@ -1,5 +1,6 @@
 package view_controller;
 
+import dao.impl.AppointmentDAOImpl;
 import dao.impl.CountryDAOImpl;
 import dao.impl.UserDAOImpl;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.Country;
+import model.Appointment;
 import model.User;
 import utils.ErrorHandler;
 
@@ -81,6 +82,7 @@ public class LoginController implements Initializable {
     detectZoneID();
 
     // TODO remember to delete these manual tests.
+
     passwordField.setOnAction(this::verifyLogin);
   }
 

@@ -15,6 +15,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import model.Appointment;
 import model.Customer;
 import model.User;
 import utils.ErrorHandler;
@@ -125,50 +126,65 @@ public class MainViewController implements Initializable {
   private Button deleteApptButton;
 
   /**
-   *
+   * ToggleGroup for appointment viewing filter buttons.
    */
-
-  @FXML
-  private RadioButton allRadioButton;
-
   @FXML
   private ToggleGroup viewByGroup;
 
+  /**
+   * Radio button to view all appointment records.
+   */
+  @FXML
+  private RadioButton allRadioButton;
+
+  /**
+   * Radio button to vew appointments within the next week.
+   */
   @FXML
   private RadioButton weekRadioButton;
 
+  /**
+   * Radio button to view appointments within the next month.
+   */
   @FXML
   private RadioButton monthRadioButton;
 
+  /**
+   * TableView to display appointment records.
+   */
   @FXML
-  private TableView<?> apptTableView;
+  private TableView<Appointment> apptTableView;
+
+  /** Table column for appointment id. */
+  @FXML
+  private TableColumn<Appointment, Integer> apptIDCol;
+
+  /** Table column for appointment title. */
+  @FXML
+  private TableColumn<Appointment, String> apptTitleCol;
+
+  /** Table column for appointment description. */
+  @FXML
+  private TableColumn<Appointment, String> apptDescCol;
+
+  /**  */
+  @FXML
+  private TableColumn<Appointment, String> apptLocationCol;
 
   @FXML
-  private TableColumn<?, ?> apptIDCol;
+  private TableColumn<Appointment, String> apptContactCol;
 
   @FXML
-  private TableColumn<?, ?> apptTitleCol;
+  private TableColumn<Appointment, ?> apptTypeCol;
 
   @FXML
-  private TableColumn<?, ?> apptDescCol;
+  private TableColumn<Appointment, ?> apptStartCol;
 
   @FXML
-  private TableColumn<?, ?> apptLocationCol;
+  private TableColumn<Appointment, ?> apptEndCol;
 
   @FXML
-  private TableColumn<?, ?> apptContactCol;
-
-  @FXML
-  private TableColumn<?, ?> apptTypeCol;
-
-  @FXML
-  private TableColumn<?, ?> apptStartCol;
-
-  @FXML
-  private TableColumn<?, ?> apptEndCol;
-
-  @FXML
-  private TableColumn<?, ?> apptCustomerIdCol;
+  private TableColumn<Appointment, ?> apptCustomerIdCol;
 
   @FXML
   private Button monthlyReportButton;
@@ -196,6 +212,8 @@ public class MainViewController implements Initializable {
 
     customerTableView.setItems(customerDAO.getAll());
     // TODO Setup cell value factories for appointment
+
+    apptIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
 
     // TODO Setup cellFactory lambda for the appointment timestamps.
 

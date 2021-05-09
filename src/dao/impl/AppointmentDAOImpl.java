@@ -59,7 +59,10 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   @Override
   public ObservableList<Appointment> getAll() {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-    String queryAll = "SELECT * FROM appointments";
+    String queryAll = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+                    + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End "
+                    + " FROM appointments AS a \n"
+                    + " INNER JOIN contacts AS c";
 
     try (PreparedStatement ps = conn.prepareStatement(queryAll);
         ResultSet rs = ps.executeQuery()) {
@@ -113,19 +116,20 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   private Appointment parseAppointment(ResultSet rs) throws SQLException {
     Appointment appointment = null;
 
-    int id = rs.getInt("Appointment_ID");
-    int customerId = rs.getInt("Customer_ID");
-    int contactId = rs.getInt("Contact_ID");
-    int userId = rs.getInt("User_ID");
-    String title = rs.getString("Title");
-    String description = rs.getString("Description");
-    String type = rs.getString("Type");
-    String location = rs.getString("Location");
-    LocalDateTime startTime = rs.getTimestamp("Start").toLocalDateTime();
-    LocalDateTime endTime = rs.getTimestamp("End").toLocalDateTime();
+    int id = rs.getInt("a.Appointment_ID");
+    int customerId = rs.getInt("a.Customer_ID");
+    int contactId = rs.getInt("a.Contact_ID");
+    String contactName = rs.getString("c.Contact_Name");
+    int userId = rs.getInt("a.User_ID");
+    String title = rs.getString("a.Title");
+    String description = rs.getString("a.Description");
+    String type = rs.getString("a.Type");
+    String location = rs.getString("a.Location");
+    LocalDateTime startTime = rs.getTimestamp("a.Start").toLocalDateTime();
+    LocalDateTime endTime = rs.getTimestamp("a.End").toLocalDateTime();
 
-    appointment = new Appointment(id, customerId, contactId, userId, title, description, type,
-                                  location, startTime, endTime);
+    appointment = new Appointment(id, customerId, contactId, contactName, userId, title,
+        description, type, location, startTime, endTime);
 
     return appointment;
   }

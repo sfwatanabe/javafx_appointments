@@ -60,10 +60,6 @@ public class User extends Person {
    */
   @Override
   public String toString() {
-    return "User{" +
-        "name='" + super.getName() + '\'' +
-        ", password='" + password + '\'' +
-        ", start='" + start.truncatedTo(ChronoUnit.SECONDS).toString() + '\'' +
-        '}';
+    return super.getId() + "-" + super.getName();
   }
 }

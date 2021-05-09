@@ -1,9 +1,8 @@
 package view_controller;
 
-import dao.impl.ContactDAOImpl;
 import dao.impl.CountryDAOImpl;
-import dao.impl.DivisionDAOImpl;
 import dao.impl.UserDAOImpl;
+import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
@@ -14,14 +13,17 @@ import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.Contact;
+import javafx.stage.Stage;
 import model.Country;
-import model.Division;
 import model.User;
 import utils.ErrorHandler;
 
@@ -79,11 +81,7 @@ public class LoginController implements Initializable {
     detectZoneID();
 
     // TODO remember to delete these manual tests.
-    CountryDAOImpl countryDAO = new CountryDAOImpl();
-    ObservableList<Country> countries = countryDAO.getAll();
-    countries.forEach(System.out::println);
     passwordField.setOnAction(this::verifyLogin);
-
   }
 
   //===========================================================================
@@ -120,20 +118,35 @@ public class LoginController implements Initializable {
       ErrorHandler.warningPopup(resources.getString("loginError"), errorMessages);
       userNameField.requestFocus();
     } else {
+      try {
         loadMainView(event);
+      } catch (IOException e) {
+        ErrorHandler.warningPopup("Main Screen", e.getMessage());
+      }
     }
   }
 
-  /** Loads main application view and calls scene initialization method. */
-  private void loadMainView(ActionEvent event) {
+  /**
+   * Loads main application view and calls scene initialization method.
+   *
+   * @param event ActionEvent produced when user enters credentials.
+   */
+  private void loadMainView(ActionEvent event) throws IOException {
     passwordField.clear();
     userNameField.clear();
-    // TODO Create FXML loader
-    // TODO Create initData method for MainView
-    // TODO Pass user object to MainView
-    // TODO Load the view
-    System.out.println("We loaded the main view.");
-    System.out.println(user);
+
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+
+    MainViewController controller = loader.getController();
+    controller.initData(user);
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
+    ErrorHandler.warningPopup("APPOINTMENT ALERT", "OR HERE.");
   }
 
   /**

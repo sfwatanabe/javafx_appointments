@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.User;
 import utils.DBConnector;
 import utils.ErrorHandler;
@@ -25,43 +27,65 @@ public class UserDAOImpl implements UserDAO {
   private Connection conn;
 
   /**
-   * Query select statement for lookup of user data by user name.
-   */
-  private String byUserName = "SELECT User_ID, User_Name, Password " +
-      "FROM users WHERE " +
-      "User_Name = ?";
-
-  /**
    * Constructor for UserDAOImpl obtains connection reference from the DBConnector class.
    */
   public UserDAOImpl() {
     this.conn = DBConnector.getConnection();
   }
 
-  /**
-   * Attempts to retrieve user by name from database connection with prepared query statement using
-   * try with resource blocks.
-   *
-   * @param userName String value of user name to be queried.
-   * @return User object reference or null if not found.
-   */
+  @Override
+  public ObservableList<User> getAll() {
+    ObservableList<User> users = FXCollections.observableArrayList();
+    String allUsers = "SELECT * FROM users";
+
+    try (PreparedStatement ps = conn.prepareStatement(allUsers);
+        ResultSet rs = ps.executeQuery()) {
+      while(rs.next()){
+        users.add(parseUser(rs));
+      }
+    } catch(SQLException e) {
+      ErrorHandler.sqlPopup("User", e);
+    }
+
+    return users;
+  }
+
   @Override
   public User getUserByName(String userName) {
     User user = null;
+    String byUserName = "SELECT User_ID, User_Name, Password " +
+        "FROM users WHERE " +
+        "User_Name = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(byUserName)) {
       ps.setString(1, userName);
       try (ResultSet rs = ps.executeQuery()) {
         if (rs.next()) {
-          int id = rs.getInt("User_ID");
-          String name = rs.getString("User_Name");
-          String password = rs.getString("Password");
-          user = new User(id, name, password);
+          user = parseUser(rs);
         }
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("User",e);
+      ErrorHandler.sqlPopup("User", e);
     }
     return user;
   }
+
+  /**
+   * Helper method to assist with parsing result set data into User objects.
+   *
+   * @param rs Result set from user DAO query.
+   * @return User object with parsed information.
+   */
+  private User parseUser(ResultSet rs) throws SQLException {
+    User user = null;
+
+    int id = rs.getInt("User_ID");
+    String name = rs.getString("User_Name");
+    String password = rs.getString("Password");
+    user = new User(id, name, password);
+
+    return user;
+  }
+
+
 }

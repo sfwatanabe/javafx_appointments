@@ -1,5 +1,6 @@
 package dao;
 
+import javafx.collections.ObservableList;
 import model.User;
 
 /**
@@ -16,4 +17,9 @@ public interface UserDAO {
    * @return User object representing matching record.
    */
   public User getUserByName(String userName);
+
+  /**
+   * @return ObservableList of  all users in database.
+   */
+  public ObservableList<User> getAll();
 }

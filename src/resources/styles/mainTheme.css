@@ -56,6 +56,11 @@
     -fx-padding: 2 0 2 10px;
 }
 
+/* Column alignment */
+.center-column {
+    -fx-alighment: CENTER;
+}
+
 /*.table-row-cell:hover {*/
 /*    -fx-background-color: */
 /*}*/
@@ -75,6 +80,11 @@
     -fx-background-color: light-grey;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: dark-blue;
+    -fx-text-fill: primary-bg;
 }
 
 /*

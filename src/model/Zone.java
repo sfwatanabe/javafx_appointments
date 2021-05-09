@@ -6,20 +6,24 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Basic person model implementation. Person has both a name and id for
- * the purposes of our application.
+ * Contains information associated with Zones.
  *
  * @author Sakae Watanabe
  */
-public abstract class Person {
+public abstract class Zone {
 
   //===========================================================================
   // Data Members
   //===========================================================================
-  /** SimpleObjectProperty to hold Customer ID number. */
+
+  /**
+   * ObjectProperty for holding zone id number.
+   */
   private ObjectProperty<Integer> id = new SimpleObjectProperty();
 
-  /** StringProperty to hold Customer name. */
+  /**
+   * StringProperty to hold zone name.
+   */
   private StringProperty name = new SimpleStringProperty();
 
   //===========================================================================
@@ -27,12 +31,12 @@ public abstract class Person {
   //===========================================================================
 
   /**
-   * Basic constructor for Person class.
+   * Basic constructor for the Zone class.
    *
-   * @param id Integer value for person id.
-   * @param name String value for person name.
+   * @param id Integer value for zone id.
+   * @param name String value for zone name.
    */
-  public Person(int id, String name) {
+  public Zone(int id, String name) {
     this.id.set(id);
     this.name.set(name);
   }
@@ -40,42 +44,63 @@ public abstract class Person {
   //===========================================================================
   // Getter & Setter Methods
   //===========================================================================
-  
-  /** Returns integer value of customer id. */
+
+  /**
+   * @return Integer value representing zone id.
+   */
   public Integer getId() {
     return id.get();
   }
 
-  /** Returns ObjectProperty representing value of customer id. */
+  /**
+   * @return IntegerProperty containing zone id value.
+   */
   public ObjectProperty<Integer> idProperty() {
     return id;
   }
 
   /**
-   * Sets the value of customer id to the given integer.
+   * Sets the value of zone id to the given integer.
    *
-   * @param id Integer value representing the customer id.
+   * @param id Integer value representing the zone id.
    */
   public void setId(Integer id) {
     this.id.set(id);
   }
 
-  /** Returns string value of customer name. */
+  /**
+   * @return String value representing the zone name.
+   */
   public String getName() {
     return name.get();
   }
 
-  /** Returns StringProperty representing value of customer name. */
+  /**
+   * @return StringProperty containing the zone name value.
+   */
   public StringProperty nameProperty() {
     return name;
   }
 
   /**
-   * Sets the value of customer name to the given string value.
+   * Sets the value of zone name to the given string.
    *
-   * @param name String value representing the customer name.
+   * @param name String value representing the zone name.
    */
   public void setName(String name) {
     this.name.set(name);
+  }
+
+  //===========================================================================
+  // Default Overrides
+  //===========================================================================
+
+
+  /**
+   * @return Zone information in a user readable format.
+   */
+  @Override
+  public String toString() {
+    return id.get() + "-" + name.get();
   }
 }

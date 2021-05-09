@@ -1,8 +1,6 @@
 package view_controller;
 
-import dao.impl.AppointmentDAOImpl;
 import dao.impl.ContactDAOImpl;
-import dao.impl.CustomerDAOImpl;
 import dao.impl.UserDAOImpl;
 import java.net.URL;
 import java.time.ZoneId;
@@ -19,9 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.Appointment;
 import model.Contact;
-import model.Customer;
 import model.User;
 import utils.ErrorHandler;
 
@@ -129,9 +125,9 @@ public class LoginController implements Initializable {
     passwordField.clear();
     userNameField.clear();
     // TODO Create FXML loader
-    // TODO add MainView.fxml
-    // TODO add Appointment Class
-    // TODO add Appointment DAO and DAOImpl
+    // TODO Create initData method for MainView
+    // TODO Pass user object to MainView
+    // TODO Load the view
     System.out.println("We loaded the main view.");
     System.out.println(user);
   }

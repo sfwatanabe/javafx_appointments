@@ -33,7 +33,7 @@ public class ContactDAOImpl implements ContactDAO {
   private String allContacts = "SELECT * FROM contacts";
 
   /**
-   * Constructor for ConctactDAOImpl obtains connection reference from the DBConnector class.
+   * Constructor for ContactDAOImpl obtains connection reference from the DBConnector class.
    */
   public ContactDAOImpl() {
     this.conn = DBConnector.getConnection();

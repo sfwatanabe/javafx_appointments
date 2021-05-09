@@ -4,8 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Representation of company contact data for use in application. Intended for
- * data access only, will not have setter methods.
+ * Representation of company contact data for use in application. Intended for data access only,
+ * will not have setter methods.
  *
  * @author Sakae Watanabe
  */
@@ -15,7 +15,9 @@ public class Contact extends Person {
   // Data Members
   //===========================================================================
 
-  /** String representing contact email address. */
+  /**
+   * String representing contact email address.
+   */
   private StringProperty email = new SimpleStringProperty();
 
   //===========================================================================
@@ -23,11 +25,11 @@ public class Contact extends Person {
   //===========================================================================
 
   /**
-   * Conatact fully parameterized constructor.
+   * Contact fully parameterized constructor.
    *
-   * @param id
-   * @param name
-   * @param email
+   * @param id    Integer value for contact id number.
+   * @param name  String value for contact name.
+   * @param email String value for contact email address.
    */
   public Contact(int id, String name, String email) {
     super(id, name);
@@ -62,10 +64,6 @@ public class Contact extends Person {
    */
   @Override
   public String toString() {
-    return "Contact{" +
-        "id=" + super.getId() +
-        ", name=" + super.getName() +
-        ", email=" + email.get() +
-        '}';
+    return super.getId() + "-" + super.getName();
   }
 }

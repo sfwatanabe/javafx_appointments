@@ -3,6 +3,7 @@ package view_controller;
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -175,16 +176,16 @@ public class MainViewController implements Initializable {
   private TableColumn<Appointment, String> apptContactCol;
 
   @FXML
-  private TableColumn<Appointment, ?> apptTypeCol;
+  private TableColumn<Appointment, String> apptTypeCol;
 
   @FXML
-  private TableColumn<Appointment, ?> apptStartCol;
+  private TableColumn<Appointment, LocalDateTime> apptStartCol;
 
   @FXML
-  private TableColumn<Appointment, ?> apptEndCol;
+  private TableColumn<Appointment, LocalDateTime> apptEndCol;
 
   @FXML
-  private TableColumn<Appointment, ?> apptCustomerIdCol;
+  private TableColumn<Appointment, Integer> apptCustomerIdCol;
 
   @FXML
   private Button monthlyReportButton;
@@ -199,6 +200,8 @@ public class MainViewController implements Initializable {
   // Scene Initialization
   //===========================================================================
 
+
+  // TODO Add javadoc for the initialize -> explain usage of lambda for cellValueFactory
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
 
@@ -214,6 +217,16 @@ public class MainViewController implements Initializable {
     // TODO Setup cell value factories for appointment
 
     apptIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+    apptTitleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+    apptDescCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+    apptLocationCol.setCellValueFactory(cellData -> cellData.getValue().locationProperty());
+    apptContactCol.setCellValueFactory(cellData -> cellData.getValue().contactNameProperty());
+    apptTypeCol.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+    apptStartCol.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+    apptEndCol.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
+    apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
+
+    apptTableView.setItems(appointmentDAO.getAll());
 
     // TODO Setup cellFactory lambda for the appointment timestamps.
 

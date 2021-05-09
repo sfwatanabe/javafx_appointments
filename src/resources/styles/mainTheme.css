@@ -27,6 +27,10 @@
 .table-view .corner {
     -fx-background-color: transparent;
 }
+.table-cell {
+    -fx-alignment: CENTER;
+}
+
 
 /*
     Header information for the table

@@ -62,7 +62,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     String queryAll = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
                     + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End "
                     + " FROM appointments AS a \n"
-                    + " INNER JOIN contacts AS c";
+                    + " INNER JOIN contacts AS c"
+                    + " WHERE a.Contact_ID = c.Contact_ID ";
 
     try (PreparedStatement ps = conn.prepareStatement(queryAll);
         ResultSet rs = ps.executeQuery()) {

@@ -6,6 +6,7 @@
     orange-accent: #EA6A47;
     steel-accent: #7E909A;
     aqua-accent: #A5D8DD;
+    -app-border-radius: 7px;
 }
 .root {
     -fx-background-color: primary-bg;
@@ -87,6 +88,13 @@
     -fx-font-size: 12;
 }
 
+.button {
+    -fx-background-color: dark-blue;
+    -fx-text-fill: light-grey;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+
 .button:hover {
     -fx-background-color: light-blue;
     -fx-text-fill: primary-bg;
@@ -98,4 +106,18 @@
     -fx-border-color: transparent transparent dark-blue transparent;
     -fx-font-size: 16;
     -fx-font-weight: bold;
+}
+
+/* Customer Table View Container */
+.customer-table {
+    -fx-border-color: dark-blue;
+    -fx-border-width: 3px;
+    -fx-border-radius: 7px;
+}
+
+/* Appointment Table View Container */
+.appt-table {
+    -fx-border-color: dark-blue;
+    -fx-border-width: 3px;
+    -fx-border-radius: 7px;
 }

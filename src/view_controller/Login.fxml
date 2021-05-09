@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.LoginController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="300.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.LoginController">
    <children>
       <HBox prefHeight="46.0" prefWidth="280.0">
          <children>
@@ -30,14 +29,14 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="userNameField" prefHeight="35.0" prefWidth="200.0" promptText="%userNamePrompt" />
+                  <TextField fx:id="userNameField" prefHeight="35.0" prefWidth="200.0" promptText="%userNamePrompt" styleClass="login-text-field" />
                   <Label fx:id="passwordLabel" focusTraversable="false" text="%passwordLabel">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <PasswordField fx:id="passwordField" prefHeight="35.0" prefWidth="200.0" promptText="%passwordPrompt" />
-                  <Button fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#verifyLogin" prefHeight="31.0" prefWidth="97.0" text="%loginButton">
+                  <PasswordField fx:id="passwordField" prefHeight="35.0" prefWidth="200.0" promptText="%passwordPrompt" styleClass="login-text-field" />
+                  <Button fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#verifyLogin" prefHeight="31.0" prefWidth="97.0" styleClass="login-button" text="%loginButton">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>

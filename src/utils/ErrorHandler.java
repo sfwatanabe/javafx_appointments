@@ -1,5 +1,6 @@
 package utils;
 
+import java.sql.SQLException;
 import java.util.List;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,7 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 public class ErrorHandler {
 
   //===========================================================================
-  // Popup Dialog Helper Methods
+  // Error Handlers
   //===========================================================================
 
   /**
@@ -42,4 +43,23 @@ public class ErrorHandler {
     alert.setContentText(String.join("\n", messages));
     alert.showAndWait();
   }
+
+  /**
+   * Adds SQLException information to popup dialog.
+   *
+   * @param daoType The type of DAO in use at time of error.
+   * @param  sqlE SQLException thrown for translation to popup dialog.
+   */
+  public static void sqlPopup(String daoType, SQLException sqlE) {
+    Alert alert = new Alert(AlertType.WARNING);
+    String messages = "Error code: " + sqlE.getErrorCode() +
+                      "\nSQL error: " + sqlE.getSQLState() +
+                      "\nError Message: " + sqlE.getMessage();
+
+    alert.setHeaderText("Data Retrieval Error -" + daoType);
+    alert.setContentText(messages);
+    alert.showAndWait();
+  }
+
+
 }

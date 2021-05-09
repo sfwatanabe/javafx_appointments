@@ -1,6 +1,7 @@
 package view_controller;
 
 import dao.impl.AppointmentDAOImpl;
+import dao.impl.ContactDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import dao.impl.UserDAOImpl;
 import java.net.URL;
@@ -19,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.Appointment;
+import model.Contact;
 import model.Customer;
 import model.User;
 import utils.ErrorHandler;
@@ -77,18 +79,9 @@ public class LoginController implements Initializable {
     detectZoneID();
 
     // TODO remember to delete these manual tests.
-    CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-//    Customer customer = customerDAO.getById(1);
-//    System.out.println(customer);
-
-    ObservableList<Customer> customers = customerDAO.getAll();
-    customers.forEach(c -> System.out.println(c));
-
-    AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
-//    Appointment appt = apptDAO.getById(1);
-//    System.out.println(appt);
-    ObservableList<Appointment> appointments = apptDAO.getAll();
-    appointments.forEach(System.out::println);
+    ContactDAOImpl contactDAO = new ContactDAOImpl();
+    ObservableList<Contact> contacts = contactDAO.getAll();
+    contacts.forEach(System.out::println);
     passwordField.setOnAction(this::verifyLogin);
 
   }

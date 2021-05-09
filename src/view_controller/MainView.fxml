@@ -6,10 +6,10 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="880.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -25,10 +25,10 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <Label prefHeight="41.0" prefWidth="176.0" text="Customer Records">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
+                        <Label prefHeight="41.0" prefWidth="176.0" styleClass="main-view-label" text="Customer Records">
+<!--                           <font>-->
+<!--                              <Font name="System Bold" size="18.0" />-->
+<!--                           </font>-->
                            <HBox.margin>
                               <Insets top="10.0" />
                            </HBox.margin>
@@ -140,17 +140,20 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <RadioButton fx:id="allRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="All">
+                        <RadioButton fx:id="allRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" selected="true" text="All">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="viewByGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="Week" toggleGroup="$viewByGroup">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </RadioButton>
-                        <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="Week">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </RadioButton>
-                        <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="Month">
+                        <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="Month" toggleGroup="$viewByGroup">
                            <font>
                               <Font size="14.0" />
                            </font>

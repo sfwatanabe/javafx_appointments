@@ -11,8 +11,11 @@ import javafx.collections.ObservableList;
 import model.Appointment;
 import model.User;
 import utils.DBConnector;
+import utils.ErrorHandler;
 
 /**
+ * Implementations for the AppointmentDAO interface.
+ *
  * @author Sakae Watanabe
  */
 public class AppointmentDAOImpl implements AppointmentDAO {
@@ -47,7 +50,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         }
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      ErrorHandler.sqlPopup("Appointment", e);
     }
 
     return appointment;
@@ -64,7 +67,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         appointments.add(parseAppointment(rs));
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      ErrorHandler.sqlPopup("Appointment", e);
     }
 
     return appointments;

@@ -108,16 +108,27 @@
     -fx-font-weight: bold;
 }
 
-/* Customer Table View Container */
+/* Main View Container */
 .customer-table {
     -fx-border-color: dark-blue;
     -fx-border-width: 3px;
     -fx-border-radius: 7px;
 }
 
-/* Appointment Table View Container */
 .appt-table {
     -fx-border-color: dark-blue;
     -fx-border-width: 3px;
     -fx-border-radius: 7px;
+}
+
+.main-view-label {
+    -fx-font-size: 18px;
+    -fx-font-color: dark-blue;
+    -fx-font-weight: bold;
+}
+
+.radio-button {
+    -fx-text-fill: dark-blue;
+    -fx-background-color: transparent;
+    -fx-text-size: 14px;
 }

@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import model.Customer;
 import model.User;
 import utils.DBConnector;
+import utils.ErrorHandler;
 
 /**
  * Implementation of the CustomerDAO interface for accessing customer data.
@@ -22,15 +23,17 @@ public class CustomerDAOImpl implements CustomerDAO {
   // Data Members
   //===========================================================================
 
-  /** Connection instance for accessing application database. */
+  /**
+   * Connection instance for accessing application database.
+   */
   private Connection conn;
 
   /**
-   * Constructor for CustomerDAOImpl obtains connection reference from the
-   * DBConnector class.
+   * Constructor for CustomerDAOImpl obtains connection reference from the DBConnector class.
    */
-  public CustomerDAOImpl() { this.conn = DBConnector.getConnection(); }
-
+  public CustomerDAOImpl() {
+    this.conn = DBConnector.getConnection();
+  }
 
   //===========================================================================
   // Methods
@@ -40,7 +43,7 @@ public class CustomerDAOImpl implements CustomerDAO {
   public Customer getById(int id) {
     Customer customer = null;
     String queryById = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID"
-                      + " FROM customers WHERE Customer_ID = ?";
+        + " FROM customers WHERE Customer_ID = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(queryById)) {
       ps.setInt(1, id);
@@ -50,7 +53,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
       }
     } catch (SQLException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
 
     return customer;
@@ -59,18 +62,17 @@ public class CustomerDAOImpl implements CustomerDAO {
   @Override
   public ObservableList<Customer> getAll() {
     ObservableList<Customer> customers = FXCollections.observableArrayList();
-    Customer customer = null;
 
     String queryAll = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID"
-                    + " FROM customers";
+        + " FROM customers";
 
     try (PreparedStatement ps = conn.prepareStatement(queryAll);
-          ResultSet rs = ps.executeQuery()) {
+        ResultSet rs = ps.executeQuery()) {
       while (rs.next()) {
         customers.add(parseCustomer(rs));
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      ErrorHandler.sqlPopup("Customer", e);
     }
 
     return customers;

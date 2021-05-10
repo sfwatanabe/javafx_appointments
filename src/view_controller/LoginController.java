@@ -148,7 +148,7 @@ public class LoginController implements Initializable {
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
     stage.show();
-    ErrorHandler.warningPopup("APPOINTMENT ALERT", "OR HERE.");
+    ErrorHandler.warningPopup("THIS IS FROM LOGIN", "OR HERE.");
   }
 
   /**

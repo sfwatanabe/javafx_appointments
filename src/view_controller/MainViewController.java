@@ -4,6 +4,7 @@ import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
@@ -36,6 +38,17 @@ public class MainViewController implements Initializable {
    * CustomerDAOImpl used for updating appointment records table view.
    */
   private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
+
+  /**
+   * Observable list for holding appointment records in the table view.
+   */
+  private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+  /**
+   * Observable list for holding customer records in the table view.
+   */
+  private ObservableList<Customer> customers = FXCollections.observableArrayList();
+
 
   /**
    * User currently logged into the application.
@@ -204,17 +217,17 @@ public class MainViewController implements Initializable {
   // TODO Add javadoc for the initialize -> explain usage of lambda for cellValueFactory
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
+    customers = customerDAO.getAll();
+    appointments = appointmentDAO.getAll();
 
-    // TODO Setup cell value factories for customer
     customerIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     customerNameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
     customerAddressCol.setCellValueFactory(cellData -> cellData.getValue().addressProperty());
     customerPostalCol.setCellValueFactory(cellData -> cellData.getValue().postalCodeProperty());
     customerPhoneCol.setCellValueFactory(cellData -> cellData.getValue().phoneNumberProperty());
     customerDivisionCol.setCellValueFactory(cellData -> cellData.getValue().divisionIdProperty());
+    customerTableView.setItems(customers);
 
-    customerTableView.setItems(customerDAO.getAll());
-    // TODO Setup cell value factories for appointment
 
     apptIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     apptTitleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
@@ -223,21 +236,46 @@ public class MainViewController implements Initializable {
     apptContactCol.setCellValueFactory(cellData -> cellData.getValue().contactNameProperty());
     apptTypeCol.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
     apptStartCol.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+    apptStartCol.setCellFactory(cellData -> formatMyDate());
     apptEndCol.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
+    apptEndCol.setCellFactory(cellData -> formatMyDate());
     apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
 
-    apptTableView.setItems(appointmentDAO.getAll());
-
-    // TODO Setup cellFactory lambda for the appointment timestamps.
-
+    apptTableView.setItems(appointments);
     // TODO Setup query appointments before in Appointments DAO
 
+  }
+
+
+  /**
+   * Sets up cell factory formatting for LocalDateTime cell data.
+   *
+   * @param <T, LocalDateTime> Object type used to populate the table view using
+   *                          LocalDateTime attribute.
+   * @return TableCell with formatted date time string.
+   */
+  private <T> TableCell<T, LocalDateTime> formatMyDate() {
+    return new TableCell<T, LocalDateTime>() {
+      @Override
+      protected void updateItem(LocalDateTime item, boolean empty) {
+        String DATE_FORMATTER = "yyyy-MM-dd HH:mm";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMATTER);
+
+        super.updateItem(item, empty);
+        if (empty) {
+          setText(null);
+        } else {
+          setText(String.format(item.format(formatter)));
+        }
+      }
+    };
   }
 
   public void initData(User user) {
     this.user = user;
     userName.setText(user.getName());
-    ErrorHandler.warningPopup("APPOINTMENT ALERT", "NEEDS TO GO HERE.");
+    System.out.println("init");
+    ErrorHandler.warningPopup("THIS IS FROM MAIN", "NEEDS TO GO HERE.");
   }
 
   //===========================================================================

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="880.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.MainViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="795.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.MainViewController">
    <children>
       <HBox prefHeight="325.0" prefWidth="1190.0" spacing="10.0">
          <children>
@@ -47,11 +47,11 @@
                   </HBox>
                   <TableView fx:id="customerTableView" prefHeight="197.0" prefWidth="550.0">
                     <columns>
-                      <TableColumn fx:id="customerIDCol" editable="false" prefWidth="50.0" resizable="false" text="ID" />
+                      <TableColumn fx:id="customerIDCol" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" resizable="false" text="ID" />
                       <TableColumn fx:id="customerNameCol" editable="false" maxWidth="131.0" minWidth="101.0" prefWidth="125.0" resizable="false" text="Name" />
                         <TableColumn fx:id="customerAddressCol" editable="false" maxWidth="150.0" minWidth="100.0" prefWidth="150.0" resizable="false" text="Address" />
                         <TableColumn fx:id="customerPostalCol" editable="false" maxWidth="65.0" minWidth="27.0" prefWidth="65.0" resizable="false" text="Post Code" />
-                        <TableColumn fx:id="customerPhoneCol" editable="false" maxWidth="100.0" minWidth="52.0" prefWidth="100.0" text="Phone" />
+                        <TableColumn fx:id="customerPhoneCol" editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Phone" />
                         <TableColumn fx:id="customerDivisionCol" editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Division" />
                     </columns>
                   </TableView>
@@ -137,7 +137,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <RadioButton fx:id="allRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" selected="true" text="All">
+                        <RadioButton fx:id="allRadioButton" mnemonicParsing="false" onAction="#apptViewRadio" prefHeight="0.0" prefWidth="80.0" selected="true" text="All">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -145,12 +145,12 @@
                               <ToggleGroup fx:id="viewByGroup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="Week" toggleGroup="$viewByGroup">
+                        <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" onAction="#apptViewRadio" prefHeight="0.0" prefWidth="80.0" text="Week" toggleGroup="$viewByGroup">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </RadioButton>
-                        <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="80.0" text="Month" toggleGroup="$viewByGroup">
+                        <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" onAction="#apptViewRadio" prefHeight="0.0" prefWidth="80.0" text="Month" toggleGroup="$viewByGroup">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -159,17 +159,17 @@
                   </HBox>
                </children>
             </HBox>
-            <TableView fx:id="apptTableView" prefHeight="312.0" prefWidth="840.0">
+            <TableView fx:id="apptTableView" prefHeight="371.0" prefWidth="974.0">
               <columns>
-                <TableColumn fx:id="apptIDCol" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="apptTitleCol" prefWidth="75.0" text="Title" />
-                  <TableColumn fx:id="apptDescCol" prefWidth="75.0" text="Description" />
-                  <TableColumn fx:id="apptLocationCol" prefWidth="75.0" text="Location" />
-                  <TableColumn fx:id="apptContactCol" prefWidth="75.0" text="Contact" />
-                  <TableColumn fx:id="apptTypeCol" prefWidth="75.0" text="Type" />
-                  <TableColumn fx:id="apptStartCol" prefWidth="75.0" text="Start Time" />
-                  <TableColumn fx:id="apptEndCol" prefWidth="75.0" text="End Time" />
-                  <TableColumn fx:id="apptCustomerIdCol" prefWidth="75.0" text="Customer ID" />
+                <TableColumn fx:id="apptIDCol" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" text="ID" />
+                <TableColumn fx:id="apptTitleCol" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Title" />
+                  <TableColumn fx:id="apptDescCol" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Description" />
+                  <TableColumn fx:id="apptLocationCol" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Location" />
+                  <TableColumn fx:id="apptContactCol" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Contact" />
+                  <TableColumn fx:id="apptTypeCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Type" />
+                  <TableColumn fx:id="apptStartCol" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Start Time" />
+                  <TableColumn fx:id="apptEndCol" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="End Time" />
+                  <TableColumn fx:id="apptCustomerIdCol" maxWidth="172.0" minWidth="75.0" prefWidth="126.0" text="Cust ID" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

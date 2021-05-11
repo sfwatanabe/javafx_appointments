@@ -9,8 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,6 +48,7 @@ public class MainViewController implements Initializable {
    * Observable list for holding appointment records in the table view.
    */
   private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+  private FilteredList<Appointment> appointmentsFiltered;
 
   /**
    * Observable list for holding customer records in the table view.
@@ -221,7 +224,11 @@ public class MainViewController implements Initializable {
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
     customers = customerDAO.getAll();
+//    appointments = appointmentDAO.getAll();
     appointments = appointmentDAO.getAll();
+    // Use a filtered list
+    appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p-> true);
+
 
     customerIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     customerNameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -244,8 +251,9 @@ public class MainViewController implements Initializable {
     apptEndCol.setCellFactory(cellData -> formatMyDate());
     apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
 
-    apptTableView.setItems(appointments);
+    apptTableView.setItems(appointmentsFiltered);
     // TODO Setup query appointments before in Appointments DAO
+    // ADD A listener to the toggle group.
 
   }
 
@@ -286,6 +294,10 @@ public class MainViewController implements Initializable {
     checkForUpcoming();
   }
 
+  /**
+   * Checks list of appointment data for any start times that are within 15
+   * minutes of user login and provides on screen alert.
+   */
   private void checkForUpcoming() {
     List<String> messages = new ArrayList<>();
     LocalDateTime timeLimit = LocalDateTime.now().plusMinutes(15);
@@ -293,7 +305,7 @@ public class MainViewController implements Initializable {
     for (Appointment a : appointments) {
       var start = a.getStartTime();
       if (start.isBefore(timeLimit)) {
-        if (start.isBefore(LocalDateTime.now())) {
+        if (start.isBefore(LocalDateTime.now()) || start.isEqual(LocalDateTime.now())) {
           messages.add("Past Due - " + a);
         } else {
           messages.add("Upcoming - " + a);
@@ -341,4 +353,23 @@ public class MainViewController implements Initializable {
   private void updateCustomerHandler(ActionEvent event) {
 
   }
+
+
+  /**
+   * Monitor action events triggered by the appointment view by toggle group.
+   * Sets predicate for the filtered list based on selected radio button
+   * using lambda function.
+   *
+   * @param event ActionEvent triggered by user selecting radio button.
+   */
+  @FXML void apptViewRadio(ActionEvent event) {
+    if(viewByGroup.getSelectedToggle().equals(allRadioButton)) {
+      appointmentsFiltered.setPredicate(a -> true);
+    } else if (viewByGroup.getSelectedToggle().equals(weekRadioButton)) {
+      appointmentsFiltered.setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusDays(7)));
+    } else if (viewByGroup.getSelectedToggle().equals(monthRadioButton)) {
+      appointmentsFiltered.setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusMonths(1)));
+    }
+  }
+
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -366,18 +367,21 @@ public class Appointment {
    */
   @Override
   public String toString() {
-    return "Appointment{" +
-        "id=" + id.get() +
-        ", customerId=" + customerId.get() +
-        ", contactId=" + contactId.get() +
-        ", contactName=" + contactName.get() +
-        ", userId=" + userId.get() +
-        ", title=" + title.get() +
-        ", description=" + description.get() +
-        ", type=" + type.get() +
-        ", location=" + location.get() +
-        ", startTime=" + startTime.get() +
-        ", endTime=" + endTime.get() +
-        '}';
+//    return "Appointment{" +
+//        "id=" + id.get() +
+//        ", customerId=" + customerId.get() +
+//        ", contactId=" + contactId.get() +
+//        ", contactName=" + contactName.get() +
+//        ", userId=" + userId.get() +
+//        ", title=" + title.get() +
+//        ", description=" + description.get() +
+//        ", type=" + type.get() +
+//        ", location=" + location.get() +
+//        ", startTime=" + startTime.get() +
+//        ", endTime=" + endTime.get() +
+//        '}'
+      return  "Appointment ID: " + id.get() +
+            "\tDate: " + startTime.get().toLocalDate() +
+            "\tTime: " + startTime.get().toLocalTime();
   }
 }

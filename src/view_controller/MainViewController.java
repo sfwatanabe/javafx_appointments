@@ -4,7 +4,10 @@ import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,7 +56,7 @@ public class MainViewController implements Initializable {
   /**
    * User currently logged into the application.
    */
-  private User user = null;
+  private static User user = null;
 
   /**
    * Button to add a new customer record.
@@ -271,11 +274,39 @@ public class MainViewController implements Initializable {
     };
   }
 
+  /**
+   * Initializes user data for the scene and makes call to check for upcoming
+   * appointments.
+   *
+   * @param user User currently accessing the application.
+   */
   public void initData(User user) {
     this.user = user;
     userName.setText(user.getName());
-    System.out.println("init");
-    ErrorHandler.warningPopup("THIS IS FROM MAIN", "NEEDS TO GO HERE.");
+    checkForUpcoming();
+  }
+
+  private void checkForUpcoming() {
+    List<String> messages = new ArrayList<>();
+    LocalDateTime timeLimit = LocalDateTime.now().plusMinutes(15);
+
+    for (Appointment a : appointments) {
+      var start = a.getStartTime();
+      if (start.isBefore(timeLimit)) {
+        if (start.isBefore(LocalDateTime.now())) {
+          messages.add("Past Due - " + a);
+        } else {
+          messages.add("Upcoming - " + a);
+        }
+      }
+    }
+
+    if(messages.size() > 0) {
+      ErrorHandler.warningPopup("Appointments", messages);
+    } else {
+      String allClear = "No appointments within 15 minutes.";
+      ErrorHandler.warningPopup("Appointments", allClear);
+    }
   }
 
   //===========================================================================

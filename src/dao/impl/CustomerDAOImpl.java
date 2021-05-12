@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import model.Customer;
 import model.User;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementation of the CustomerDAO interface for accessing customer data.
@@ -72,7 +72,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         customers.add(parseCustomer(rs));
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Customer", e);
+      NotificationHandler.sqlPopup("Customer", e);
     }
 
     return customers;
@@ -85,9 +85,18 @@ public class CustomerDAOImpl implements CustomerDAO {
   }
 
   @Override
-  public int deleteCustomer(Customer customer, User user) {
-    // TODO Must implement delete appointment by customer first
-    return 0;
+  public int deleteCustomer(Customer customer) {
+    int rowsAffected = 0;
+    String deleteById = "DELETE FROM customers WHERE Customer_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(deleteById)) {
+      ps.setInt(1, customer.getId());
+      rowsAffected = ps.executeUpdate();
+    }catch (SQLException e) {
+      NotificationHandler.sqlPopup("Customer",e);
+    }
+
+    return rowsAffected;
   }
 
   @Override

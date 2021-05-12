@@ -63,7 +63,7 @@ public class ConfigProps {
         getPropValues();
       } catch (IOException e) {
         e.printStackTrace();
-        ErrorHandler.warningPopup(e.getMessage(),
+        NotificationHandler.warningPopup(e.getMessage(),
             "Unable to get user name.");
       }
     }
@@ -82,7 +82,7 @@ public class ConfigProps {
         getPropValues();
       } catch (IOException e) {
         e.printStackTrace();
-        ErrorHandler.warningPopup(e.getMessage(),
+        NotificationHandler.warningPopup(e.getMessage(),
             "Unable to get password.");
       }
     }

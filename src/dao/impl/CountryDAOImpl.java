@@ -8,9 +8,8 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Country;
-import model.Division;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementation for the CountryDAO interface.
@@ -51,7 +50,7 @@ public class CountryDAOImpl implements CountryDAO {
           countries.add(parseCountry(rs));
         }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Country", e);
+      NotificationHandler.sqlPopup("Country", e);
     }
     return countries;
   }
@@ -69,7 +68,7 @@ public class CountryDAOImpl implements CountryDAO {
         }
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Country", e);
+      NotificationHandler.sqlPopup("Country", e);
     }
 
     return countries;

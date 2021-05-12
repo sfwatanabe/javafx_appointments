@@ -9,7 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Contact;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementation for the ContactDAO interface.
@@ -55,7 +55,7 @@ public class ContactDAOImpl implements ContactDAO {
       }
 
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Contact", e);
+      NotificationHandler.sqlPopup("Contact", e);
     }
 
     return contacts;

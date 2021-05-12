@@ -136,13 +136,6 @@ public class Customer extends Person {
    */
   @Override
   public String toString() {
-    return "Customer{" +
-        "id=" + super.getId() +
-        ", name=" + super.getName() +
-        ", address=" + address.get() +
-        ", postalCode=" + postalCode.get() +
-        ", phoneNumber=" + phoneNumber.get() +
-        ", divisionId=" + divisionId.get() +
-        '}';
+    return super.getId() + "-" + super.getName();
   }
 }

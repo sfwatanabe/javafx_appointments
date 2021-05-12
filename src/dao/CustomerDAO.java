@@ -38,10 +38,9 @@ public interface CustomerDAO {
    * supplied object.
    *
    * @param customer Customer object to be removed from database.
-   * @param user     User submitting the customer to be deleted.
    * @return Integer value representing number of affected rows.
    */
-  public int deleteCustomer(Customer customer, User user);
+  public int deleteCustomer(Customer customer);
 
   /**
    * updateCustomer will be used to update customer record in database matching customer id of

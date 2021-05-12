@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="446.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox fillHeight="false" prefHeight="212.0" prefWidth="436.0" spacing="10.0">
@@ -31,7 +30,7 @@
                         <VBox prefHeight="52.0" prefWidth="118.0">
                            <children>
                               <Label styleClass="form-label" text="ID" />
-                              <TextField editable="false" prefHeight="32.0" prefWidth="135.0" styleClass="form-text-field" text="Auto Generated">
+                              <TextField fx:id="idField" editable="false" prefHeight="32.0" prefWidth="135.0" styleClass="form-text-field" text="Auto Generated">
                                  <font>
                                     <Font name="System Italic" size="12.0" />
                                  </font>

@@ -33,7 +33,7 @@ public class CustomerViewController implements Initializable {
   /**
    * Holds current customer record when updating customer.
    */
-  private Customer currentCustomer = null;
+  private Customer currentCustomer;
 
   /**
    * CustomerDAOImpl used for adding or updating customer record.
@@ -59,6 +59,12 @@ public class CustomerViewController implements Initializable {
    * Filtered list for holding division records for the combo box.
    */
   private FilteredList<Division> divisions;
+
+  /**
+   * Customer id information.
+   */
+  @FXML
+  private TextField idField;
 
   /**
    * Customer name information.
@@ -127,10 +133,26 @@ public class CustomerViewController implements Initializable {
    * Overloaded method initializes user data and isNew flags for the customer
    * record scene and prepares labels.
    *
-   * @param user User currently accessing the application.
+   * @param user  User currently accessing the application.
+   * @param isNew Indicates if we are adding a new customer record.
    */
   public void initCustomerData(boolean isNew, User user) {
     this.user = user;
+    this.isNew = isNew;
+    this.currentCustomer = null;
+
+    updateLabels();
+  }
+
+  /**
+   * Overloaded method initializes user data, isNew flags, and current customer
+   * record before calling update labels.
+   *
+   * @param user User currently accessing the application.
+   */
+  public void initCustomerData(boolean isNew, User user, Customer customer) {
+    this.user = user;
+    this.currentCustomer = customer;
     this.isNew = isNew;
 
     updateLabels();
@@ -143,6 +165,15 @@ public class CustomerViewController implements Initializable {
   private void updateLabels() {
     if (isNew) {
       customerFormType.setText("Create New");
+    } else if (!isNew && currentCustomer != null) {
+      customerFormType.setText("Update Existing");
+      idField.setText(String.valueOf(currentCustomer.getId()));
+      nameField.setText(currentCustomer.getName());
+      addressField.setText(currentCustomer.getAddress());
+      postCode.setText(currentCustomer.getPostalCode());
+      phoneNumber.setText(currentCustomer.getPhoneNumber());
+      // TODO Add the division selection - shouldn't need to filter at this step
+      // TODO Add the country selection - shouldn't need to filter at this step
     }
   }
 

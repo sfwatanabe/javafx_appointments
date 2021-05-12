@@ -9,7 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.User;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementation of the UserDAO interface for accessing user data.
@@ -44,7 +44,7 @@ public class UserDAOImpl implements UserDAO {
         users.add(parseUser(rs));
       }
     } catch(SQLException e) {
-      ErrorHandler.sqlPopup("User", e);
+      NotificationHandler.sqlPopup("User", e);
     }
 
     return users;
@@ -65,7 +65,7 @@ public class UserDAOImpl implements UserDAO {
         }
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("User", e);
+      NotificationHandler.sqlPopup("User", e);
     }
     return user;
   }

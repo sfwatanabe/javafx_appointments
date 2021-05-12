@@ -9,7 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Division;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementation for the DivisionDAO interface.
@@ -50,7 +50,7 @@ public class DivisionDAOImpl implements DivisionDAO {
         divisions.add(parseDivision(rs));
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Division", e);
+      NotificationHandler.sqlPopup("Division", e);
     }
 
     return divisions;
@@ -69,7 +69,7 @@ public class DivisionDAOImpl implements DivisionDAO {
         }
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Division", e);
+      NotificationHandler.sqlPopup("Division", e);
     }
 
     return divisions;

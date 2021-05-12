@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import model.Customer;
 import model.User;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementation of the CustomerDAO interface for accessing customer data.
@@ -72,7 +72,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         customers.add(parseCustomer(rs));
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Customer", e);
+      NotificationHandler.sqlPopup("Customer", e);
     }
 
     return customers;

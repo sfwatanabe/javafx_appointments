@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 import model.Appointment;
 import model.User;
 import utils.DBConnector;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Implementations for the AppointmentDAO interface.
@@ -50,7 +50,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         }
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Appointment", e);
+      NotificationHandler.sqlPopup("Appointment", e);
     }
 
     return appointment;
@@ -71,7 +71,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         appointments.add(parseAppointment(rs));
       }
     } catch (SQLException e) {
-      ErrorHandler.sqlPopup("Appointment", e);
+      NotificationHandler.sqlPopup("Appointment", e);
     }
 
     return appointments;

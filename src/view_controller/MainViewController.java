@@ -1,15 +1,15 @@
 package view_controller;
 
+import static utils.NotificationHandler.confirmPopup;
+
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,7 +26,7 @@ import javafx.scene.control.ToggleGroup;
 import model.Appointment;
 import model.Customer;
 import model.User;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 public class MainViewController implements Initializable {
 
@@ -59,6 +59,12 @@ public class MainViewController implements Initializable {
    * User currently logged into the application.
    */
   private static User user = null;
+
+  /**
+   * Exit button to leave application.
+   */
+  @FXML
+  private Button exitButton;
 
   /**
    * Button to add a new customer record.
@@ -318,10 +324,10 @@ public class MainViewController implements Initializable {
     }
 
     if (messages.size() > 0) {
-      ErrorHandler.warningPopup("Appointments for user: " + user.getName(), messages);
+      NotificationHandler.warningPopup("Appointments for user: " + user.getName(), messages);
     } else {
       String allClear = "No appointments within 15 minutes.";
-      ErrorHandler.warningPopup("Appointments for user: " + user.getName(), allClear);
+      NotificationHandler.warningPopup("Appointments for user: " + user.getName(), allClear);
     }
   }
 
@@ -358,6 +364,17 @@ public class MainViewController implements Initializable {
 
   }
 
+  /**
+   * Exits the application.
+   *
+   * @param event ActionEvent triggered by user clicking the exit button.
+   */
+  @FXML
+  private void exitApp(ActionEvent event) {
+    if(confirmPopup(event, "Please confirm you would like to exit.")) {
+      System.exit(0);
+    }
+  }
 
   /**
    * Monitor action events triggered by the appointment view by toggle group. Sets predicate for the

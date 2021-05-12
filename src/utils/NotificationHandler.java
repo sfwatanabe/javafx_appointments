@@ -2,15 +2,18 @@ package utils;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 /**
  * Contains static methods for displaying common errors to user.
  *
  * @author Sakae Watanabe
  */
-public class ErrorHandler {
+public class NotificationHandler {
 
   //===========================================================================
   // Error Handlers
@@ -61,5 +64,20 @@ public class ErrorHandler {
     alert.showAndWait();
   }
 
+  /**
+   * The confirmPopup method will open a confirmation dialog window for user
+   * interaction and returns true when OK is clicked.
+   *
+   * @param event Action event passed through by calling method.
+   * @param content String value to be used as the confirmation dialog content text.
+   * @return True if the user clicks OK, false otherwise.
+   */
+  public static boolean confirmPopup(ActionEvent event, String content) {
+    Alert confirmation = new Alert(AlertType.CONFIRMATION);
+    confirmation.setTitle("Confirmation Notice");
+    confirmation.setContentText(content);
+    Optional<ButtonType> choice = confirmation.showAndWait();
+    return choice.get() == ButtonType.OK;
+  }
 
 }

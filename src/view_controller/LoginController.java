@@ -1,7 +1,5 @@
 package view_controller;
 
-import dao.impl.AppointmentDAOImpl;
-import dao.impl.CountryDAOImpl;
 import dao.impl.UserDAOImpl;
 import java.io.IOException;
 import java.net.URL;
@@ -11,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,9 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.Appointment;
 import model.User;
-import utils.ErrorHandler;
+import utils.NotificationHandler;
 
 /**
  * Controller class that handles the main application login screen. Responsible
@@ -117,13 +113,13 @@ public class LoginController implements Initializable {
         }
     }
     if (errorMessages.size() > 0) {
-      ErrorHandler.warningPopup(resources.getString("loginError"), errorMessages);
+      NotificationHandler.warningPopup(resources.getString("loginError"), errorMessages);
       userNameField.requestFocus();
     } else {
       try {
         loadMainView(event);
       } catch (IOException e) {
-        ErrorHandler.warningPopup("Main Screen", e.getMessage());
+        NotificationHandler.warningPopup("Main Screen", e.getMessage());
       }
     }
   }

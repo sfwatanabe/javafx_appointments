@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import model.Customer;
 import model.User;
 import utils.DBConnector;
 import utils.NotificationHandler;
@@ -98,7 +99,22 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   @Override
-  public int deleteAppointment(Appointment appointment, User user) {
+  public int deleteAppointment(Appointment appointment) {
+    int rowsAffected = 0;
+    String deleteById = "DELETE FROM appointments WHERE Appointment_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(deleteById)) {
+      ps.setInt(1, appointment.getId());
+      rowsAffected = ps.executeUpdate();
+    }catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment",e);
+    }
+
+    return rowsAffected;
+  }
+
+  @Override
+  public int deleteAppointmentByCustomer(Customer customer) {
     return 0;
   }
 

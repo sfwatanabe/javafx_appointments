@@ -1,6 +1,7 @@
 package view_controller;
 
 import static utils.NotificationHandler.confirmPopup;
+import static utils.NotificationHandler.warningPopup;
 
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
@@ -26,6 +27,7 @@ import javafx.scene.control.ToggleGroup;
 import model.Appointment;
 import model.Customer;
 import model.User;
+import org.w3c.dom.ls.LSOutput;
 import utils.NotificationHandler;
 
 public class MainViewController implements Initializable {
@@ -237,10 +239,6 @@ public class MainViewController implements Initializable {
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
     customers = customerDAO.getAll();
-//    appointments = appointmentDAO.getAll();
-//    appointments = appointmentDAO.getAll();
-    // Use a filtered list
-    appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p -> true);
 
     customerIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     customerNameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -262,12 +260,18 @@ public class MainViewController implements Initializable {
     apptEndCol.setCellFactory(cellData -> formatMyDate());
     apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
 
-    apptTableView.setItems(appointmentsFiltered);
-    // TODO Setup query appointments before in Appointments DAO
-    // ADD A listener to the toggle group.
+    // TODO Move these into a method for reuse
+    updateAppointments();
 
   }
 
+  /**
+   * Updated the appointment records in table view from the database.
+   */
+  private void updateAppointments() {
+    appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p -> true);
+    apptTableView.setItems(appointmentsFiltered);
+  }
 
   /**
    * Sets up cell factory formatting for LocalDateTime cell data.
@@ -344,9 +348,34 @@ public class MainViewController implements Initializable {
 
   }
 
+  /**
+   * Handles user request to delete selected appointment and updates the contents
+   * of the table view.
+   *
+   * @param event Event triggered when user clicks on delete appointment.
+   */
   @FXML
   private void deleteApptHandler(ActionEvent event) {
+    // TODO Add getSelection model logic
+    Appointment appointment  = apptTableView.getSelectionModel().getSelectedItem();
 
+    if (appointment != null){
+      // TODO Ask for user confirmation before executing the delete operation.
+      int apptId = appointment.getId();
+      String msg = "Delete appointment " + apptId + " are you sure?";
+      if (confirmPopup(event, msg)){
+        int rows = appointmentDAO.deleteAppointment(appointment);
+        if (rows > 0) {
+        // TODO update the appointments filtered list if we did it
+            String deleteMsg = "Appointment " + apptId + " deleted.";
+            warningPopup("Delete Complete", deleteMsg);
+            updateAppointments();
+            allRadioButton.setSelected(true);
+        }
+      }
+    } else {
+      warningPopup("Delete Failed", "Please select an appointment.");
+    }
   }
 
   @FXML

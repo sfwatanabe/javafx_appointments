@@ -3,6 +3,7 @@ package dao;
 import java.time.LocalDateTime;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import model.Customer;
 import model.User;
 
 /**
@@ -64,14 +65,21 @@ public interface AppointmentDAO {
   public int addAppointment(Appointment appointment, User user);
 
   /**
-   * deleteAppointment will be used to delete appointment record from database that
-   * matches appointment id of supplied object.
+   * deleteAppointment will be used to delete matching appointment from database.
    *
-   * @param appointment Appointment object to be removed from database.
-   * @param user User submitting the appointment to be deleted.
+   * @param appointment Appointment to be deleted from database.
    * @return Integer value representing number of affected rows.
    */
-  public int deleteAppointment(Appointment appointment, User user);
+  public int deleteAppointment(Appointment appointment);
+
+  /**
+   * deleteAppointment will be used to delete all appointments from database
+   * matching customer id of supplied Customer.
+   *
+   * @param customer Customer for which appointments will be deleted.
+   * @return Integer value representing number of affected rows.
+   */
+  public int deleteAppointmentByCustomer(Customer customer);
 
   /**
    * updateAppointment will be used to update appointment record in database

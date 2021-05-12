@@ -77,6 +77,7 @@ public class Appointment {
    * @param customerId  Integer representing associated customer's id number.
    * @param contactId   Integer representing associated contact's id number.
    * @param contactName String representing associated contact's name.
+   * @param userId      Integer value representing userID assigned to appointment.
    * @param title       String representing title for the appointment.
    * @param description String representing description of appointment.
    * @param type        String representing the type of appointment.

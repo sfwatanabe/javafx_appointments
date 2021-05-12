@@ -45,9 +45,8 @@ public class MainViewController implements Initializable {
   private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
 
   /**
-   * Observable list for holding appointment records in the table view.
+   * Filtered list for holding appointment records in the table view.
    */
-  private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
   private FilteredList<Appointment> appointmentsFiltered;
 
   /**
@@ -175,19 +174,27 @@ public class MainViewController implements Initializable {
   @FXML
   private TableView<Appointment> apptTableView;
 
-  /** Table column for appointment id. */
+  /**
+   * Table column for appointment id.
+   */
   @FXML
   private TableColumn<Appointment, Integer> apptIDCol;
 
-  /** Table column for appointment title. */
+  /**
+   * Table column for appointment title.
+   */
   @FXML
   private TableColumn<Appointment, String> apptTitleCol;
 
-  /** Table column for appointment description. */
+  /**
+   * Table column for appointment description.
+   */
   @FXML
   private TableColumn<Appointment, String> apptDescCol;
 
-  /**  */
+  /**
+   *
+   */
   @FXML
   private TableColumn<Appointment, String> apptLocationCol;
 
@@ -225,10 +232,9 @@ public class MainViewController implements Initializable {
   public void initialize(URL Location, ResourceBundle resources) {
     customers = customerDAO.getAll();
 //    appointments = appointmentDAO.getAll();
-    appointments = appointmentDAO.getAll();
+//    appointments = appointmentDAO.getAll();
     // Use a filtered list
-    appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p-> true);
-
+    appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p -> true);
 
     customerIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     customerNameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -237,7 +243,6 @@ public class MainViewController implements Initializable {
     customerPhoneCol.setCellValueFactory(cellData -> cellData.getValue().phoneNumberProperty());
     customerDivisionCol.setCellValueFactory(cellData -> cellData.getValue().divisionIdProperty());
     customerTableView.setItems(customers);
-
 
     apptIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     apptTitleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
@@ -261,8 +266,8 @@ public class MainViewController implements Initializable {
   /**
    * Sets up cell factory formatting for LocalDateTime cell data.
    *
-   * @param <T, LocalDateTime> Object type used to populate the table view using
-   *                          LocalDateTime attribute.
+   * @param <T, LocalDateTime> Object type used to populate the table view using LocalDateTime
+   *            attribute.
    * @return TableCell with formatted date time string.
    */
   private <T> TableCell<T, LocalDateTime> formatMyDate() {
@@ -283,8 +288,7 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Initializes user data for the scene and makes call to check for upcoming
-   * appointments.
+   * Initializes user data for the scene and makes call to check for upcoming appointments.
    *
    * @param user User currently accessing the application.
    */
@@ -295,16 +299,16 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Checks list of appointment data for any start times that are within 15
-   * minutes of user login and provides on screen alert.
+   * Checks list of appointment data for any start times that are within 15 minutes of user login
+   * and provides on screen alert.
    */
   private void checkForUpcoming() {
     List<String> messages = new ArrayList<>();
     LocalDateTime timeLimit = LocalDateTime.now().plusMinutes(15);
 
-    for (Appointment a : appointments) {
+    for (Appointment a : appointmentsFiltered) {
       var start = a.getStartTime();
-      if (start.isBefore(timeLimit)) {
+      if (start.isBefore(timeLimit) && (user.getId().equals(a.getUserId()))) {
         if (start.isBefore(LocalDateTime.now()) || start.isEqual(LocalDateTime.now())) {
           messages.add("Past Due - " + a);
         } else {
@@ -313,11 +317,11 @@ public class MainViewController implements Initializable {
       }
     }
 
-    if(messages.size() > 0) {
-      ErrorHandler.warningPopup("Appointments", messages);
+    if (messages.size() > 0) {
+      ErrorHandler.warningPopup("Appointments for user: " + user.getName(), messages);
     } else {
       String allClear = "No appointments within 15 minutes.";
-      ErrorHandler.warningPopup("Appointments", allClear);
+      ErrorHandler.warningPopup("Appointments for user: " + user.getName(), allClear);
     }
   }
 
@@ -356,19 +360,21 @@ public class MainViewController implements Initializable {
 
 
   /**
-   * Monitor action events triggered by the appointment view by toggle group.
-   * Sets predicate for the filtered list based on selected radio button
-   * using lambda function.
+   * Monitor action events triggered by the appointment view by toggle group. Sets predicate for the
+   * filtered list based on selected radio button using lambda function.
    *
    * @param event ActionEvent triggered by user selecting radio button.
    */
-  @FXML void apptViewRadio(ActionEvent event) {
-    if(viewByGroup.getSelectedToggle().equals(allRadioButton)) {
+  @FXML
+  void apptViewRadio(ActionEvent event) {
+    if (viewByGroup.getSelectedToggle().equals(allRadioButton)) {
       appointmentsFiltered.setPredicate(a -> true);
     } else if (viewByGroup.getSelectedToggle().equals(weekRadioButton)) {
-      appointmentsFiltered.setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusDays(7)));
+      appointmentsFiltered
+          .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusDays(7)));
     } else if (viewByGroup.getSelectedToggle().equals(monthRadioButton)) {
-      appointmentsFiltered.setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusMonths(1)));
+      appointmentsFiltered
+          .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusMonths(1)));
     }
   }
 

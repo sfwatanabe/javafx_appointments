@@ -28,8 +28,13 @@ import javafx.scene.control.ToggleGroup;
 import model.Appointment;
 import model.Customer;
 import model.User;
-import org.w3c.dom.ls.LSOutput;
 import utils.NotificationHandler;
+
+/**
+ * MainViewController handles scene events and logic for the main view.
+ *
+ * @author Sakae Watanabe
+ */
 
 public class MainViewController implements Initializable {
 
@@ -40,12 +45,12 @@ public class MainViewController implements Initializable {
   /**
    * CustomerDAOImpl used for updating customer records table view.
    */
-  private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+  private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
 
   /**
    * CustomerDAOImpl used for updating appointment records table view.
    */
-  private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
+  private final AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
 
   /**
    * Filtered list for holding appointment records in the table view.
@@ -281,10 +286,8 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Sets up cell factory formatting for LocalDateTime cell data.
+   * Provides cell factory formatting for LocalDateTime cell data.
    *
-   * @param <T, LocalDateTime> Object type used to populate the table view using LocalDateTime
-   *            attribute.
    * @return TableCell with formatted date time string.
    */
   private <T> TableCell<T, LocalDateTime> formatMyDate() {
@@ -345,6 +348,7 @@ public class MainViewController implements Initializable {
   //===========================================================================
   // Event Handlers & Helper Methods
   //===========================================================================
+
   @FXML
   private void addApptHandler(ActionEvent event) {
 

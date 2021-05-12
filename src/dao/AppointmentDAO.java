@@ -55,6 +55,15 @@ public interface AppointmentDAO {
    */
   public ObservableList<Appointment> getByContact(String contactName);
 
+
+  /**
+   * getByCustomerId looks up appointment records matching supplied contact name.
+   *
+   * @param customerId Integer representing customer id to match.
+   * @return ObservableList of appointments matching supplied customer id.
+   */
+  public ObservableList<Appointment> getByCustomerId(int customerId);
+
   /**
    * addAppointment will insert new appointment records into database.
    *

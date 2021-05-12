@@ -85,9 +85,18 @@ public class CustomerDAOImpl implements CustomerDAO {
   }
 
   @Override
-  public int deleteCustomer(Customer customer, User user) {
-    // TODO Must implement delete appointment by customer first
-    return 0;
+  public int deleteCustomer(Customer customer) {
+    int rowsAffected = 0;
+    String deleteById = "DELETE FROM customers WHERE Customer_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(deleteById)) {
+      ps.setInt(1, customer.getId());
+      rowsAffected = ps.executeUpdate();
+    }catch (SQLException e) {
+      NotificationHandler.sqlPopup("Customer",e);
+    }
+
+    return rowsAffected;
   }
 
   @Override

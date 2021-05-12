@@ -41,7 +41,11 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   @Override
   public Appointment getById(int appointmentId) {
     Appointment appointment = null;
-    String queryById = "SELECT * FROM appointments WHERE Appointment_ID = ?";
+    String queryById = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+                      + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+                      + " FROM appointments AS a"
+                      + " INNER JOIN contacts AS c"
+                      + " WHERE a.Contact_ID = c.Contact_ID AND a.Appointment_ID = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(queryById)) {
       ps.setInt(1, appointmentId);
@@ -89,6 +93,30 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   @Override
+  public ObservableList<Appointment> getByCustomerId(int customerId) {
+    ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    String queryByCustomerId = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+                              + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+                              + " FROM appointments AS a"
+                              + " INNER JOIN contacts AS c"
+                              + " WHERE a.Contact_ID = c.Contact_ID AND a.Customer_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(queryByCustomerId)) {
+      ps.setInt(1, customerId);
+
+      try (ResultSet rs = ps.executeQuery()) {
+       while (rs.next()) {
+         appointments.add(parseAppointment(rs));
+       }
+      }
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment", e);
+    }
+
+    return appointments;
+  }
+
+  @Override
   public ObservableList<Appointment> getByContact(String contactName) {
     return null;
   }
@@ -115,7 +143,17 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
   @Override
   public int deleteAppointmentByCustomer(Customer customer) {
-    return 0;
+    int rowsAffected = 0;
+    String deleteByCustomer = "DELETE FROM appointments WHERE Customer_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(deleteByCustomer)) {
+      ps.setInt(1, customer.getId());
+      rowsAffected = ps.executeUpdate();
+    }catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment",e);
+    }
+
+    return rowsAffected;
   }
 
   @Override

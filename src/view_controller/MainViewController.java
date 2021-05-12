@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -238,7 +239,6 @@ public class MainViewController implements Initializable {
   // TODO Add javadoc for the initialize -> explain usage of lambda for cellValueFactory
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
-    customers = customerDAO.getAll();
 
     customerIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     customerNameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -246,7 +246,6 @@ public class MainViewController implements Initializable {
     customerPostalCol.setCellValueFactory(cellData -> cellData.getValue().postalCodeProperty());
     customerPhoneCol.setCellValueFactory(cellData -> cellData.getValue().phoneNumberProperty());
     customerDivisionCol.setCellValueFactory(cellData -> cellData.getValue().divisionIdProperty());
-    customerTableView.setItems(customers);
 
     apptIDCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     apptTitleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
@@ -260,9 +259,17 @@ public class MainViewController implements Initializable {
     apptEndCol.setCellFactory(cellData -> formatMyDate());
     apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
 
-    // TODO Move these into a method for reuse
+    updateCustomers();
     updateAppointments();
 
+  }
+
+  /**
+   * Updates the list of customer records from the database.
+   */
+  private void updateCustomers() {
+    customers = customerDAO.getAll();
+    customerTableView.setItems(customers);
   }
 
   /**
@@ -349,28 +356,28 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Handles user request to delete selected appointment and updates the contents
-   * of the table view.
+   * Handles user request to delete selected appointment and updates the contents of the table
+   * view.
    *
    * @param event Event triggered when user clicks on delete appointment.
    */
   @FXML
   private void deleteApptHandler(ActionEvent event) {
-    // TODO Add getSelection model logic
-    Appointment appointment  = apptTableView.getSelectionModel().getSelectedItem();
+    Appointment appointment = apptTableView.getSelectionModel().getSelectedItem();
 
-    if (appointment != null){
-      // TODO Ask for user confirmation before executing the delete operation.
-      int apptId = appointment.getId();
-      String msg = "Delete appointment " + apptId + " are you sure?";
-      if (confirmPopup(event, msg)){
+    if (appointment != null) {
+
+      int appointmentId = appointment.getId();
+      String msg = "Delete appointment " + appointmentId + " are you sure?";
+
+      if (confirmPopup(event, msg)) {
         int rows = appointmentDAO.deleteAppointment(appointment);
+
         if (rows > 0) {
-        // TODO update the appointments filtered list if we did it
-            String deleteMsg = "Appointment " + apptId + " deleted.";
-            warningPopup("Delete Complete", deleteMsg);
-            updateAppointments();
-            allRadioButton.setSelected(true);
+          String deleteMsg = "Appointment " + appointmentId + " deleted.";
+          warningPopup("Delete Complete", deleteMsg);
+          updateAppointments();
+          allRadioButton.setSelected(true);
         }
       }
     } else {
@@ -378,9 +385,50 @@ public class MainViewController implements Initializable {
     }
   }
 
+
+  /**
+   * Handles user request to delete customer if selected and will also confirm
+   * deletion of associated customer appointments from the system. Provides user
+   * with a list of associated appointments that will be removed. Updates both
+   * customer and appointment views after transaction has been completed.
+   *
+   * @param event Event triggered when user clicks on delete customer.
+   */
   @FXML
   private void deleteCustomerHandler(ActionEvent event) {
+    Customer customer = customerTableView.getSelectionModel().getSelectedItem();
 
+    if (customer != null) {
+      int customerId = customer.getId();
+      String confirmationMsg = "Delete customer " + customer;
+      ObservableList<Appointment> associatedAppointments = appointmentDAO.getByCustomerId(customerId);
+
+      if (!associatedAppointments.isEmpty()){
+        confirmationMsg += "\n\nThe following appointments will also be deleted:\n\n" +
+            String.join("\n", associatedAppointments.stream().map(Appointment::toString)
+                .collect(Collectors.joining("\n")));
+      } else {
+        confirmationMsg += "\n\nCustomer has no associated appointments.";
+      }
+      confirmationMsg += "\n\nAre you sure?";
+
+      System.out.println(confirmationMsg);
+      if (confirmPopup(event, confirmationMsg)) {
+        // user confirmed now we delete the appointments then the customer FK Constraints
+        int appointmentsDeleted = appointmentDAO.deleteAppointmentByCustomer(customer);
+        int customerDeleted = customerDAO.deleteCustomer(customer);
+
+        if (customerDeleted > 0) {
+          String deleteMsg = "Customer " + customer + " deleted.\n" +
+              appointmentsDeleted + " associated appointments were deleted.";
+          warningPopup("Delete Complete", deleteMsg);
+          updateCustomers();
+          updateAppointments();
+        }
+      }
+    } else {
+      warningPopup("Delete Failed", "Please select a customer.");
+    }
   }
 
   @FXML
@@ -394,13 +442,13 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Exits the application.
+   * Exits the application upon user confirmation.
    *
    * @param event ActionEvent triggered by user clicking the exit button.
    */
   @FXML
   private void exitApp(ActionEvent event) {
-    if(confirmPopup(event, "Please confirm you would like to exit.")) {
+    if (confirmPopup(event, "Please confirm you would like to exit.")) {
       System.exit(0);
     }
   }

@@ -130,6 +130,10 @@
     /*-fx-font-weight: bold;*/
 }
 
+#idField {
+    -fx-background-color: light-grey;
+}
+
 .form-label {
     -fx-font-size: 14px;
     -fx-font-color: dark-blue;

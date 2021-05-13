@@ -221,12 +221,25 @@ public class CustomerViewController implements Initializable {
     if (isNew) {
       currentCustomer = new Customer(-1, name, address, postalCode, phone, divisionId);
       currentCustomer.setId(customerDAO.addCustomer(currentCustomer, user));
-      NotificationHandler.warningPopup("Add Complete", "Customer\n" +
-          currentCustomer + " has been added." );
-      loadMainView(event);
+      if (currentCustomer.getId() > 0){
+        NotificationHandler.warningPopup("Add Complete", "Customer\n" +
+            currentCustomer + " has been added.");
+        loadMainView(event);
+      }
+    } else {
+      // TODO direct existing customer to an update
+      currentCustomer.setName(name);
+      currentCustomer.setAddress(address);
+      currentCustomer.setPostalCode(postalCode);
+      currentCustomer.setPhoneNumber(phone);
+      currentCustomer.setDivisionId(divisionId);
+      int rowsAffected = customerDAO.updateCustomer(currentCustomer, user);
+      if (rowsAffected > 0) {
+        NotificationHandler.warningPopup("Update Complete", "Customer\n" +
+            currentCustomer + " has been updated.");
+        loadMainView(event);
+      }
     }
-    // TODO direct existing customer to an update
-
   }
 
   /**

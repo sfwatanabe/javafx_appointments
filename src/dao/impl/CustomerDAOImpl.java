@@ -114,6 +114,42 @@ public class CustomerDAOImpl implements CustomerDAO {
     return newCustomerId;
   }
 
+
+  @Override
+  public int updateCustomer(Customer customer, User user) {
+    // TODO implement updateCustomer and return customer id of record
+    int rowsAffected = 0;
+    String updateCustomer = "UPDATE customers "
+                            + " SET Customer_Name = ?,"
+                            + " Address = ?,"
+                            + " Postal_Code = ?,"
+                            + " Phone = ?,"
+                            + " Division_ID = ?,"
+                            + " Last_Update = NOW(),"
+                            + " Last_Updated_By = ?"
+                          + "WHERE Customer_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(updateCustomer)) {
+      ps.setString(1, customer.getName());
+      ps.setString(2, customer.getAddress());
+      ps.setString(3, customer.getPostalCode());
+      ps.setString(4, customer.getPhoneNumber());
+      ps.setInt(5, customer.getDivisionId());
+      ps.setString(6, user.getName());
+      ps.setInt(7, customer.getId());
+
+      rowsAffected = ps.executeUpdate();
+
+      if (rowsAffected == 0) {
+        throw new SQLException("Create user failed, no rows affected.");
+      }
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Customer-Update", e);
+    }
+
+    return rowsAffected;
+  }
+
   @Override
   public int deleteCustomer(Customer customer) {
     int rowsAffected = 0;
@@ -127,12 +163,6 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     return rowsAffected;
-  }
-
-  @Override
-  public int updateCustomer(Customer customer, User user) {
-    // TODO implement updateCustomer and return customer id of record
-    return 0;
   }
 
   /**

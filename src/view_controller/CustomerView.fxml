@@ -72,7 +72,7 @@
                         <VBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="146.0" spacing="5.0">
                            <children>
                               <ComboBox fx:id="divisionComboBox" maxWidth="160.0" minWidth="160.0" onAction="#divisionComboHandler" prefHeight="29.0" prefWidth="160.0" promptText="Division" visibleRowCount="5" />
-                              <ComboBox fx:id="countryComboBox" maxWidth="160.0" minWidth="160.0" onAction="#filterDivisions" prefHeight="27.0" prefWidth="160.0" promptText="1 - UK" visibleRowCount="4" />
+                              <ComboBox fx:id="countryComboBox" maxWidth="160.0" minWidth="160.0" onAction="#countryComboHandler" prefHeight="27.0" prefWidth="160.0" promptText="1 - UK" visibleRowCount="4" />
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="446.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="446.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.CustomerViewController">
    <children>
       <HBox fillHeight="false" prefHeight="212.0" prefWidth="436.0" spacing="10.0">
          <padding>
@@ -69,7 +69,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <ComboBox fx:id="divisionComboBox" onAction="#filterCountries" prefHeight="36.0" prefWidth="100.0" promptText="Division" visibleRowCount="5" />
+                        <ComboBox fx:id="divisionComboBox" onAction="#divisionComboHandler" prefHeight="36.0" prefWidth="100.0" promptText="Division" visibleRowCount="5" />
                         <ComboBox fx:id="countryComboBox" onAction="#filterDivisions" prefHeight="37.0" prefWidth="100.0" promptText="Country" visibleRowCount="4" />
                         <VBox prefHeight="52.0" prefWidth="168.0">
                            <children>

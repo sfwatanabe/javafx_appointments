@@ -39,7 +39,7 @@ public class LoginController implements Initializable {
   private ResourceBundle resources;
 
   /** UserDAOImpl object for obtaining user records. */
-  private UserDAOImpl userDAOImpl = new UserDAOImpl();
+  private final UserDAOImpl userDAOImpl = new UserDAOImpl();
 
   /** User object for holding current record for validation.  */
   private User user = null;

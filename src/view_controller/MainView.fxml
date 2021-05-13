@@ -36,8 +36,8 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="214.0" spacing="2.0">
                            <children>
-                              <Button fx:id="addCustomerButton" mnemonicParsing="false" onAction="#addCustomerHandler" prefHeight="35.0" prefWidth="70.0" text="ADD" />
-                              <Button fx:id="updateCustomerButton" mnemonicParsing="false" onAction="#updateCustomerHandler" prefHeight="35.0" prefWidth="70.0" text="UPDATE" />
+                              <Button fx:id="addCustomerButton" mnemonicParsing="false" onAction="#loadCustomerView" prefHeight="35.0" prefWidth="70.0" text="ADD" />
+                              <Button fx:id="updateCustomerButton" mnemonicParsing="false" onAction="#loadCustomerView" prefHeight="35.0" prefWidth="70.0" text="UPDATE" />
                               <Button fx:id="deleteCustomerButton" mnemonicParsing="false" onAction="#deleteCustomerHandler" prefHeight="35.0" prefWidth="70.0" text="DELETE" />
                            </children>
                            <HBox.margin>

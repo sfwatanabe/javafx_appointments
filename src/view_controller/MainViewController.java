@@ -5,6 +5,7 @@ import static utils.NotificationHandler.warningPopup;
 
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,9 +16,14 @@ import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -25,6 +31,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 import model.User;
@@ -264,15 +271,15 @@ public class MainViewController implements Initializable {
     apptEndCol.setCellFactory(cellData -> formatMyDate());
     apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
 
-    updateCustomers();
-    updateAppointments();
+    updateCustomersItems();
+    updateAppointmentsItems();
 
   }
 
   /**
    * Updates the list of customer records from the database.
    */
-  private void updateCustomers() {
+  private void updateCustomersItems() {
     customers = customerDAO.getAll();
     customerTableView.setItems(customers);
   }
@@ -280,9 +287,11 @@ public class MainViewController implements Initializable {
   /**
    * Updated the appointment records in table view from the database.
    */
-  private void updateAppointments() {
+  private void updateAppointmentsItems() {
     appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p -> true);
-    apptTableView.setItems(appointmentsFiltered);
+    SortedList<Appointment> sortedData = new SortedList<>(appointmentsFiltered);
+    sortedData.comparatorProperty().bind(apptTableView.comparatorProperty());
+    apptTableView.setItems(sortedData);
   }
 
   /**
@@ -345,50 +354,46 @@ public class MainViewController implements Initializable {
     }
   }
 
+
+  /**
+   * Loads customer record view and calls appropriate init method for the
+   * customer records screen based on adding new customer or updating existing.
+   *
+   * @param event ActionEvent passed through by the add and update customer
+   *              buttons
+   */
+  @FXML
+  private void loadCustomerView(ActionEvent event) throws IOException {
+    String buttonId = ((Button)event.getSource()).getId();
+
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/CustomerView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+    CustomerViewController controller = loader.getController();
+    // TODO put the scene initCustomerData methods here after FXML is done
+    if (buttonId.equals(addCustomerButton.getId())) {
+      controller.initCustomerData(true, user);
+
+    } else if (buttonId.equals(updateCustomerButton.getId())) {
+        Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+        if (customer != null){
+          controller.initCustomerData(false, user, customer);
+
+      } else {
+          warningPopup("No Customer Selected", "Please select a customer.");
+          return;
+        }
+    }
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
+  }
+
   //===========================================================================
   // Event Handlers & Helper Methods
   //===========================================================================
-
-  @FXML
-  private void addApptHandler(ActionEvent event) {
-
-  }
-
-  @FXML
-  private void addCustomerHandler(ActionEvent event) {
-
-  }
-
-  /**
-   * Handles user request to delete selected appointment and updates the contents of the table
-   * view.
-   *
-   * @param event Event triggered when user clicks on delete appointment.
-   */
-  @FXML
-  private void deleteApptHandler(ActionEvent event) {
-    Appointment appointment = apptTableView.getSelectionModel().getSelectedItem();
-
-    if (appointment != null) {
-
-      int appointmentId = appointment.getId();
-      String msg = "Delete appointment " + appointmentId + " are you sure?";
-
-      if (confirmPopup(event, msg)) {
-        int rows = appointmentDAO.deleteAppointment(appointment);
-
-        if (rows > 0) {
-          String deleteMsg = "Appointment " + appointmentId + " deleted.";
-          warningPopup("Delete Complete", deleteMsg);
-          updateAppointments();
-          allRadioButton.setSelected(true);
-        }
-      }
-    } else {
-      warningPopup("Delete Failed", "Please select an appointment.");
-    }
-  }
-
 
   /**
    * Handles user request to delete customer if selected and will also confirm
@@ -426,8 +431,8 @@ public class MainViewController implements Initializable {
           String deleteMsg = "Customer " + customer + " deleted.\n" +
               appointmentsDeleted + " associated appointments were deleted.";
           warningPopup("Delete Complete", deleteMsg);
-          updateCustomers();
-          updateAppointments();
+          updateCustomersItems();
+          updateAppointmentsItems();
         }
       }
     } else {
@@ -441,9 +446,40 @@ public class MainViewController implements Initializable {
   }
 
   @FXML
-  private void updateCustomerHandler(ActionEvent event) {
+  private void addApptHandler(ActionEvent event) {
 
   }
+  /**
+   * Handles user request to delete selected appointment and updates the contents of the table
+   * view.
+   *
+   * @param event Event triggered when user clicks on delete appointment.
+   */
+  @FXML
+  private void deleteApptHandler(ActionEvent event) {
+    Appointment appointment = apptTableView.getSelectionModel().getSelectedItem();
+
+    if (appointment != null) {
+
+      int appointmentId = appointment.getId();
+      String msg = "Delete appointment " + appointmentId + " are you sure?";
+
+      if (confirmPopup(event, msg)) {
+        int rows = appointmentDAO.deleteAppointment(appointment);
+
+        if (rows > 0) {
+          String deleteMsg = "Appointment " + appointmentId + " deleted.";
+          warningPopup("Delete Complete", deleteMsg);
+          updateAppointmentsItems();
+          allRadioButton.setSelected(true);
+        }
+      }
+    } else {
+      warningPopup("Delete Failed", "Please select an appointment.");
+    }
+  }
+
+
 
   /**
    * Exits the application upon user confirmation.
@@ -474,6 +510,10 @@ public class MainViewController implements Initializable {
       appointmentsFiltered
           .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusMonths(1)));
     }
+
+    SortedList<Appointment> sortedAppointments =new SortedList<>(appointmentsFiltered);
+    sortedAppointments.comparatorProperty().bind(apptTableView.comparatorProperty());
+    apptTableView.setItems(sortedAppointments);
   }
 
 }

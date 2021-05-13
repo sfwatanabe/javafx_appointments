@@ -130,6 +130,27 @@
     /*-fx-font-weight: bold;*/
 }
 
+.empty-form-field {
+    -fx-background-color: transparent;
+    -fx-border-color: red red red red;
+    -fx-font-size: 14px;
+    /*-fx-font-weight: bold;*/
+}
+
+.combo-box-empty {
+    -fx-background-color: transparent;
+    -fx-border-color: red red red red;
+/*    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, red, primary-bg;*/
+/*    -fx-background-insets: 0 0 -1 0, 0, 1, 2;*/
+/*    -fx-background-radius: 3px, 3px, 2px, 1px;*/
+/*    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; !* 4 8 4 8 *!*/
+/*    -fx-text-fill: -fx-text-base-color;*/
+/*    -fx-alignment: CENTER;*/
+/*    -fx-content-display: LEFT;*/
+}
+
+
+
 #idField {
     -fx-background-color: light-grey;
 }

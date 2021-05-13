@@ -5,6 +5,11 @@ import dao.impl.CustomerDAOImpl;
 import dao.impl.DivisionDAOImpl;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -16,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -66,6 +72,16 @@ public class CustomerViewController implements Initializable {
    * Filtered list for holding division records for the combo box.
    */
   private FilteredList<Division> divisions;
+
+  /**
+   * List containing the field controls for the form.
+   */
+  private List<Control> fieldControls = new ArrayList<>();
+
+  /**
+   * Map with status representing if field has been completed.
+   */
+  private Map<String, Boolean> fieldControlStatus = new HashMap<>();
 
   /**
    * Customer id information.
@@ -139,6 +155,9 @@ public class CustomerViewController implements Initializable {
     countries = countryDAO.getAll().filtered(c -> true);
     countryComboBox.setItems(countries);
 
+    fieldControls.addAll(Arrays.asList(nameField, addressField, postCode, divisionComboBox,
+                                        countryComboBox, phoneNumber));
+    fieldControls.forEach(this::checkEmptyField);
   }
 
   /**
@@ -152,6 +171,9 @@ public class CustomerViewController implements Initializable {
     this.user = user;
     this.isNew = isNew;
     this.currentCustomer = null;
+    for(Control c : fieldControls) {
+      fieldControlStatus.putIfAbsent(c.getId(), false);
+    }
     updateLabels();
     System.out.println(user + "\n" + currentCustomer);
   }
@@ -167,6 +189,9 @@ public class CustomerViewController implements Initializable {
     this.currentCustomer = customer;
     this.isNew = isNew;
     updateLabels();
+    for(Control c : fieldControls) {
+      fieldControlStatus.putIfAbsent(c.getId(), true);
+    }
     System.out.println(user + "\n" + currentCustomer);
   }
 
@@ -321,6 +346,65 @@ public class CustomerViewController implements Initializable {
       }
     }
     divisions.setPredicate(d -> d.getCountryID() == currentCountry.getId());
+  }
+
+  private void checkEmptyField(Control control) {
+    control.focusedProperty().addListener((observable, oldValue, newValue) -> {
+      boolean filled = true;
+
+      if (!newValue) {
+        if (control instanceof TextField) {
+          if (((TextField) control).getText().isBlank()) {
+            control.getStyleClass().add("empty-form-field");
+            filled = false;
+          } else {
+            control.getStyleClass().removeIf(style -> style.equals("empty-form-field"));
+          }
+
+        } else if (control instanceof ComboBox) {
+          if (((ComboBox) control).getSelectionModel().getSelectedItem() == null) {
+            control.getStyleClass().add("combo-box-empty");
+            filled = false;
+          } else {
+            control.getStyleClass().removeIf(style -> style.equals("combo-box-empty"));
+          }
+        }
+
+      }
+      fieldControlStatus.put(control.getId(), filled);
+      System.out.println(control);
+      if (!okToSave()) {
+        // TODO Update this section
+        // TODO Test saving a customer from clicking to the save button from the field.
+        System.out.println("not ok");
+        saveButton.setDisable(true);
+      } else {
+        System.out.println("ok");
+        saveButton.setDisable(false);
+      }
+    });
+  }
+
+
+  /**
+   * Checks the status map and will enable the save button iff all fields have
+   * been completed.
+   *
+   * @return True if all fields have been completed and ok to save/update record.
+   */
+  private boolean okToSave() {
+    boolean ok = true;
+    StringBuilder badFields = new StringBuilder();
+
+    for (Map.Entry<String, Boolean> entry : fieldControlStatus.entrySet()) {
+      if (!entry.getValue()) {
+        badFields.append(" | ").append(entry.getKey()).append(" | ");
+        ok = false;
+      }
+    }
+    // TODO Replace this with a notification message with an fxml label
+    System.out.println(badFields);
+    return ok;
   }
 
 }

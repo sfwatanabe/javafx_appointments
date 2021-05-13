@@ -369,7 +369,8 @@ public class Appointment {
   @Override
   public String toString() {
       return  "Appt ID: " + id.get() +
-            "\tDate: " + startTime.get().toLocalDate() +
-            "\tTime: " + startTime.get().toLocalTime();
+            "\nDate: " + startTime.get().toLocalDate() +
+            "\nTime: " + startTime.get().toLocalTime() +
+            "\nType: " + type.get();
   }
 }

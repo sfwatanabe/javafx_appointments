@@ -39,7 +39,7 @@ public class LoginController implements Initializable {
   private ResourceBundle resources;
 
   /** UserDAOImpl object for obtaining user records. */
-  private UserDAOImpl userDAOImpl = new UserDAOImpl();
+  private final UserDAOImpl userDAOImpl = new UserDAOImpl();
 
   /** User object for holding current record for validation.  */
   private User user = null;
@@ -76,9 +76,6 @@ public class LoginController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     this.resources = resources;
     detectZoneID();
-
-    // TODO remember to delete these manual tests.
-
     passwordField.setOnAction(this::verifyLogin);
   }
 
@@ -129,6 +126,7 @@ public class LoginController implements Initializable {
    *
    * @param event ActionEvent produced when user enters credentials.
    */
+  @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
     passwordField.clear();
     userNameField.clear();

@@ -5,6 +5,7 @@ import static utils.NotificationHandler.warningPopup;
 
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.CustomerDAOImpl;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,9 +16,14 @@ import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -25,11 +31,17 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 import model.User;
-import org.w3c.dom.ls.LSOutput;
 import utils.NotificationHandler;
+
+/**
+ * MainViewController handles scene events and logic for the main view.
+ *
+ * @author Sakae Watanabe
+ */
 
 public class MainViewController implements Initializable {
 
@@ -40,12 +52,12 @@ public class MainViewController implements Initializable {
   /**
    * CustomerDAOImpl used for updating customer records table view.
    */
-  private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+  private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
 
   /**
    * CustomerDAOImpl used for updating appointment records table view.
    */
-  private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
+  private final AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
 
   /**
    * Filtered list for holding appointment records in the table view.
@@ -62,6 +74,8 @@ public class MainViewController implements Initializable {
    * User currently logged into the application.
    */
   private static User user = null;
+
+  private static boolean firstLoad = true;
 
   /**
    * Exit button to leave application.
@@ -84,6 +98,7 @@ public class MainViewController implements Initializable {
   /**
    * Button to delete an existing customer record.
    */
+  @SuppressWarnings("unused")
   @FXML
   private Button deleteCustomerButton;
 
@@ -202,32 +217,56 @@ public class MainViewController implements Initializable {
   private TableColumn<Appointment, String> apptDescCol;
 
   /**
-   *
+   * Table column for appointment location information.
    */
   @FXML
   private TableColumn<Appointment, String> apptLocationCol;
 
+  /**
+   * Table column for appointment contact name information.
+   */
   @FXML
   private TableColumn<Appointment, String> apptContactCol;
 
+  /**
+   * Table column for appointment type information.
+   */
   @FXML
   private TableColumn<Appointment, String> apptTypeCol;
 
+  /**
+   * Table column for appointment start time data.
+   */
   @FXML
   private TableColumn<Appointment, LocalDateTime> apptStartCol;
 
+  /**
+   * Table column for appointment end time data.
+   */
   @FXML
   private TableColumn<Appointment, LocalDateTime> apptEndCol;
 
+  /**
+   * Table column for appointment's associated customer id.
+   */
   @FXML
   private TableColumn<Appointment, Integer> apptCustomerIdCol;
 
+  /**
+   * Button to generate monthly report by appointment type.
+   */
   @FXML
   private Button monthlyReportButton;
 
+  /**
+   * Button to generate schedule report by contact.
+   */
   @FXML
   private Button contactReportButton;
 
+  /**
+   * Button to generate report of appointments by division.
+   */
   @FXML
   private Button divisionReportButton;
 
@@ -259,15 +298,15 @@ public class MainViewController implements Initializable {
     apptEndCol.setCellFactory(cellData -> formatMyDate());
     apptCustomerIdCol.setCellValueFactory(cellData -> cellData.getValue().customerIdProperty());
 
-    updateCustomers();
-    updateAppointments();
+    updateCustomersItems();
+    updateAppointmentsItems();
 
   }
 
   /**
    * Updates the list of customer records from the database.
    */
-  private void updateCustomers() {
+  private void updateCustomersItems() {
     customers = customerDAO.getAll();
     customerTableView.setItems(customers);
   }
@@ -275,20 +314,20 @@ public class MainViewController implements Initializable {
   /**
    * Updated the appointment records in table view from the database.
    */
-  private void updateAppointments() {
+  private void updateAppointmentsItems() {
     appointmentsFiltered = new FilteredList<>(appointmentDAO.getAll(), p -> true);
-    apptTableView.setItems(appointmentsFiltered);
+    SortedList<Appointment> sortedData = new SortedList<>(appointmentsFiltered);
+    sortedData.comparatorProperty().bind(apptTableView.comparatorProperty());
+    apptTableView.setItems(sortedData);
   }
 
   /**
-   * Sets up cell factory formatting for LocalDateTime cell data.
+   * Provides cell factory formatting for LocalDateTime cell data.
    *
-   * @param <T, LocalDateTime> Object type used to populate the table view using LocalDateTime
-   *            attribute.
    * @return TableCell with formatted date time string.
    */
   private <T> TableCell<T, LocalDateTime> formatMyDate() {
-    return new TableCell<T, LocalDateTime>() {
+    return new TableCell<>() {
       @Override
       protected void updateItem(LocalDateTime item, boolean empty) {
         String DATE_FORMATTER = "yyyy-MM-dd HH:mm";
@@ -298,7 +337,7 @@ public class MainViewController implements Initializable {
         if (empty) {
           setText(null);
         } else {
-          setText(String.format(item.format(formatter)));
+          setText(item.format(formatter));
         }
       }
     };
@@ -310,9 +349,12 @@ public class MainViewController implements Initializable {
    * @param user User currently accessing the application.
    */
   public void initData(User user) {
-    this.user = user;
+    MainViewController.user = user;
     userName.setText(user.getName());
-    checkForUpcoming();
+    if (firstLoad) {
+      checkForUpcoming();
+      firstLoad = false;
+    }
   }
 
   /**
@@ -327,9 +369,9 @@ public class MainViewController implements Initializable {
       var start = a.getStartTime();
       if (start.isBefore(timeLimit) && (user.getId().equals(a.getUserId()))) {
         if (start.isBefore(LocalDateTime.now()) || start.isEqual(LocalDateTime.now())) {
-          messages.add("Past Due - " + a);
+          messages.add("\nPast Due:\n" + a);
         } else {
-          messages.add("Upcoming - " + a);
+          messages.add("\nUpcoming:\n" + a);
         }
       }
     }
@@ -342,16 +384,99 @@ public class MainViewController implements Initializable {
     }
   }
 
+
+  /**
+   * Loads customer record view and calls appropriate init method for the customer records screen
+   * based on adding new customer or updating existing.
+   *
+   * @param event ActionEvent passed through by the add and update customer buttons
+   */
+  @FXML
+  private void loadCustomerView(ActionEvent event) throws IOException {
+    String buttonId = ((Button) event.getSource()).getId();
+
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/CustomerView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+    CustomerViewController controller = loader.getController();
+    // TODO put the scene initCustomerData methods here after FXML is done
+    if (buttonId.equals(addCustomerButton.getId())) {
+      controller.initCustomerData(true, user);
+
+    } else if (buttonId.equals(updateCustomerButton.getId())) {
+      Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+      if (customer != null) {
+        controller.initCustomerData(false, user, customer);
+
+      } else {
+        warningPopup("No Customer Selected", "Please select a customer.");
+        return;
+      }
+    }
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
+  }
+
   //===========================================================================
   // Event Handlers & Helper Methods
   //===========================================================================
+
+  /**
+   * Handles user request to delete customer if selected and will also confirm deletion of
+   * associated customer appointments from the system. Provides user with a list of associated
+   * appointments that will be removed. Updates both customer and appointment views after
+   * transaction has been completed.
+   *
+   * @param event Event triggered when user clicks on delete customer.
+   */
   @FXML
-  private void addApptHandler(ActionEvent event) {
+  private void deleteCustomerHandler(ActionEvent event) {
+    Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+
+    if (customer != null) {
+      int customerId = customer.getId();
+      String confirmationMsg = "Delete customer " + customer;
+      ObservableList<Appointment> associatedAppointments = appointmentDAO
+          .getByCustomerId(customerId);
+
+      if (!associatedAppointments.isEmpty()) {
+        confirmationMsg += "\n\nThe following appointments will also be deleted:\n\n" +
+            String.join("\n", associatedAppointments.stream().map(Appointment::toString)
+                .collect(Collectors.joining("\n")));
+      } else {
+        confirmationMsg += "\n\nCustomer has no associated appointments.";
+      }
+      confirmationMsg += "\n\nAre you sure?";
+
+      System.out.println(confirmationMsg);
+      if (confirmPopup(event, confirmationMsg)) {
+        // user confirmed now we delete the appointments then the customer FK Constraints
+        int appointmentsDeleted = appointmentDAO.deleteAppointmentByCustomer(customer);
+        int customerDeleted = customerDAO.deleteCustomer(customer);
+
+        if (customerDeleted > 0) {
+          String deleteMsg = "Customer " + customer + " deleted.\n" +
+              appointmentsDeleted + " associated appointments were deleted.";
+          warningPopup("Delete Complete", deleteMsg);
+          updateCustomersItems();
+          updateAppointmentsItems();
+        }
+      }
+    } else {
+      warningPopup("Delete Failed", "Please select a customer.");
+    }
+  }
+
+  @FXML
+  private void updateApptHandler(ActionEvent event) {
 
   }
 
   @FXML
-  private void addCustomerHandler(ActionEvent event) {
+  private void addApptHandler(ActionEvent event) {
 
   }
 
@@ -376,7 +501,7 @@ public class MainViewController implements Initializable {
         if (rows > 0) {
           String deleteMsg = "Appointment " + appointmentId + " deleted.";
           warningPopup("Delete Complete", deleteMsg);
-          updateAppointments();
+          updateAppointmentsItems();
           allRadioButton.setSelected(true);
         }
       }
@@ -385,61 +510,6 @@ public class MainViewController implements Initializable {
     }
   }
 
-
-  /**
-   * Handles user request to delete customer if selected and will also confirm
-   * deletion of associated customer appointments from the system. Provides user
-   * with a list of associated appointments that will be removed. Updates both
-   * customer and appointment views after transaction has been completed.
-   *
-   * @param event Event triggered when user clicks on delete customer.
-   */
-  @FXML
-  private void deleteCustomerHandler(ActionEvent event) {
-    Customer customer = customerTableView.getSelectionModel().getSelectedItem();
-
-    if (customer != null) {
-      int customerId = customer.getId();
-      String confirmationMsg = "Delete customer " + customer;
-      ObservableList<Appointment> associatedAppointments = appointmentDAO.getByCustomerId(customerId);
-
-      if (!associatedAppointments.isEmpty()){
-        confirmationMsg += "\n\nThe following appointments will also be deleted:\n\n" +
-            String.join("\n", associatedAppointments.stream().map(Appointment::toString)
-                .collect(Collectors.joining("\n")));
-      } else {
-        confirmationMsg += "\n\nCustomer has no associated appointments.";
-      }
-      confirmationMsg += "\n\nAre you sure?";
-
-      System.out.println(confirmationMsg);
-      if (confirmPopup(event, confirmationMsg)) {
-        // user confirmed now we delete the appointments then the customer FK Constraints
-        int appointmentsDeleted = appointmentDAO.deleteAppointmentByCustomer(customer);
-        int customerDeleted = customerDAO.deleteCustomer(customer);
-
-        if (customerDeleted > 0) {
-          String deleteMsg = "Customer " + customer + " deleted.\n" +
-              appointmentsDeleted + " associated appointments were deleted.";
-          warningPopup("Delete Complete", deleteMsg);
-          updateCustomers();
-          updateAppointments();
-        }
-      }
-    } else {
-      warningPopup("Delete Failed", "Please select a customer.");
-    }
-  }
-
-  @FXML
-  private void updateApptHandler(ActionEvent event) {
-
-  }
-
-  @FXML
-  private void updateCustomerHandler(ActionEvent event) {
-
-  }
 
   /**
    * Exits the application upon user confirmation.
@@ -460,7 +530,7 @@ public class MainViewController implements Initializable {
    * @param event ActionEvent triggered by user selecting radio button.
    */
   @FXML
-  void apptViewRadio(ActionEvent event) {
+  void apptViewRadio(@SuppressWarnings("unused") ActionEvent event) {
     if (viewByGroup.getSelectedToggle().equals(allRadioButton)) {
       appointmentsFiltered.setPredicate(a -> true);
     } else if (viewByGroup.getSelectedToggle().equals(weekRadioButton)) {
@@ -470,6 +540,10 @@ public class MainViewController implements Initializable {
       appointmentsFiltered
           .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusMonths(1)));
     }
+
+    SortedList<Appointment> sortedAppointments = new SortedList<>(appointmentsFiltered);
+    sortedAppointments.comparatorProperty().bind(apptTableView.comparatorProperty());
+    apptTableView.setItems(sortedAppointments);
   }
 
 }

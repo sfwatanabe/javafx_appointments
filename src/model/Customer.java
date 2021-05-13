@@ -48,7 +48,21 @@ public class Customer extends Person {
     this.phoneNumber.set(phoneNumber);
     this.divisionId.set(divisionId);
   }
-  
+
+  /**
+   * No Arg constructor for the Customer class initializes empty strings and
+   * negative id numbers.
+   */
+  public Customer() {
+
+    super();
+    this.address.set("");
+    this.postalCode.set("");
+    this.phoneNumber.set("");
+    this.divisionId.set(-1);
+  }
+
+
   //===========================================================================
   // Getter & Setter Methods
   //===========================================================================

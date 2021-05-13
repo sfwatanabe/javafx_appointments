@@ -32,6 +32,12 @@ import model.Division;
 import model.User;
 import utils.NotificationHandler;
 
+
+/**
+ * Handles logic and data collection for the customer record screen.
+ *
+ * @author Sakae Watanabe
+ */
 public class CustomerViewController implements Initializable {
 
   /**
@@ -77,11 +83,13 @@ public class CustomerViewController implements Initializable {
   /**
    * List containing the field controls for the form.
    */
+  @SuppressWarnings("FieldMayBeFinal")
   private List<Control> fieldControls = new ArrayList<>();
 
   /**
    * Map with status representing if field has been completed.
    */
+  @SuppressWarnings("FieldMayBeFinal")
   private Map<String, Boolean> fieldControlStatus = new HashMap<>();
 
   /**
@@ -135,6 +143,7 @@ public class CustomerViewController implements Initializable {
   /**
    * Cancel the current update or new customer record.
    */
+  @SuppressWarnings("unused")
   @FXML
   private Button cancelButton;
 
@@ -214,7 +223,8 @@ public class CustomerViewController implements Initializable {
       filterDivisions();
       divisionComboBox.getSelectionModel().selectFirst();
 
-    } else if (!isNew && currentCustomer != null) {
+    } else //noinspection ConstantConditions
+      if (!isNew && currentCustomer != null) {
       customerFormType.setText("Update Existing");
       idField.setText(String.valueOf(currentCustomer.getId()));
       nameField.setText(currentCustomer.getName());
@@ -244,9 +254,11 @@ public class CustomerViewController implements Initializable {
 
 
   /**
+   * Attempts to save the new customer record or update the current record being
+   * browsed.
    *
-   * @param event
-   * @throws IOException
+   * @param event ActionEvent triggered by user clicking on the save button.
+   * @throws IOException Exception from failure to load the main scene.
    */
   @FXML
   private void saveCustomerHandler(ActionEvent event) throws IOException {
@@ -284,7 +296,7 @@ public class CustomerViewController implements Initializable {
   }
 
   /**
-   * Cancel the current add or update and revert scene to the main view.
+   * Cancel the current add or update operation and revert scene to the main view.
    *
    * @param event ActionEvent from user clicking on the cancel button.
    */
@@ -304,6 +316,7 @@ public class CustomerViewController implements Initializable {
    *
    * @param event ActionEvent triggered by save or cancel button handlers.
    */
+  @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
@@ -326,7 +339,7 @@ public class CustomerViewController implements Initializable {
    *              division combo box.
    */
   @FXML
-  private void divisionComboHandler(ActionEvent event) {
+  private void divisionComboHandler(@SuppressWarnings("unused") ActionEvent event) {
     Division currentDivision = divisionComboBox.getSelectionModel().getSelectedItem();
     Country currentCountry = countryComboBox.getSelectionModel().getSelectedItem();
     if ((currentDivision != null) && (currentCountry == null)){
@@ -345,13 +358,13 @@ public class CustomerViewController implements Initializable {
    *              country combo box.
    */
   @FXML
-  private void countryComboHandler(ActionEvent event) {
+  private void countryComboHandler(@SuppressWarnings("unused") ActionEvent event) {
     filterDivisions();
   }
 
 
   /**
-   * Filters list of available choices for divisions based on country id.
+   * Filters list of available choices for divisions based on country selection.
    */
   private void filterDivisions() {
     Country currentCountry = countryComboBox.getSelectionModel().getSelectedItem();
@@ -386,6 +399,7 @@ public class CustomerViewController implements Initializable {
           }
 
         } else if (control instanceof ComboBox) {
+          //noinspection rawtypes
           if (((ComboBox) control).getSelectionModel().getSelectedItem() == null) {
             control.getStyleClass().add("combo-box-empty");
             filled = false;
@@ -420,9 +434,9 @@ public class CustomerViewController implements Initializable {
     for (Map.Entry<String, Boolean> entry : fieldControlStatus.entrySet()) {
       if (!entry.getValue()) {
         ok = false;
+        break;
       }
     }
-    // TODO Replace this with a notification message with an fxml label
     if(!ok){
       emptyWarning.setText("MUST COMPLETE ALL FIELDS BEFORE SAVING");
     } else {

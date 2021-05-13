@@ -126,6 +126,7 @@ public class LoginController implements Initializable {
    *
    * @param event ActionEvent produced when user enters credentials.
    */
+  @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
     passwordField.clear();
     userNameField.clear();

@@ -76,9 +76,6 @@ public class LoginController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     this.resources = resources;
     detectZoneID();
-
-    // TODO remember to delete these manual tests.
-
     passwordField.setOnAction(this::verifyLogin);
   }
 

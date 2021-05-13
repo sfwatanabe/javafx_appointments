@@ -37,6 +37,14 @@ public abstract class Person {
     this.name.set(name);
   }
 
+  /**
+   * No arg constructor for the person class.
+   */
+  public Person() {
+    this.id.set(-1);
+    this.name.set("The face has no name.");
+  }
+
   //===========================================================================
   // Getter & Setter Methods
   //===========================================================================

@@ -177,6 +177,9 @@ public class CustomerViewController implements Initializable {
   private void updateLabels() {
     if (isNew) {
       customerFormType.setText("Create New");
+      divisionComboBox.getSelectionModel().selectFirst();
+      countryComboBox.getSelectionModel().selectFirst();
+
     } else if (!isNew && currentCustomer != null) {
       customerFormType.setText("Update Existing");
       idField.setText(String.valueOf(currentCustomer.getId()));
@@ -184,8 +187,18 @@ public class CustomerViewController implements Initializable {
       addressField.setText(currentCustomer.getAddress());
       postCode.setText(currentCustomer.getPostalCode());
       phoneNumber.setText(currentCustomer.getPhoneNumber());
-      // TODO Add the division selection - shouldn't need to filter at this step
-      // TODO Add the country selection - shouldn't need to filter at this step
+
+      for (Division d : divisions) {
+        if (currentCustomer.getDivisionId().equals(d.getId())) {
+          divisionComboBox.getSelectionModel().select(d);
+          Division currentDivision = divisionComboBox.getSelectionModel().getSelectedItem();
+          for (Country c : countries) {
+            if (c.getId() == currentDivision.getCountryID()) {
+              countryComboBox.getSelectionModel().select(c);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -194,7 +207,24 @@ public class CustomerViewController implements Initializable {
   //===========================================================================
 
   @FXML
-  private void saveCustomerHandler(ActionEvent event) {
+  private void saveCustomerHandler(ActionEvent event) throws IOException {
+    // TODO Add text field listeners to disable save action if empty.
+    // TODO Wrap this block in a confirmation popup
+
+    String name = nameField.getText().strip();
+    String address = addressField.getText().strip();
+    String postalCode = postCode.getText().strip();
+    String phone = phoneNumber.getText().strip();
+    int divisionId = divisionComboBox.getSelectionModel().getSelectedItem().getId();
+
+    if (isNew) {
+      currentCustomer = new Customer(-1, name, address, postalCode, phone, divisionId);
+      currentCustomer.setId(customerDAO.addCustomer(currentCustomer, user));
+      NotificationHandler.warningPopup("Add Complete", "Customer\n" +
+          currentCustomer + " has been added." );
+      loadMainView(event);
+    }
+    // TODO direct existing customer to an update
 
   }
 
@@ -208,19 +238,29 @@ public class CustomerViewController implements Initializable {
     String message = "Discard changes and return to main?";
 
     if (NotificationHandler.confirmPopup(event, message)){
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
-      Parent parent = loader.load();
-      Scene scene = new Scene(parent);
-
-      MainViewController controller = loader.getController();
-      controller.initData(user);
-
-      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-      stage.setScene(scene);
-      stage.show();
+      loadMainView(event);
 
     }
+  }
+
+
+  /**
+   * Loads the main view.
+   *
+   * @param event ActionEvent triggered by save or cancel button handlers.
+   */
+  private void loadMainView(ActionEvent event) throws IOException {
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+
+    MainViewController controller = loader.getController();
+    controller.initData(user);
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
   }
 
   /**

@@ -480,7 +480,6 @@ public class MainViewController implements Initializable {
   }
 
 
-
   /**
    * Exits the application upon user confirmation.
    *

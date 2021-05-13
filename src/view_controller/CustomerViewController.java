@@ -24,6 +24,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
@@ -143,6 +144,13 @@ public class CustomerViewController implements Initializable {
   @FXML
   private Label customerFormType;
 
+  /**
+   * Displays warning messages to user regarding empty fields that need to be
+   * completed before able to save/update record.
+   */
+  @FXML
+  private Label emptyWarning;
+
   //===========================================================================
   // Scene Initialization
   //===========================================================================
@@ -216,15 +224,17 @@ public class CustomerViewController implements Initializable {
 
       for (Division d : divisions) {
         if (currentCustomer.getDivisionId().equals(d.getId())) {
-          divisionComboBox.getSelectionModel().select(d);
-          Division currentDivision = divisionComboBox.getSelectionModel().getSelectedItem();
           for (Country c : countries) {
-            if (c.getId() == currentDivision.getCountryID()) {
-              countryComboBox.getSelectionModel().select(c);
+            if (c.getId() == d.getCountryID()) {
+                countryComboBox.setValue(c);
+                filterDivisions();
+                divisionComboBox.setValue(d);
+                return;
             }
           }
         }
       }
+
     }
   }
 
@@ -232,37 +242,43 @@ public class CustomerViewController implements Initializable {
   // Event Handlers & Helper Methods
   //===========================================================================
 
+
+  /**
+   *
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void saveCustomerHandler(ActionEvent event) throws IOException {
-    // TODO Add text field listeners to disable save action if empty.
-    // TODO Wrap this block in a confirmation popup
 
-    String name = nameField.getText().strip();
-    String address = addressField.getText().strip();
-    String postalCode = postCode.getText().strip();
-    String phone = phoneNumber.getText().strip();
-    int divisionId = divisionComboBox.getSelectionModel().getSelectedItem().getId();
+    if (NotificationHandler.confirmPopup(event, "Save changes to record?")){
 
-    if (isNew) {
-      currentCustomer = new Customer(-1, name, address, postalCode, phone, divisionId);
-      currentCustomer.setId(customerDAO.addCustomer(currentCustomer, user));
-      if (currentCustomer.getId() > 0){
-        NotificationHandler.warningPopup("Add Complete", "Customer\n" +
-            currentCustomer + " has been added.");
-        loadMainView(event);
-      }
-    } else {
-      // TODO direct existing customer to an update
-      currentCustomer.setName(name);
-      currentCustomer.setAddress(address);
-      currentCustomer.setPostalCode(postalCode);
-      currentCustomer.setPhoneNumber(phone);
-      currentCustomer.setDivisionId(divisionId);
-      int rowsAffected = customerDAO.updateCustomer(currentCustomer, user);
-      if (rowsAffected > 0) {
-        NotificationHandler.warningPopup("Update Complete", "Customer\n" +
-            currentCustomer + " has been updated.");
-        loadMainView(event);
+      String name = nameField.getText().strip();
+      String address = addressField.getText().strip();
+      String postalCode = postCode.getText().strip();
+      String phone = phoneNumber.getText().strip();
+      int divisionId = divisionComboBox.getSelectionModel().getSelectedItem().getId();
+
+      if (isNew) {
+        currentCustomer = new Customer(-1, name, address, postalCode, phone, divisionId);
+        currentCustomer.setId(customerDAO.addCustomer(currentCustomer, user));
+        if (currentCustomer.getId() > 0) {
+          NotificationHandler.warningPopup("Add Complete", "Customer\n" +
+              currentCustomer + " has been added.");
+          loadMainView(event);
+        }
+      } else {
+        currentCustomer.setName(name);
+        currentCustomer.setAddress(address);
+        currentCustomer.setPostalCode(postalCode);
+        currentCustomer.setPhoneNumber(phone);
+        currentCustomer.setDivisionId(divisionId);
+        int rowsAffected = customerDAO.updateCustomer(currentCustomer, user);
+        if (rowsAffected > 0) {
+          NotificationHandler.warningPopup("Update Complete", "Customer\n" +
+              currentCustomer + " has been updated.");
+          loadMainView(event);
+        }
       }
     }
   }
@@ -284,7 +300,7 @@ public class CustomerViewController implements Initializable {
 
 
   /**
-   * Loads the main view.
+   * Loads the main view and initializes user data.
    *
    * @param event ActionEvent triggered by save or cancel button handlers.
    */
@@ -348,6 +364,14 @@ public class CustomerViewController implements Initializable {
     divisions.setPredicate(d -> d.getCountryID() == currentCountry.getId());
   }
 
+
+  /**
+   * Adds listeners to data collection fields that check if input is present in
+   * the field. If no input present in the field it will be bordered in red
+   * and flagged as false in the field status map.
+   *
+   * @param control Data collection control on form used to update customer data.
+   */
   private void checkEmptyField(Control control) {
     control.focusedProperty().addListener((observable, oldValue, newValue) -> {
       boolean filled = true;
@@ -372,15 +396,12 @@ public class CustomerViewController implements Initializable {
 
       }
       fieldControlStatus.put(control.getId(), filled);
-      System.out.println(control);
       if (!okToSave()) {
-        // TODO Update this section
-        // TODO Test saving a customer from clicking to the save button from the field.
-        System.out.println("not ok");
         saveButton.setDisable(true);
       } else {
-        System.out.println("ok");
+        Tooltip goodToGo = new Tooltip("Click to save changes.");
         saveButton.setDisable(false);
+        saveButton.setTooltip(goodToGo);
       }
     });
   }
@@ -388,22 +409,25 @@ public class CustomerViewController implements Initializable {
 
   /**
    * Checks the status map and will enable the save button iff all fields have
-   * been completed.
+   * been completed. Displays label to user advising that all fields must be
+   * completed to save the record.
    *
    * @return True if all fields have been completed and ok to save/update record.
    */
   private boolean okToSave() {
     boolean ok = true;
-    StringBuilder badFields = new StringBuilder();
 
     for (Map.Entry<String, Boolean> entry : fieldControlStatus.entrySet()) {
       if (!entry.getValue()) {
-        badFields.append(" | ").append(entry.getKey()).append(" | ");
         ok = false;
       }
     }
     // TODO Replace this with a notification message with an fxml label
-    System.out.println(badFields);
+    if(!ok){
+      emptyWarning.setText("MUST COMPLETE ALL FIELDS BEFORE SAVING");
+    } else {
+      emptyWarning.setText("");
+    }
     return ok;
   }
 

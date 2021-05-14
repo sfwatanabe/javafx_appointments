@@ -11,14 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox prefHeight="512.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentViewController">
+<VBox prefHeight="477.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentViewController">
    <children>
       <HBox prefHeight="65.0" prefWidth="990.0" spacing="10.0">
          <children>
             <VBox prefHeight="74.0" prefWidth="980.0">
                <children>
-                  <Label prefHeight="30.0" prefWidth="447.0" text="appointmentType">
+                  <Label fx:id="appointmentType" prefHeight="30.0" prefWidth="447.0" text="appointmentType">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -82,7 +81,7 @@
                </padding>
                <children>
                   <Label prefHeight="20.0" prefWidth="182.0" styleClass="main-view-label" text="Type" />
-                  <TextField fx:id="typeField" editable="false" promptText="Enter Location" styleClass="form-text-field" />
+                  <TextField fx:id="typeField" editable="false" promptText="Enter Type" styleClass="form-text-field" />
                </children>
             </VBox>
          </children>
@@ -95,7 +94,7 @@
             <VBox prefHeight="100.0" prefWidth="272.0" spacing="10.0">
                <children>
                   <Label prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Contact" />
-                  <ComboBox prefHeight="34.0" prefWidth="250.0" />
+                  <ComboBox fx:id="contactCombo" prefHeight="34.0" prefWidth="250.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -104,7 +103,7 @@
             <VBox prefHeight="100.0" prefWidth="272.0" spacing="10.0">
                <children>
                   <Label prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Customer" />
-                  <ComboBox prefHeight="34.0" prefWidth="250.0" />
+                  <ComboBox fx:id="customerCombo" prefHeight="34.0" prefWidth="250.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -112,14 +111,14 @@
             </VBox>
             <VBox prefHeight="116.0" prefWidth="230.0" spacing="5.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="202.0" styleClass="main-view-label" text="Start Time" />
+                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="229.0" styleClass="main-view-label" text="Start Time - End Time" />
                   <HBox alignment="CENTER" prefHeight="49.0" prefWidth="220.0" spacing="5.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <ComboBox maxWidth="100.0" minWidth="100.0" prefHeight="34.0" prefWidth="100.0" />
-                        <DatePicker maxWidth="100.0" minWidth="100.0" prefHeight="34.0" prefWidth="100.0" />
+                        <ComboBox fx:id="startTime" maxWidth="100.0" minWidth="100.0" prefHeight="34.0" prefWidth="100.0" promptText="Pick Start" />
+                        <ComboBox fx:id="endTime" maxWidth="100.0" minWidth="100.0" prefHeight="34.0" prefWidth="100.0" promptText="Pick End" />
                      </children>
                   </HBox>
                </children>
@@ -127,16 +126,15 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox prefHeight="168.0" prefWidth="230.0" spacing="5.0">
+            <VBox prefHeight="98.0" prefWidth="133.0" spacing="5.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="End Time" />
+                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Date" />
                   <HBox alignment="CENTER" prefHeight="49.0" prefWidth="220.0" spacing="5.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <ComboBox maxWidth="100.0" minWidth="100.0" prefHeight="34.0" prefWidth="100.0" />
-                        <DatePicker maxWidth="100.0" minWidth="100.0" prefHeight="34.0" prefWidth="100.0" />
+                        <DatePicker fx:id="datePicker" maxWidth="114.0" minWidth="100.0" prefHeight="34.0" prefWidth="114.0" promptText="Pick Date" />
                      </children>
                   </HBox>
                </children>
@@ -154,7 +152,7 @@
             <VBox fillWidth="false" prefHeight="301.0" prefWidth="783.0" spacing="5.0">
                <children>
                   <Label prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Description" />
-                  <TextField fx:id="locationField1" editable="false" prefHeight="32.0" prefWidth="504.0" promptText="Enter Location" styleClass="form-text-field" />
+                  <TextField fx:id="descriptionField" editable="false" prefHeight="32.0" prefWidth="504.0" promptText="Enter Description" styleClass="form-text-field" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -162,8 +160,8 @@
             </VBox>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="21.0" layoutY="14.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="70.0" text="Save" textAlignment="CENTER" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="14.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="70.0" text="Cancel" />
+                  <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" layoutX="21.0" layoutY="14.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveHandler" prefHeight="40.0" prefWidth="70.0" text="Save" textAlignment="CENTER" />
+                  <Button fx:id="cancelButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="14.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#cancelHandler" prefHeight="40.0" prefWidth="70.0" text="Cancel" />
                </children>
             </AnchorPane>
          </children>
@@ -173,7 +171,7 @@
       </HBox>
       <AnchorPane prefHeight="75.0" prefWidth="990.0">
          <children>
-            <Label alignment="CENTER" layoutX="272.0" layoutY="13.0" prefHeight="37.0" prefWidth="447.0" text="Empty Field Warning" textFill="#eb0b0b">
+            <Label fx:id="emptyWarning" alignment="CENTER" layoutX="272.0" layoutY="13.0" prefHeight="37.0" prefWidth="447.0" text="Empty Field Warning" textFill="#eb0b0b">
                <font>
                   <Font name="System Bold Italic" size="28.0" />
                </font>

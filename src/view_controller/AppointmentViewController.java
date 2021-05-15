@@ -11,8 +11,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.Appointment;
 import model.Contact;
 import model.Customer;
+import model.User;
 
 
 /**
@@ -26,6 +28,21 @@ public class AppointmentViewController implements Initializable {
   //===========================================================================
 
   // TODO Add scene initializer members
+  /**
+   * User currently editing the appointment record.
+   */
+  private User user;
+
+  /**
+   * Indicates if we are adding a new appointment.
+   */
+  private boolean isNew;
+
+  /**
+   * Holds current appointment record when updating.
+   */
+  private Appointment currentAppointment;
+
   // TODO Add initData methods for the add and update methods
   @FXML
   private Label appointmentType;
@@ -81,14 +98,25 @@ public class AppointmentViewController implements Initializable {
   //===========================================================================
   // Event Handlers & Helper Methods
   //===========================================================================
-  
+
+
   @FXML
-  void cancelHandler(ActionEvent event) {
+  private void checkEndTime(ActionEvent event) {
 
   }
 
   @FXML
-  void saveHandler(ActionEvent event) {
+  private void checkStartTime(ActionEvent event) {
+
+  }
+
+  @FXML
+  private void cancelHandler(ActionEvent event) {
+
+  }
+
+  @FXML
+  private void saveHandler(ActionEvent event) {
 
   }
 }

@@ -46,7 +46,7 @@ public class CustomerViewController implements Initializable {
   private User user;
 
   /**
-   * Indicates if we are adding a new user.
+   * Indicates if we are adding a new customer.
    */
   private boolean isNew;
 

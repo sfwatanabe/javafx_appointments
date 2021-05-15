@@ -63,7 +63,7 @@
                </padding>
                <children>
                   <Label prefHeight="20.0" prefWidth="182.0" styleClass="main-view-label" text="Title" />
-                  <TextField fx:id="titleField" editable="false" promptText="Enter Title" styleClass="form-text-field" />
+                  <TextField fx:id="titleField" promptText="Enter Title" styleClass="form-text-field" />
                </children>
             </VBox>
             <VBox prefHeight="74.0" prefWidth="231.0" spacing="5.0">
@@ -72,7 +72,7 @@
                </padding>
                <children>
                   <Label prefHeight="20.0" prefWidth="182.0" styleClass="main-view-label" text="Location" />
-                  <TextField fx:id="locationField" editable="false" promptText="Enter Location" styleClass="form-text-field" />
+                  <TextField fx:id="locationField" promptText="Enter Location" styleClass="form-text-field" />
                </children>
             </VBox>
             <VBox prefHeight="74.0" prefWidth="222.0" spacing="5.0">
@@ -81,7 +81,7 @@
                </padding>
                <children>
                   <Label prefHeight="20.0" prefWidth="182.0" styleClass="main-view-label" text="Type" />
-                  <TextField fx:id="typeField" editable="false" promptText="Enter Type" styleClass="form-text-field" />
+                  <TextField fx:id="typeField" promptText="Enter Type" styleClass="form-text-field" />
                </children>
             </VBox>
          </children>
@@ -152,7 +152,7 @@
             <VBox fillWidth="false" prefHeight="301.0" prefWidth="783.0" spacing="5.0">
                <children>
                   <Label prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Description" />
-                  <TextField fx:id="descriptionField" editable="false" prefHeight="32.0" prefWidth="504.0" promptText="Enter Description" styleClass="form-text-field" />
+                  <TextField fx:id="descriptionField" prefHeight="32.0" prefWidth="504.0" promptText="Enter Description" styleClass="form-text-field" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -171,7 +171,7 @@
       </HBox>
       <AnchorPane prefHeight="75.0" prefWidth="990.0">
          <children>
-            <Label fx:id="emptyWarning" alignment="CENTER" layoutX="272.0" layoutY="13.0" prefHeight="37.0" prefWidth="447.0" text="Empty Field Warning" textFill="#eb0b0b">
+            <Label fx:id="emptyWarning" alignment="CENTER" layoutX="272.0" layoutY="13.0" prefHeight="37.0" prefWidth="447.0" textFill="#eb0b0b">
                <font>
                   <Font name="System Bold Italic" size="28.0" />
                </font>

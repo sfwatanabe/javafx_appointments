@@ -274,8 +274,20 @@ public class MainViewController implements Initializable {
   // Scene Initialization
   //===========================================================================
 
-
   // TODO Add javadoc for the initialize -> explain usage of lambda for cellValueFactory
+
+  /**
+   * Initializes the controller for the main view and sets up the table data for both customer and
+   * appointment table views.
+   * <p>
+   * LAMBDA EXPRESSION (1) -> Lambda expression used for setting cell value factories for all table
+   * data via property access, reducing the necessary lines of code to implement the Callback
+   * interface. LAMBDA EXPRESSION (2) -> Lambda expression used for setting cell factory for date
+   * columns allowing use of method defined within class to return table cell data.
+   *
+   * @param Location
+   * @param resources
+   */
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
 
@@ -400,7 +412,7 @@ public class MainViewController implements Initializable {
     Parent parent = loader.load();
     Scene scene = new Scene(parent);
     CustomerViewController controller = loader.getController();
-    // TODO put the scene initCustomerData methods here after FXML is done
+
     if (buttonId.equals(addCustomerButton.getId())) {
       controller.initCustomerData(true, user);
 
@@ -470,15 +482,41 @@ public class MainViewController implements Initializable {
     }
   }
 
+  /**
+   * Handles user request to add a new appointment record and calls scene init method for adding a
+   * new appointment from AppointmentViewController class.
+   *
+   * @param event ActionEvent triggered by user clicking the add appointment button.
+   */
   @FXML
-  private void updateApptHandler(ActionEvent event) {
+  private void loadApptHandler(ActionEvent event) throws IOException {
+    String buttonId = ((Button) event.getSource()).getId();
 
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/AppointmentView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+    AppointmentViewController controller = loader.getController();
+
+    if (buttonId.equals(addApptButton.getId())) {
+      controller.initAppointmentData(true, user);
+
+    } else if (buttonId.equals(updateApptButton.getId())) {
+      Appointment appointment = apptTableView.getSelectionModel().getSelectedItem();
+      if (appointment != null) {
+        controller.initAppointmentData(false, user, appointment);
+
+      } else {
+        warningPopup("No appointment Selected", "Please select a appointment.");
+        return;
+      }
+    }
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
   }
 
-  @FXML
-  private void addApptHandler(ActionEvent event) {
-
-  }
 
   /**
    * Handles user request to delete selected appointment and updates the contents of the table
@@ -525,7 +563,10 @@ public class MainViewController implements Initializable {
 
   /**
    * Monitor action events triggered by the appointment view by toggle group. Sets predicate for the
-   * filtered list based on selected radio button using lambda function.
+   * filtered list based on selected radio button using lambda expression.
+   * <p>
+   * LAMBDA EXPRESSION (3) -> Filtered list predicates are updated using lambda expressions,
+   * allowing reduced code for implementing the Predicate interface.
    *
    * @param event ActionEvent triggered by user selecting radio button.
    */

@@ -408,7 +408,7 @@ public class CustomerViewController implements Initializable {
 
       if (fieldControlStatus.containsValue(false)) {
         saveButton.setDisable(true);
-        emptyWarning.setText("MUST COMPLETE ALL FIELDS BEFORE SAVING");
+        emptyWarning.setText("MUST COMPLETE ALL FIELDS TO SAVE");
       } else {
         emptyWarning.setText("");
         Tooltip goodToGo = new Tooltip("Click to save changes.");

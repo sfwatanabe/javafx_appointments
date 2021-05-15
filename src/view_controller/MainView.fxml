@@ -124,8 +124,8 @@
                   </Label>
                   <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="210.0" spacing="2.0">
                      <children>
-                        <Button fx:id="addApptButton" mnemonicParsing="false" onAction="#addApptHandler" prefHeight="35.0" prefWidth="70.0" text="ADD" />
-                        <Button fx:id="updateApptButton" mnemonicParsing="false" onAction="#updateApptHandler" prefHeight="35.0" prefWidth="70.0" text="UPDATE" />
+                        <Button fx:id="addApptButton" mnemonicParsing="false" onAction="#loadApptHandler" prefHeight="35.0" prefWidth="70.0" text="ADD" />
+                        <Button fx:id="updateApptButton" mnemonicParsing="false" onAction="#loadApptHandler" prefHeight="35.0" prefWidth="70.0" text="UPDATE" />
                         <Button fx:id="deleteApptButton" mnemonicParsing="false" onAction="#deleteApptHandler" prefHeight="35.0" prefWidth="70.0" text="DELETE">
                            <HBox.margin>
                               <Insets />

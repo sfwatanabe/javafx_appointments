@@ -30,6 +30,7 @@ import model.Country;
 import model.Customer;
 import model.Division;
 import model.User;
+import utils.ControlValidation;
 import utils.NotificationHandler;
 
 
@@ -175,7 +176,9 @@ public class CustomerViewController implements Initializable {
 
     fieldControls.addAll(Arrays.asList(nameField, addressField, postCode, divisionComboBox,
         countryComboBox, phoneNumber));
-    fieldControls.forEach(this::checkEmptyField);
+//    fieldControls.forEach(this::checkEmptyField);
+    fieldControls.forEach(c -> ControlValidation
+        .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
   }
 
   /**
@@ -189,9 +192,7 @@ public class CustomerViewController implements Initializable {
     this.user = user;
     this.isNew = isNew;
     this.currentCustomer = null;
-    for (Control c : fieldControls) {
-      fieldControlStatus.putIfAbsent(c.getId(), false);
-    }
+    fieldControlStatus.replaceAll((k, v) -> v = false);
     updateCustomerLabels();
   }
 
@@ -206,9 +207,7 @@ public class CustomerViewController implements Initializable {
     this.currentCustomer = customer;
     this.isNew = isNew;
     updateCustomerLabels();
-    for (Control c : fieldControls) {
-      fieldControlStatus.putIfAbsent(c.getId(), true);
-    }
+    fieldControlStatus.replaceAll((k, v) -> v = true);
   }
 
   /**
@@ -371,52 +370,5 @@ public class CustomerViewController implements Initializable {
     }
     divisions.setPredicate(d -> d.getCountryID() == currentCountry.getId());
   }
-
-
-  /**
-   * Adds listeners to customer data collection fields that check if input is present in the field.
-   * If no input present in the field it will be bordered in red and flagged as false in the field
-   * status map.
-   *
-   * @param control Data collection control on form used to update customer data.
-   */
-  private void checkEmptyField(Control control) {
-    control.focusedProperty().addListener((observable, oldValue, newValue) -> {
-      boolean filled = true;
-
-      if (!newValue) {
-        if (control instanceof TextField) {
-          if (((TextField) control).getText().isBlank()) {
-            control.getStyleClass().add("empty-form-field");
-            filled = false;
-          } else {
-            control.getStyleClass().removeIf(style -> style.equals("empty-form-field"));
-          }
-
-        } else if (control instanceof ComboBox) {
-          //noinspection rawtypes
-          if (((ComboBox) control).getSelectionModel().getSelectedItem() == null) {
-            control.getStyleClass().add("combo-box-empty");
-            filled = false;
-          } else {
-            control.getStyleClass().removeIf(style -> style.equals("combo-box-empty"));
-          }
-        }
-
-      }
-      fieldControlStatus.put(control.getId(), filled);
-
-      if (fieldControlStatus.containsValue(false)) {
-        saveButton.setDisable(true);
-        emptyWarning.setText("MUST COMPLETE ALL FIELDS TO SAVE");
-      } else {
-        emptyWarning.setText("");
-        Tooltip goodToGo = new Tooltip("Click to save changes.");
-        saveButton.setDisable(false);
-        saveButton.setTooltip(goodToGo);
-      }
-    });
-  }
-
 
 }

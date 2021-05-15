@@ -171,9 +171,9 @@
       </HBox>
       <AnchorPane prefHeight="75.0" prefWidth="990.0">
          <children>
-            <Label fx:id="emptyWarning" alignment="CENTER" layoutX="272.0" layoutY="13.0" prefHeight="37.0" prefWidth="447.0" textFill="#eb0b0b">
+            <Label fx:id="emptyWarning" alignment="CENTER" layoutX="197.0" layoutY="7.0" prefHeight="50.0" prefWidth="596.0" textFill="#eb0b0b">
                <font>
-                  <Font name="System Bold Italic" size="28.0" />
+                  <Font name="System Italic" size="20.0" />
                </font>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

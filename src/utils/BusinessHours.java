@@ -42,14 +42,17 @@ public class BusinessHours {
    */
   private static final ZonedDateTime closeZDT = ZonedDateTime
       .of(LocalDate.now(), closeHours, businessZone);
+
   /**
    * Opening business hours converted to local system default zone id.
    */
   private static final LocalTime localOpen = makeLocalTime(openZDT);
+
   /**
    * Closing business hours converted to local system default zone id.
    */
   private static final LocalTime localClose = makeLocalTime(closeZDT);
+
   /**
    * Time slot interval at which time blocks will be spaced.
    */

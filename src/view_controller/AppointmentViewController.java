@@ -35,6 +35,7 @@ import model.Contact;
 import model.Customer;
 import model.User;
 import utils.BusinessHours;
+import utils.ControlValidation;
 import utils.NotificationHandler;
 
 
@@ -217,7 +218,8 @@ public class AppointmentViewController implements Initializable {
     // Add controls to the fieldControls list
     fieldControls.addAll(Arrays.asList(titleField, locationField, typeField, contactCombo,
         customerCombo, startTime, endTime, datePicker, descriptionField));
-    fieldControls.forEach(this::checkEmptyField);
+    fieldControls.forEach(c -> ControlValidation
+        .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
 
   }
 
@@ -234,9 +236,7 @@ public class AppointmentViewController implements Initializable {
     this.isNew = isNew;
     this.currentAppointment = null;
     updateAppointmentLabels();
-    for (Control c : fieldControls) {
-      fieldControlStatus.putIfAbsent(c.getId(), false);
-    }
+    fieldControlStatus.replaceAll((k, v) -> v = false);
   }
 
   /**
@@ -253,9 +253,7 @@ public class AppointmentViewController implements Initializable {
     this.isNew = isNew;
     this.currentAppointment = appointment;
     updateAppointmentLabels();
-    for (Control c : fieldControls) {
-      fieldControlStatus.putIfAbsent(c.getId(), false);
-    }
+    fieldControlStatus.replaceAll((k, v) -> v = true);
   }
 
 
@@ -275,8 +273,6 @@ public class AppointmentViewController implements Initializable {
       typeField.setText(currentAppointment.getType());
       datePicker.setValue(currentAppointment.getStartTime().toLocalDate());
       descriptionField.setText(currentAppointment.getDescription());
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-
       // TODO Clean this up later and combine refs.
       for (Contact c : contacts) {
         if (currentAppointment.getContactId().equals(c.getId())) {
@@ -293,7 +289,6 @@ public class AppointmentViewController implements Initializable {
 
       startTime.setValue(currentAppointment.getLocalStartTime());
       endTime.setValue(currentAppointment.getLocalEndTime());
-      // TODO Investigate whats going on here -> probably a seconds issue.
     }
 
   }
@@ -350,54 +345,6 @@ public class AppointmentViewController implements Initializable {
   @FXML
   private void saveHandler(ActionEvent event) {
 
-  }
-
-  // TODO move this into utils?
-
-  /**
-   * Adds listeners to data collection fields that check if input is present in the field. If no
-   * input present in the field it will be bordered in red and flagged as false in the field status
-   * map.
-   *
-   * @param control Data collection control on form used to update customer data.
-   */
-  private void checkEmptyField(Control control) {
-    control.focusedProperty().addListener((observable, oldValue, newValue) -> {
-      boolean filled = true;
-
-      if (!newValue) {
-        if (control instanceof TextField) {
-          if (((TextField) control).getText().isBlank()) {
-            control.getStyleClass().add("empty-form-field");
-            filled = false;
-          } else {
-            control.getStyleClass().removeIf(style -> style.equals("empty-form-field"));
-//            filled = true;
-          }
-
-        } else if (control instanceof ComboBox) {
-          //noinspection rawtypes
-          if (((ComboBox) control).getSelectionModel().getSelectedItem() == null) {
-            control.getStyleClass().add("combo-box-empty");
-            filled = false;
-          } else {
-            control.getStyleClass().removeIf(style -> style.equals("combo-box-empty"));
-          }
-        }
-
-      }
-      fieldControlStatus.put(control.getId(), filled);
-
-      if (fieldControlStatus.containsValue(false)) {
-        saveButton.setDisable(true);
-        emptyWarning.setText("MUST COMPLETE ALL FIELDS TO SAVE");
-      } else {
-        emptyWarning.setText("");
-        Tooltip goodToGo = new Tooltip("Click to save changes.");
-        saveButton.setDisable(false);
-        saveButton.setTooltip(goodToGo);
-      }
-    });
   }
 
 }

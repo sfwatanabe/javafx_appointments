@@ -154,8 +154,8 @@ public class CustomerViewController implements Initializable {
   private Label customerFormType;
 
   /**
-   * Displays warning messages to user regarding empty fields that need to be
-   * completed before able to save/update record.
+   * Displays warning messages to user regarding empty fields that need to be completed before able
+   * to save/update record.
    */
   @FXML
   private Label emptyWarning;
@@ -164,6 +164,7 @@ public class CustomerViewController implements Initializable {
   // Scene Initialization
   //===========================================================================
 
+  // TODO fill in javadoc comment for customer initialize.
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
     divisions = divisionDAO.getAll().filtered(d -> true);
@@ -173,13 +174,13 @@ public class CustomerViewController implements Initializable {
     countryComboBox.setItems(countries);
 
     fieldControls.addAll(Arrays.asList(nameField, addressField, postCode, divisionComboBox,
-                                        countryComboBox, phoneNumber));
+        countryComboBox, phoneNumber));
     fieldControls.forEach(this::checkEmptyField);
   }
 
   /**
-   * Overloaded method initializes user data and isNew flags for the customer
-   * record scene and prepares labels.
+   * Overloaded method initializes user data and isNew flags for the customer record scene and
+   * prepares labels.
    *
    * @param user  User currently accessing the application.
    * @param isNew Indicates if we are adding a new customer record.
@@ -188,16 +189,15 @@ public class CustomerViewController implements Initializable {
     this.user = user;
     this.isNew = isNew;
     this.currentCustomer = null;
-    for(Control c : fieldControls) {
+    for (Control c : fieldControls) {
       fieldControlStatus.putIfAbsent(c.getId(), false);
     }
-    updateLabels();
-    System.out.println(user + "\n" + currentCustomer);
+    updateCustomerLabels();
   }
 
   /**
-   * Overloaded method initializes user data, isNew flags, and current customer
-   * record before calling update labels.
+   * Overloaded method initializes user data, isNew flags, and current customer record before
+   * calling update labels.
    *
    * @param user User currently accessing the application.
    */
@@ -205,18 +205,16 @@ public class CustomerViewController implements Initializable {
     this.user = user;
     this.currentCustomer = customer;
     this.isNew = isNew;
-    updateLabels();
-    for(Control c : fieldControls) {
+    updateCustomerLabels();
+    for (Control c : fieldControls) {
       fieldControlStatus.putIfAbsent(c.getId(), true);
     }
-    System.out.println(user + "\n" + currentCustomer);
   }
 
   /**
-   * Prepares scene labels and text fields for either adding or updating the
-   * customer record.
+   * Prepares scene labels and text fields for either adding or updating the customer record.
    */
-  private void updateLabels() {
+  private void updateCustomerLabels() {
     if (isNew) {
       customerFormType.setText("Create New");
       countryComboBox.getSelectionModel().selectFirst();
@@ -225,27 +223,27 @@ public class CustomerViewController implements Initializable {
 
     } else //noinspection ConstantConditions
       if (!isNew && currentCustomer != null) {
-      customerFormType.setText("Update Existing");
-      idField.setText(String.valueOf(currentCustomer.getId()));
-      nameField.setText(currentCustomer.getName());
-      addressField.setText(currentCustomer.getAddress());
-      postCode.setText(currentCustomer.getPostalCode());
-      phoneNumber.setText(currentCustomer.getPhoneNumber());
+        customerFormType.setText("Update Existing");
+        idField.setText(String.valueOf(currentCustomer.getId()));
+        nameField.setText(currentCustomer.getName());
+        addressField.setText(currentCustomer.getAddress());
+        postCode.setText(currentCustomer.getPostalCode());
+        phoneNumber.setText(currentCustomer.getPhoneNumber());
 
-      for (Division d : divisions) {
-        if (currentCustomer.getDivisionId().equals(d.getId())) {
-          for (Country c : countries) {
-            if (c.getId() == d.getCountryID()) {
+        for (Division d : divisions) {
+          if (currentCustomer.getDivisionId().equals(d.getId())) {
+            for (Country c : countries) {
+              if (c.getId() == d.getCountryID()) {
                 countryComboBox.setValue(c);
                 filterDivisions();
                 divisionComboBox.setValue(d);
                 return;
+              }
             }
           }
         }
-      }
 
-    }
+      }
   }
 
   //===========================================================================
@@ -254,8 +252,7 @@ public class CustomerViewController implements Initializable {
 
 
   /**
-   * Attempts to save the new customer record or update the current record being
-   * browsed.
+   * Attempts to save the new customer record or update the current record being browsed.
    *
    * @param event ActionEvent triggered by user clicking on the save button.
    * @throws IOException Exception from failure to load the main scene.
@@ -263,7 +260,7 @@ public class CustomerViewController implements Initializable {
   @FXML
   private void saveCustomerHandler(ActionEvent event) throws IOException {
 
-    if (NotificationHandler.confirmPopup(event, "Save changes to record?")){
+    if (NotificationHandler.confirmPopup(event, "Save changes to record?")) {
 
       String name = nameField.getText().strip();
       String address = addressField.getText().strip();
@@ -304,7 +301,7 @@ public class CustomerViewController implements Initializable {
   private void cancelHandler(ActionEvent event) throws IOException {
     String message = "Discard changes and return to main?";
 
-    if (NotificationHandler.confirmPopup(event, message)){
+    if (NotificationHandler.confirmPopup(event, message)) {
       loadMainView(event);
 
     }
@@ -332,17 +329,16 @@ public class CustomerViewController implements Initializable {
   }
 
   /**
-   * Checks if current selection of country combo box is null and will set to
-   * matching country id of selected division.
-   * 
-   * @param event ActionEvent generated by user selecting division from the
-   *              division combo box.
+   * Checks if current selection of country combo box is null and will set to matching country id of
+   * selected division.
+   *
+   * @param event ActionEvent generated by user selecting division from the division combo box.
    */
   @FXML
   private void divisionComboHandler(@SuppressWarnings("unused") ActionEvent event) {
     Division currentDivision = divisionComboBox.getSelectionModel().getSelectedItem();
     Country currentCountry = countryComboBox.getSelectionModel().getSelectedItem();
-    if ((currentDivision != null) && (currentCountry == null)){
+    if ((currentDivision != null) && (currentCountry == null)) {
       for (Country c : countries) {
         if (currentDivision.getCountryID() == c.getId()) {
           countryComboBox.getSelectionModel().select(c);
@@ -354,8 +350,7 @@ public class CustomerViewController implements Initializable {
   /**
    * Handles event generated by a new selection of the country combo box.
    *
-   * @param event ActionEvent generated by user selecting country from the
-   *              country combo box.
+   * @param event ActionEvent generated by user selecting country from the country combo box.
    */
   @FXML
   private void countryComboHandler(@SuppressWarnings("unused") ActionEvent event) {
@@ -369,7 +364,7 @@ public class CustomerViewController implements Initializable {
   private void filterDivisions() {
     Country currentCountry = countryComboBox.getSelectionModel().getSelectedItem();
     Division currentDivision = divisionComboBox.getSelectionModel().getSelectedItem();
-    if (currentDivision != null ) {
+    if (currentDivision != null) {
       if ((currentDivision.getCountryID() != currentCountry.getId())) {
         divisionComboBox.getSelectionModel().clearSelection();
       }
@@ -379,9 +374,9 @@ public class CustomerViewController implements Initializable {
 
 
   /**
-   * Adds listeners to data collection fields that check if input is present in
-   * the field. If no input present in the field it will be bordered in red
-   * and flagged as false in the field status map.
+   * Adds listeners to customer data collection fields that check if input is present in the field.
+   * If no input present in the field it will be bordered in red and flagged as false in the field
+   * status map.
    *
    * @param control Data collection control on form used to update customer data.
    */
@@ -410,9 +405,12 @@ public class CustomerViewController implements Initializable {
 
       }
       fieldControlStatus.put(control.getId(), filled);
-      if (!okToSave()) {
+
+      if (fieldControlStatus.containsValue(false)) {
         saveButton.setDisable(true);
+        emptyWarning.setText("MUST COMPLETE ALL FIELDS BEFORE SAVING");
       } else {
+        emptyWarning.setText("");
         Tooltip goodToGo = new Tooltip("Click to save changes.");
         saveButton.setDisable(false);
         saveButton.setTooltip(goodToGo);
@@ -420,29 +418,5 @@ public class CustomerViewController implements Initializable {
     });
   }
 
-
-  /**
-   * Checks the status map and will enable the save button iff all fields have
-   * been completed. Displays label to user advising that all fields must be
-   * completed to save the record.
-   *
-   * @return True if all fields have been completed and ok to save/update record.
-   */
-  private boolean okToSave() {
-    boolean ok = true;
-
-    for (Map.Entry<String, Boolean> entry : fieldControlStatus.entrySet()) {
-      if (!entry.getValue()) {
-        ok = false;
-        break;
-      }
-    }
-    if(!ok){
-      emptyWarning.setText("MUST COMPLETE ALL FIELDS BEFORE SAVING");
-    } else {
-      emptyWarning.setText("");
-    }
-    return ok;
-  }
 
 }

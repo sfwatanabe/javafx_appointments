@@ -53,7 +53,7 @@ public class BusinessHours {
   /**
    * Time slot interval at which time blocks will be spaced.
    */
-  private static final int SPACING = 15;
+  private static final int SPACING = 1;
 
 
   /**

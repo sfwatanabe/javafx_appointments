@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -274,6 +275,7 @@ public class AppointmentViewController implements Initializable {
       typeField.setText(currentAppointment.getType());
       datePicker.setValue(currentAppointment.getStartTime().toLocalDate());
       descriptionField.setText(currentAppointment.getDescription());
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 
       // TODO Clean this up later and combine refs.
       for (Contact c : contacts) {
@@ -288,21 +290,10 @@ public class AppointmentViewController implements Initializable {
           break;
         }
       }
+
+      startTime.setValue(currentAppointment.getLocalStartTime());
+      endTime.setValue(currentAppointment.getLocalEndTime());
       // TODO Investigate whats going on here -> probably a seconds issue.
-      for (LocalTime lt : startTimes) {
-        if (currentAppointment.getStartTime().toLocalTime().equals(lt)) {
-          startTime.setValue(lt);
-          break;
-        }
-      }
-      for (LocalTime lt : endTimes) {
-        if (currentAppointment.getEndTime().toLocalTime().equals(lt)) {
-          endTime.setValue(lt);
-          break;
-        }
-      }
-
-
     }
 
   }

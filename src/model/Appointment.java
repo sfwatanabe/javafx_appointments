@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -321,6 +322,13 @@ public class Appointment {
   }
 
   /**
+   * @return Local starting time in 24hr format rounded to minutes.
+   */
+  public LocalTime getLocalStartTime() {
+    return startTime.get().toLocalTime().truncatedTo(ChronoUnit.MINUTES);
+  }
+
+  /**
    * @return ObjectProperty holding the appointment start time.
    */
   public ObjectProperty<LocalDateTime> startTimeProperty() {
@@ -342,6 +350,14 @@ public class Appointment {
   public LocalDateTime getEndTime() {
     return endTime.get();
   }
+
+  /**
+   * @return Local end time in 24hr format rounded to minutes.
+   */
+  public LocalTime getLocalEndTime() {
+    return endTime.get().toLocalTime().truncatedTo(ChronoUnit.MINUTES);
+  }
+
 
   /**
    * @return ObjectProperty holding the appointment end time.
@@ -368,9 +384,9 @@ public class Appointment {
    */
   @Override
   public String toString() {
-      return  "Appt ID: " + id.get() +
-            "\nDate: " + startTime.get().toLocalDate() +
-            "\nTime: " + startTime.get().toLocalTime() +
-            "\nType: " + type.get();
+    return "Appt ID: " + id.get() +
+        "\nDate: " + startTime.get().toLocalDate() +
+        "\nTime: " + startTime.get().toLocalTime() +
+        "\nType: " + type.get();
   }
 }

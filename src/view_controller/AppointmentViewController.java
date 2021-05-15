@@ -3,6 +3,7 @@ package view_controller;
 import dao.impl.ContactDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
+import utils.BusinessHours;
 
 
 /**
@@ -70,12 +72,12 @@ public class AppointmentViewController implements Initializable {
   /**
    * List of contacts for use in the contact combo box.
    */
-  private final ObservableList<Contact> contacts = contactDAO.getAll();
+  private ObservableList<Contact> contacts = contactDAO.getAll();
 
   /**
    * List of customers for use in the customer combo box.
    */
-  private final ObservableList<Customer> customers = customerDAO.getAll();
+  private ObservableList<Customer> customers = customerDAO.getAll();
 
   /**
    * FilteredList of starting times for appointments.
@@ -190,6 +192,18 @@ public class AppointmentViewController implements Initializable {
   // TODO fill in javadoc comment for customer initialize.
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    // TODO Setup combo boxes for contact and customer
+    contacts = contactDAO.getAll();
+    customers = customerDAO.getAll();
+
+    startTimes = BusinessHours.getStartTimes().filtered(s -> true);
+    endTimes = BusinessHours.getEndTimes().filtered(e -> true);
+
+    contactCombo.setItems(contacts);
+    customerCombo.setItems(customers);
+    startTime.setItems(startTimes);
+    endTime.setItems(endTimes);
+
     //TODO setup time lists
 
     // Add controls to the fieldControls list
@@ -199,8 +213,8 @@ public class AppointmentViewController implements Initializable {
   }
 
   /**
-   * Overloaded method for initializing user data and isNew flags for the appointment record scene,
-   * preparing appropriate scene labels as well.
+   * Overloaded method for initializing user data and isNew flags for the appointment record
+   * scene,preparing appropriate scene labels as well.
    *
    * @param isNew Indicates if we are adding a new appointment record.
    * @param user  User currently accessing the application.
@@ -210,16 +224,82 @@ public class AppointmentViewController implements Initializable {
     this.user = user;
     this.isNew = isNew;
     this.currentAppointment = null;
+    updateAppointmentLabels();
     for (Control c : fieldControls) {
       fieldControlStatus.putIfAbsent(c.getId(), false);
     }
-    // TODO updateAppointmentLabels method
+  }
+
+  /**
+   * Overloaded method for initializing user data and isNew flags for the appointment record
+   * scene,preparing appropriate scene labels as well.
+   *
+   * @param isNew       Indicates if we are adding a new appointment record.
+   * @param appointment Appointment record to open for updating.
+   * @param user        User currently accessing the application.
+   */
+
+  public void initAppointmentData(boolean isNew, User user, Appointment appointment) {
+    this.user = user;
+    this.isNew = isNew;
+    this.currentAppointment = appointment;
+    updateAppointmentLabels();
+    for (Control c : fieldControls) {
+      fieldControlStatus.putIfAbsent(c.getId(), false);
+    }
+  }
+
+
+  /**
+   * Prepares scene labels and text fields for either adding or updating the appointment record.
+   */
+  private void updateAppointmentLabels() {
+    if (isNew) {
+      appointmentType.setText("Create New");
+      datePicker.setValue(LocalDate.now());
+
+    } else if (!isNew && currentAppointment != null) {
+      appointmentType.setText("Update Existing");
+      idField.setText(String.valueOf(currentAppointment.getId()));
+      titleField.setText(currentAppointment.getTitle());
+      locationField.setText(currentAppointment.getLocation());
+      typeField.setText(currentAppointment.getType());
+      datePicker.setValue(currentAppointment.getStartTime().toLocalDate());
+      descriptionField.setText(currentAppointment.getDescription());
+
+      // TODO Clean this up later and combine refs.
+      for (Contact c : contacts) {
+        if (currentAppointment.getContactId().equals(c.getId())) {
+          contactCombo.setValue(c);
+          break;
+        }
+      }
+      for (Customer c : customers) {
+        if (currentAppointment.getCustomerId().equals(c.getId())) {
+          customerCombo.setValue(c);
+          break;
+        }
+      }
+      for (LocalTime lt : startTimes) {
+        if (currentAppointment.getStartTime().toLocalTime().equals(lt)) {
+          startTime.setValue(lt);
+          break;
+        }
+      }
+      for (LocalTime lt : endTimes) {
+        if (currentAppointment.getEndTime().toLocalTime().equals(lt)) {
+          endTime.setValue(lt);
+          break;
+        }
+      }
+
+
+    }
 
   }
   //===========================================================================
   // Event Handlers & Helper Methods
   //===========================================================================
-
 
   @FXML
   private void checkEndTime(ActionEvent event) {

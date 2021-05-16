@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,15 +26,18 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   // Data Members
   //===========================================================================
 
-  /** Connection instance for accessing application database. */
+  /**
+   * Connection instance for accessing application database.
+   */
   private Connection conn;
 
   /**
-   * Constructor for AppointmentDAOImpl obtains connection reference from the
-   * DBConnector class.
+   * Constructor for AppointmentDAOImpl obtains connection reference from the DBConnector class.
    */
-  public AppointmentDAOImpl() { this.conn = DBConnector.getConnection(); }
-  
+  public AppointmentDAOImpl() {
+    this.conn = DBConnector.getConnection();
+  }
+
   //===========================================================================
   // Methods
   //===========================================================================
@@ -42,10 +46,10 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   public Appointment getById(int appointmentId) {
     Appointment appointment = null;
     String queryById = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
-                      + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
-                      + " FROM appointments AS a"
-                      + " INNER JOIN contacts AS c"
-                      + " WHERE a.Contact_ID = c.Contact_ID AND a.Appointment_ID = ?";
+        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+        + " FROM appointments AS a"
+        + " INNER JOIN contacts AS c"
+        + " WHERE a.Contact_ID = c.Contact_ID AND a.Appointment_ID = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(queryById)) {
       ps.setInt(1, appointmentId);
@@ -65,10 +69,10 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   public ObservableList<Appointment> getAll() {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     String queryAll = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
-                    + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End "
-                    + " FROM appointments AS a \n"
-                    + " INNER JOIN contacts AS c"
-                    + " WHERE a.Contact_ID = c.Contact_ID ";
+        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End "
+        + " FROM appointments AS a \n"
+        + " INNER JOIN contacts AS c"
+        + " WHERE a.Contact_ID = c.Contact_ID ";
 
     try (PreparedStatement ps = conn.prepareStatement(queryAll);
         ResultSet rs = ps.executeQuery()) {
@@ -82,32 +86,65 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return appointments;
   }
 
+  // TODO Decide if this will be  needed.
   @Override
   public ObservableList<Appointment> getBefore(LocalDateTime startLimit) {
     return null;
   }
 
+
   @Override
-  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends) {
-    return null;
+  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends, int ignore) {
+    ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    String queryBetween = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+        + " FROM appointments AS a"
+        + " INNER JOIN contacts AS c"
+        + " WHERE a.Contact_ID = c.Contact_ID AND"
+        + " (End BETWEEN ? AND ? "
+        + " OR Start BETWEEN ? AND ?) AND"
+        + " a.Appointment_ID != ?";
+
+    Timestamp startsTime = Timestamp.valueOf(starts);
+    Timestamp endsTime = Timestamp.valueOf(ends);
+
+    try (PreparedStatement ps = conn.prepareStatement(queryBetween)) {
+      ps.setTimestamp(1, startsTime);
+      ps.setTimestamp(2, endsTime);
+      ps.setTimestamp(3, startsTime);
+      ps.setTimestamp(4, endsTime);
+      ps.setInt(5, ignore);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          appointments.add(parseAppointment(rs));
+        }
+      }
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment-Interval", e);
+    }
+
+    return appointments;
   }
+
 
   @Override
   public ObservableList<Appointment> getByCustomerId(int customerId) {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-    String queryByCustomerId = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
-                              + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
-                              + " FROM appointments AS a"
-                              + " INNER JOIN contacts AS c"
-                              + " WHERE a.Contact_ID = c.Contact_ID AND a.Customer_ID = ?";
+    String queryByCustomerId =
+        "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+            + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+            + " FROM appointments AS a"
+            + " INNER JOIN contacts AS c"
+            + " WHERE a.Contact_ID = c.Contact_ID AND a.Customer_ID = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(queryByCustomerId)) {
       ps.setInt(1, customerId);
 
       try (ResultSet rs = ps.executeQuery()) {
-       while (rs.next()) {
-         appointments.add(parseAppointment(rs));
-       }
+        while (rs.next()) {
+          appointments.add(parseAppointment(rs));
+        }
       }
     } catch (SQLException e) {
       NotificationHandler.sqlPopup("Appointment", e);
@@ -116,15 +153,96 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return appointments;
   }
 
+
   @Override
   public ObservableList<Appointment> getByContact(String contactName) {
     return null;
   }
 
+
   @Override
   public int addAppointment(Appointment appointment, User user) {
-    return 0;
+    int newAppointmentID = 0;
+    int rowsAffected = 0;
+
+    String newAppointment = "INSERT INTO appointments (Title, Description, Location, Type,\n"
+        + "Start, End, Create_Date, Created_By, Last_Update,\n"
+        + "Last_Updated_By, Customer_ID, User_ID, Contact_ID)\n"
+        + "VALUES (?,?,?, ?, ?, ?, NOW(), ?, NOW(), ?, ?, ?, ?)";
+
+    try (PreparedStatement ps = conn
+        .prepareStatement(newAppointment, PreparedStatement.RETURN_GENERATED_KEYS)) {
+      ps.setString(1, appointment.getTitle());
+      ps.setString(2, appointment.getDescription());
+      ps.setString(3, appointment.getLocation());
+      ps.setString(4, appointment.getType());
+      ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartTime()));
+      ps.setTimestamp(6, Timestamp.valueOf(appointment.getEndTime()));
+      ps.setString(7, user.getName());
+      ps.setString(8, user.getName());
+      ps.setInt(9, appointment.getCustomerId());
+      ps.setInt(10, user.getId());
+      ps.setInt(11, appointment.getContactId());
+
+      rowsAffected = ps.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Create appointment failed, no rows affected.");
+      }
+      try (ResultSet keys = ps.getGeneratedKeys()) {
+        if (keys.next()) {
+          newAppointmentID = keys.getInt(1);
+        } else {
+          throw new SQLException("Create appointment failed, no rows affected.");
+        }
+      }
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment-Add", e);
+    }
+
+    return newAppointmentID;
   }
+
+
+  @Override
+  public int updateAppointment(Appointment appointment, User user) {
+    int rowsAffected = 0;
+    String updateAppointment = "UPDATE appointments"
+        + " SET Title = ?,"
+        + " Location = ?,"
+        + " Type = ?,"
+        + " Start = ?,"
+        + " End = ?,"
+        + " Last_Update = NOW(),"
+        + " Last_Updated_By = ?,"
+        + " Customer_ID = ?,"
+        + " User_ID = ?,"
+        + " Contact_ID = ?"
+        + "WHERE Appointment_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(updateAppointment)) {
+      ps.setString(1, appointment.getTitle());
+      ps.setString(2, appointment.getLocation());
+      ps.setString(3, appointment.getType());
+      ps.setTimestamp(4, Timestamp.valueOf(appointment.getStartTime()));
+      ps.setTimestamp(5, Timestamp.valueOf(appointment.getEndTime()));
+      ps.setString(6, user.getName());
+      ps.setInt(7, appointment.getCustomerId());
+      ps.setInt(8, user.getId());
+      ps.setInt(9, appointment.getContactId());
+      ps.setInt(10, appointment.getId());
+      
+      rowsAffected = ps.executeUpdate();
+      
+      if (rowsAffected == 0) {
+        throw new SQLException("Update appointment failed, no rows affected.");
+      }
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment-Update", e);
+    }
+
+    return rowsAffected;
+  }
+
 
   @Override
   public int deleteAppointment(Appointment appointment) {
@@ -134,12 +252,13 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     try (PreparedStatement ps = conn.prepareStatement(deleteById)) {
       ps.setInt(1, appointment.getId());
       rowsAffected = ps.executeUpdate();
-    }catch (SQLException e) {
-      NotificationHandler.sqlPopup("Appointment",e);
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment", e);
     }
 
     return rowsAffected;
   }
+
 
   @Override
   public int deleteAppointmentByCustomer(Customer customer) {
@@ -149,16 +268,11 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     try (PreparedStatement ps = conn.prepareStatement(deleteByCustomer)) {
       ps.setInt(1, customer.getId());
       rowsAffected = ps.executeUpdate();
-    }catch (SQLException e) {
-      NotificationHandler.sqlPopup("Appointment",e);
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment", e);
     }
 
     return rowsAffected;
-  }
-
-  @Override
-  public int updateAppointment(Appointment appointment, User user) {
-    return 0;
   }
 
 
@@ -168,6 +282,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
    * @param rs Result set form appointment DAO query.
    * @return Appointment object with parsed information.
    */
+
   private Appointment parseAppointment(ResultSet rs) throws SQLException {
     Appointment appointment = null;
 

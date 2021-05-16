@@ -13,9 +13,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // TODO Remember to delete these locale testing lines before submission.
-        Locale locale = new Locale("fr", "FR");
-        Locale.setDefault(locale);
-//        Locale locale = Locale.getDefault();
+//        Locale locale = new Locale("fr", "FR");
+//        Locale.setDefault(locale);
+        Locale locale = Locale.getDefault();
         String resourcePath = "resources/languages/change_language";
         ResourceBundle resources = ResourceBundle.getBundle(resourcePath,locale);
 

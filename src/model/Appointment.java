@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -384,10 +385,9 @@ public class Appointment {
    */
   @Override
   public String toString() {
-    return "Appt ID: " + id.get() +
-        "\nDate: " + startTime.get().toLocalDate() +
-        "\nStart: " + startTime.get().toLocalTime() +
-        "\nEnd: " + endTime.get().toLocalTime() +
-        "\nType: " + type.get() + "\n";
+    return "Appt ID: " + id.get() + " Customer: " + getCustomerId() +
+        "\nType: " + type.get() +
+        "\nStart: " + Timestamp.valueOf(startTime.get()) +
+        "\nEnd: " + Timestamp.valueOf(endTime.get()) + "\n";
   }
 }

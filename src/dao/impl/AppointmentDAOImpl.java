@@ -95,12 +95,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends) {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     String queryBetween = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
-                        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
-                        + " FROM appointments AS a"
-                        + " INNER JOIN contacts AS c"
-                        + " WHERE a.Contact_ID = c.Contact_ID AND"
-                        + " (End BETWEEN ? AND ? "
-                        + " OR Start BETWEEN ? AND ?)";
+        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+        + " FROM appointments AS a"
+        + " INNER JOIN contacts AS c"
+        + " WHERE a.Contact_ID = c.Contact_ID AND"
+        + " (End BETWEEN ? AND ? "
+        + " OR Start BETWEEN ? AND ?)";
 
     Timestamp startsTime = Timestamp.valueOf(starts);
     Timestamp endsTime = Timestamp.valueOf(ends);
@@ -116,7 +116,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
           appointments.add(parseAppointment(rs));
         }
       }
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       NotificationHandler.sqlPopup("Appointment-Interval", e);
     }
 
@@ -195,6 +195,41 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return newAppointmentID;
   }
 
+
+  @Override
+  public int updateAppointment(Appointment appointment, User user) {
+    int rowsAffected = 0;
+    String updateAppointment = "UPDATE appointments"
+        + " SET Title = ?,"
+        + " Location = ?,"
+        + " Type = ?,"
+        + " Start = ?,"
+        + " End = ?,"
+        + " Last_Update = NOW(),"
+        + " Last_Updated_By = ?,"
+        + " Customer_ID = ?,"
+        + " User_ID = ?,"
+        + " Contact_ID = ?"
+        + "WHERE Appointment_ID = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(updateAppointment)) {
+      // Title / Loc / Type
+      ps.setString(1, appointment.getTitle());
+      ps.setString(2, appointment.getLocation());
+      ps.setString(3, appointment.getType());
+      // Set start and end
+      ps.setTimestamp(4, Timestamp.valueOf(appointment.getStartTime()));
+      ps.setTimestamp(5, Timestamp.valueOf(appointment.getEndTime()));
+      // Set updated by
+
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Appointment-Update", e);
+    }
+
+    return 0;
+  }
+
+
   @Override
   public int deleteAppointment(Appointment appointment) {
     int rowsAffected = 0;
@@ -209,6 +244,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
     return rowsAffected;
   }
+
 
   @Override
   public int deleteAppointmentByCustomer(Customer customer) {
@@ -225,11 +261,6 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return rowsAffected;
   }
 
-  @Override
-  public int updateAppointment(Appointment appointment, User user) {
-    return 0;
-  }
-
 
   /**
    * Helper method for parsing result set data into Appointment objects.
@@ -237,6 +268,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
    * @param rs Result set form appointment DAO query.
    * @return Appointment object with parsed information.
    */
+
   private Appointment parseAppointment(ResultSet rs) throws SQLException {
     Appointment appointment = null;
 

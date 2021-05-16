@@ -117,7 +117,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 
   @Override
   public int updateCustomer(Customer customer, User user) {
-    // TODO implement updateCustomer and return customer id of record
     int rowsAffected = 0;
     String updateCustomer = "UPDATE customers "
         + " SET Customer_Name = ?,"

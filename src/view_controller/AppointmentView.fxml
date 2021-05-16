@@ -111,14 +111,14 @@
             </VBox>
             <VBox prefHeight="116.0" prefWidth="230.0" spacing="5.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="229.0" styleClass="main-view-label" text="Start Time - End Time" />
+                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="229.0" styleClass="main-view-label" text="Start " />
                   <HBox alignment="CENTER" prefHeight="49.0" prefWidth="220.0" spacing="5.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
                         <ComboBox fx:id="startTime" maxWidth="100.0" minWidth="100.0" onAction="#checkEndTime" prefHeight="34.0" prefWidth="100.0" promptText="Pick Start" />
-                        <ComboBox fx:id="endTime" maxWidth="100.0" minWidth="100.0" onAction="#checkStartTime" prefHeight="34.0" prefWidth="100.0" promptText="Pick End" />
+                        <DatePicker fx:id="startDate" maxWidth="114.0" minWidth="100.0" prefHeight="34.0" prefWidth="114.0" promptText="Pick Date" />
                      </children>
                   </HBox>
                </children>
@@ -128,13 +128,14 @@
             </VBox>
             <VBox prefHeight="98.0" prefWidth="133.0" spacing="5.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Date" />
+                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="End" />
                   <HBox alignment="CENTER" prefHeight="49.0" prefWidth="220.0" spacing="5.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <DatePicker fx:id="datePicker" maxWidth="114.0" minWidth="100.0" prefHeight="34.0" prefWidth="114.0" promptText="Pick Date" />
+                        <ComboBox fx:id="endTime" maxWidth="100.0" minWidth="100.0" onAction="#checkStartTime" prefHeight="34.0" prefWidth="100.0" promptText="Pick End" />
+                        <DatePicker fx:id="endDate" maxWidth="114.0" minWidth="100.0" prefHeight="34.0" prefWidth="114.0" promptText="Pick Date" />
                      </children>
                   </HBox>
                </children>

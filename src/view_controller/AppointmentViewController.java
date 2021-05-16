@@ -52,7 +52,6 @@ public class AppointmentViewController implements Initializable {
   // Data Members
   //===========================================================================
 
-  // TODO Add scene initializer members
   /**
    * User currently editing the appointment record.
    */
@@ -159,10 +158,16 @@ public class AppointmentViewController implements Initializable {
   private ComboBox<LocalTime> endTime;
 
   /**
-   * Date picker for appointment date.
+   * Date picker for appointment start date.
    */
   @FXML
-  private DatePicker datePicker;
+  private DatePicker startDate;
+
+  /**
+   * Date picker for appointment end date.
+   */
+  @FXML
+  private DatePicker endDate;
 
   /**
    * Extended description for the appointment record.
@@ -207,7 +212,6 @@ public class AppointmentViewController implements Initializable {
   // TODO fill in javadoc comment for customer initialize.
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    // TODO Setup combo boxes for contact and customer
     contacts = contactDAO.getAll();
     customers = customerDAO.getAll();
 
@@ -219,11 +223,8 @@ public class AppointmentViewController implements Initializable {
     startTime.setItems(startTimes);
     endTime.setItems(endTimes);
 
-    //TODO setup time lists
-
-    // Add controls to the fieldControls list
     fieldControls.addAll(Arrays.asList(titleField, locationField, typeField, contactCombo,
-        customerCombo, startTime, endTime, datePicker, descriptionField));
+        customerCombo, startTime, endTime, startDate, endDate, descriptionField));
     fieldControls.forEach(c -> ControlValidation
         .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
 
@@ -269,7 +270,7 @@ public class AppointmentViewController implements Initializable {
   private void updateAppointmentLabels() {
     if (isNew) {
       appointmentType.setText("Create New");
-      datePicker.setValue(LocalDate.now());
+      startDate.setValue(LocalDate.now());
 
     } else if (!isNew && currentAppointment != null) {
       appointmentType.setText("Update Existing");
@@ -277,9 +278,10 @@ public class AppointmentViewController implements Initializable {
       titleField.setText(currentAppointment.getTitle());
       locationField.setText(currentAppointment.getLocation());
       typeField.setText(currentAppointment.getType());
-      datePicker.setValue(currentAppointment.getStartTime().toLocalDate());
+      startDate.setValue(currentAppointment.getStartTime().toLocalDate());
       descriptionField.setText(currentAppointment.getDescription());
       // TODO Clean this up later and combine refs.
+      // TODO Setup binary search by id that returns an object and then sets value
       for (Contact c : contacts) {
         if (currentAppointment.getContactId().equals(c.getId())) {
           contactCombo.setValue(c);
@@ -304,14 +306,13 @@ public class AppointmentViewController implements Initializable {
 
   @FXML
   private void saveHandler(ActionEvent event) throws IOException {
-    // Check if they want to save first
     List<String> conflictMessages = new ArrayList<String>();
 
     if (NotificationHandler.confirmPopup(event, "Save changes ?")) {
-      LocalDateTime start = LocalDateTime.of(datePicker.getValue(), startTime.getValue());
-      LocalDateTime end = LocalDateTime.of(datePicker.getValue(), endTime.getValue());
+      LocalDateTime start = LocalDateTime.of(startDate.getValue(), startTime.getValue());
+      LocalDateTime end = LocalDateTime.of(endDate.getValue(), endTime.getValue());
       var conflictList = appointmentDAO.getBetween(start, end);
-      //TODO put in the appointments between check here and only parse the appointment if we're good
+
       if (conflictList.isEmpty()){
         int customerId = customerCombo.getValue().getId();
         int contactId = contactCombo.getValue().getId();
@@ -331,13 +332,28 @@ public class AppointmentViewController implements Initializable {
                 currentAppointment + " has been added.");
             loadMainView(event);
           }
+        } else {
+        // TODO Update appointment
+          currentAppointment.setTitle(title);
+          currentAppointment.setLocation(location);
+          currentAppointment.setType(type);
+          currentAppointment.setStartTime(start);
+          currentAppointment.setEndTime(end);
+          currentAppointment.setContactId(contactId);
+          currentAppointment.setContactName(contactName);
+          currentAppointment.setCustomerId(customerId);
+          int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
+          if (rowsAffected > 0) {
+            NotificationHandler.warningPopup("Update Complete", "Appointment\n" +
+                currentAppointment + " has been updated.");
+            loadMainView(event);
+          }
         }
-        // Update appointment
 
 
       } else {
         conflictMessages = conflictList.stream().map(Appointment::toString).collect(Collectors.toList());
-        NotificationHandler.warningPopup("Scheduling Overlaps", conflictMessages);
+        NotificationHandler.warningPopup("Scheduling Overlap", conflictMessages);
       }
 
     }
@@ -345,12 +361,12 @@ public class AppointmentViewController implements Initializable {
 
   @FXML
   private void checkEndTime(ActionEvent event) {
-
+    // TODO Filter the ending times predicate based on the currently selected start time.
   }
 
   @FXML
   private void checkStartTime(ActionEvent event) {
-
+    // TODO Filter the starting times predicate based on the currently selected end time.
   }
 
   /**
@@ -361,7 +377,6 @@ public class AppointmentViewController implements Initializable {
   @FXML
   private void cancelHandler(ActionEvent event) throws IOException {
     String message = "Discard changes and return to main?";
-
     if (NotificationHandler.confirmPopup(event, message)) {
       loadMainView(event);
 

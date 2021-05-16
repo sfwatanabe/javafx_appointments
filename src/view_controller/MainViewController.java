@@ -532,7 +532,7 @@ public class MainViewController implements Initializable {
     if (appointment != null) {
 
       int appointmentId = appointment.getId();
-      String msg = "Delete appointment " + appointmentId + " are you sure?";
+      String msg = "Delete appointment\n" + appointment + "\nAre you sure?";
 
       if (confirmPopup(event, msg)) {
         int rows = appointmentDAO.deleteAppointment(appointment);

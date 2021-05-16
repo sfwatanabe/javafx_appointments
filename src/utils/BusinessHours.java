@@ -20,18 +20,27 @@ public class BusinessHours {
   //===========================================================================
   // DATA MEMBERS
   //===========================================================================
+
   /**
    * Time zone for the business HQ location.
    */
   private static final ZoneId businessZone = ZoneId.of("America/New_York");
+
+  /**
+   * Total hours of operation for the business.
+   */
+  private static final int SHIFT_LENGTH = 14;
+
   /**
    * Opening business local time based on HQ location.
    */
   private static final LocalTime openHours = LocalTime.of(8, 00);
+
   /**
    * Closing business local time based on HQ location.
    */
-  private static final LocalTime closeHours = LocalTime.of(22, 00);
+  private static final LocalTime closeHours = openHours.plusHours(SHIFT_LENGTH);
+
   /**
    * ZonedDateTime object for the opening business hours based on HQ.
    */
@@ -80,8 +89,8 @@ public class BusinessHours {
   }
 
   /**
-   * Creates an ObservableList of local times starting at start time up to and including the end
-   * time. List will be spaced out using the minutes value of interval.
+   * Creates an ObservableList of local times starting at start time until the end of SHIFT_LENGTH.
+   * List will be spaced out using the minutes value of SPACING .
    *
    * @param start Starting time for the local time list.
    * @param end   Upper bound for the local time list.
@@ -92,14 +101,18 @@ public class BusinessHours {
     int hours = start.getHour();
     int minutes = start.getMinute();
     var currentTime = start;
+    var addMinutes = 0;
+    var shiftMinutes = (SHIFT_LENGTH * 60) - SPACING;
 
-    while (currentTime.isBefore(end) || currentTime.equals(end)) {
-      times.add(LocalTime.of(hours, minutes));
-      minutes += BusinessHours.SPACING;
-      hours += minutes / 60;
-      minutes %= 60;
-
-      currentTime = LocalTime.of(hours, minutes);
+//    while (currentTime.isBefore(end) || currentTime.equals(end)) {
+    while (addMinutes <= shiftMinutes) {
+//      times.add(LocalTime.of(hours, minutes));
+      times.add(currentTime.plusMinutes(addMinutes));
+//      minutes += BusinessHours.SPACING;
+//      hours += minutes / 60;
+//      minutes %= 60;
+      addMinutes += SPACING;
+//      currentTime = LocalTime.of(hours, minutes);
     }
     return times;
   }
@@ -117,7 +130,10 @@ public class BusinessHours {
     return locZDT.toLocalTime();
   }
 
+  // TODO Remove this straggler - > or rewrite as a unit test.
   public static void main(String[] args) {
+    System.out.println("Start: " + localOpen);
+    System.out.println("End: " + localClose);
     System.out.println(getStartTimes());
     System.out.println(getEndTimes());
   }

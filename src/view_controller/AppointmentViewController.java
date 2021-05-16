@@ -224,7 +224,7 @@ public class AppointmentViewController implements Initializable {
     endTime.setItems(endTimes);
 
     fieldControls.addAll(Arrays.asList(titleField, locationField, typeField, contactCombo,
-        customerCombo, startTime, endTime, startDate, endDate, descriptionField));
+        customerCombo, startTime, endTime, startDate, endTime, endDate, descriptionField));
     fieldControls.forEach(c -> ControlValidation
         .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
 
@@ -279,6 +279,7 @@ public class AppointmentViewController implements Initializable {
       locationField.setText(currentAppointment.getLocation());
       typeField.setText(currentAppointment.getType());
       startDate.setValue(currentAppointment.getStartTime().toLocalDate());
+      endDate.setValue(currentAppointment.getEndTime().toLocalDate());
       descriptionField.setText(currentAppointment.getDescription());
       // TODO Clean this up later and combine refs.
       // TODO Setup binary search by id that returns an object and then sets value
@@ -304,58 +305,78 @@ public class AppointmentViewController implements Initializable {
   // Event Handlers & Helper Methods
   //===========================================================================
 
+  /**
+   * Attempts to save the new appointment record or update the existing record currently in use.
+   *
+   * @param event ActionEvent triggered by user clicking on the save button.
+   * @throws IOException Exception from failure to load the main scene.
+   */
+
   @FXML
   private void saveHandler(ActionEvent event) throws IOException {
-    List<String> conflictMessages = new ArrayList<String>();
+    List<String> conflictMessages = new ArrayList<>();
 
     if (NotificationHandler.confirmPopup(event, "Save changes ?")) {
+      boolean ready = true;
       LocalDateTime start = LocalDateTime.of(startDate.getValue(), startTime.getValue());
       LocalDateTime end = LocalDateTime.of(endDate.getValue(), endTime.getValue());
-      var conflictList = appointmentDAO.getBetween(start, end);
-
-      if (conflictList.isEmpty()){
-        int customerId = customerCombo.getValue().getId();
-        int contactId = contactCombo.getValue().getId();
-        String contactName = contactCombo.getValue().getName();
-        String title = titleField.getText().strip();
-        String description = descriptionField.getText().strip();
-        String type = typeField.getText().strip();
-        String location = locationField.getText().strip();
-        // New appointment
-        if (isNew) {
-          currentAppointment = new Appointment(-1, customerId, contactId, contactName, user.getId(),
-              title, description, type, location, start, end);
-          currentAppointment.setId(appointmentDAO.addAppointment(currentAppointment, user));
-
-          if (currentAppointment.getId() > 0) {
-            NotificationHandler.warningPopup("Add Complete", "Appointment\n" +
-                currentAppointment + " has been added.");
-            loadMainView(event);
-          }
-        } else {
-        // TODO Update appointment
-          currentAppointment.setTitle(title);
-          currentAppointment.setLocation(location);
-          currentAppointment.setType(type);
-          currentAppointment.setStartTime(start);
-          currentAppointment.setEndTime(end);
-          currentAppointment.setContactId(contactId);
-          currentAppointment.setContactName(contactName);
-          currentAppointment.setCustomerId(customerId);
-          int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
-          if (rowsAffected > 0) {
-            NotificationHandler.warningPopup("Update Complete", "Appointment\n" +
-                currentAppointment + " has been updated.");
-            loadMainView(event);
-          }
-        }
-
-
-      } else {
-        conflictMessages = conflictList.stream().map(Appointment::toString).collect(Collectors.toList());
-        NotificationHandler.warningPopup("Scheduling Overlap", conflictMessages);
+      // TODO add the start before end check here -> too troublesome to try and filter the list.
+      if (!start.isBefore(end)){
+        conflictMessages.add("Start must be before end date & time.");
+      }
+      if (!BusinessHours.insideShift(start, end)) {
+        conflictMessages.add("Outside of business hours.");
       }
 
+
+
+      // If we fall through and are still ready we'll continue with the save operation.
+      if (ready) {
+        var apptId = isNew ? -1 : currentAppointment.getId();
+        var conflictList = appointmentDAO.getBetween(start, end, apptId);
+
+        if (conflictList.isEmpty()) {
+          int customerId = customerCombo.getValue().getId();
+          int contactId = contactCombo.getValue().getId();
+          String contactName = contactCombo.getValue().getName();
+          String title = titleField.getText().strip();
+          String description = descriptionField.getText().strip();
+          String type = typeField.getText().strip();
+          String location = locationField.getText().strip();
+
+          if (isNew) {
+            currentAppointment = new Appointment(apptId, customerId, contactId, contactName,
+                user.getId(),
+                title, description, type, location, start, end);
+            currentAppointment.setId(appointmentDAO.addAppointment(currentAppointment, user));
+
+            if (currentAppointment.getId() > 0) {
+              NotificationHandler.warningPopup("Add Complete", "Appointment\n" +
+                  currentAppointment + " has been added.");
+              loadMainView(event);
+            }
+          } else {
+            currentAppointment.setTitle(title);
+            currentAppointment.setLocation(location);
+            currentAppointment.setType(type);
+            currentAppointment.setStartTime(start);
+            currentAppointment.setEndTime(end);
+            currentAppointment.setContactId(contactId);
+            currentAppointment.setContactName(contactName);
+            currentAppointment.setCustomerId(customerId);
+            int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
+            if (rowsAffected > 0) {
+              NotificationHandler.warningPopup("Update Complete", "Appointment\n" +
+                  currentAppointment + " has been updated.");
+              loadMainView(event);
+            }
+          }
+        } else {
+          conflictMessages = conflictList.stream().map(Appointment::toString)
+              .collect(Collectors.toList());
+          NotificationHandler.warningPopup("Scheduling Overlap", conflictMessages);
+        }
+      }
     }
   }
 

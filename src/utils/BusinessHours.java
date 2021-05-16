@@ -2,6 +2,7 @@ package utils;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -106,15 +107,33 @@ public class BusinessHours {
 
 //    while (currentTime.isBefore(end) || currentTime.equals(end)) {
     while (addMinutes <= shiftMinutes) {
-//      times.add(LocalTime.of(hours, minutes));
       times.add(currentTime.plusMinutes(addMinutes));
-//      minutes += BusinessHours.SPACING;
-//      hours += minutes / 60;
-//      minutes %= 60;
       addMinutes += SPACING;
-//      currentTime = LocalTime.of(hours, minutes);
     }
     return times;
+  }
+
+  /**
+   * Determines if the start and end times fall within
+   *
+   * @param start
+   * @param end
+   * @return
+   */
+  public static boolean insideShift(LocalDateTime start, LocalDateTime end) {
+    boolean inside = true;
+    // Convert both start and end to zonedDateTime objects
+    ZonedDateTime startZDT = toBusinessZDT(start);
+    ZonedDateTime endZDT = toBusinessZDT(end);
+    // Make a local date time for the starting date that has the opening hours
+    // Make an ending date time that adds 14 hours to above.
+    // Start checking conditions.
+    // endZDT.isbefore(startZDT.toLocalDate().plusHours(14)) hours and after start
+    // Start is after close and before end
+
+
+
+    return inside;
   }
 
 
@@ -130,11 +149,26 @@ public class BusinessHours {
     return locZDT.toLocalTime();
   }
 
+  /**
+   * Helper method converts a local date time object to a ZonedDateTime at the
+   * business zone id.
+   *
+   * @param ldt LocalDateTime object to be converted to the business ZonedDateTime.
+   * @return ZonedDateTime object with same instant at business zone id.
+   */
+  private static ZonedDateTime toBusinessZDT(LocalDateTime ldt) {
+    ZonedDateTime ldtZDT = ldt.atZone(ZoneId.systemDefault());
+    return ldtZDT.withZoneSameInstant(businessZone);
+  }
+
+
+
   // TODO Remove this straggler - > or rewrite as a unit test.
   public static void main(String[] args) {
-    System.out.println("Start: " + localOpen);
-    System.out.println("End: " + localClose);
-    System.out.println(getStartTimes());
-    System.out.println(getEndTimes());
+    System.out.println("Open hours " + openHours);
+    System.out.println("Close hours " + closeHours);
+
+//    System.out.println("Start: " + localOpen);
+//    System.out.println("End: " + localClose);
   }
 }

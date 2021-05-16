@@ -38,14 +38,16 @@ public interface AppointmentDAO {
 
   /**
    * getBefore queries appointment data for all appointments starting between
-   * the start and end time. Method used to check for list of conflicting
-   * appointments when adding or updating new entries.
+   * the start and end time not matching ignore. Method used to check for list
+   * of conflicting appointments when adding or updating new entries while not
+   * checking for the ignored id.
    *
    * @param starts LocalDateTime to use as upper bound for search.
    * @param ends LocalDateTime to use as upper bound for search.
+   * @param ignore Id of appointment to be ignored from the search.
    * @return ObservableList where appointments between start and end time.
    */
-  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends);
+  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends, int ignore);
 
   /**
    * getByContact looks up appointment records matching supplied contact name.

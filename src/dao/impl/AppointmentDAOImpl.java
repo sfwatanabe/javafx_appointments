@@ -86,13 +86,15 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return appointments;
   }
 
+  // TODO Decide if this will be  needed.
   @Override
   public ObservableList<Appointment> getBefore(LocalDateTime startLimit) {
     return null;
   }
 
+
   @Override
-  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends) {
+  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends, int ignore) {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     String queryBetween = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
         + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
@@ -100,7 +102,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         + " INNER JOIN contacts AS c"
         + " WHERE a.Contact_ID = c.Contact_ID AND"
         + " (End BETWEEN ? AND ? "
-        + " OR Start BETWEEN ? AND ?)";
+        + " OR Start BETWEEN ? AND ?) AND"
+        + " a.Appointment_ID != ?";
 
     Timestamp startsTime = Timestamp.valueOf(starts);
     Timestamp endsTime = Timestamp.valueOf(ends);
@@ -110,6 +113,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
       ps.setTimestamp(2, endsTime);
       ps.setTimestamp(3, startsTime);
       ps.setTimestamp(4, endsTime);
+      ps.setInt(5, ignore);
 
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
@@ -122,6 +126,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
     return appointments;
   }
+
 
   @Override
   public ObservableList<Appointment> getByCustomerId(int customerId) {
@@ -148,10 +153,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return appointments;
   }
 
+
   @Override
   public ObservableList<Appointment> getByContact(String contactName) {
     return null;
   }
+
 
   @Override
   public int addAppointment(Appointment appointment, User user) {
@@ -213,20 +220,27 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         + "WHERE Appointment_ID = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(updateAppointment)) {
-      // Title / Loc / Type
       ps.setString(1, appointment.getTitle());
       ps.setString(2, appointment.getLocation());
       ps.setString(3, appointment.getType());
-      // Set start and end
       ps.setTimestamp(4, Timestamp.valueOf(appointment.getStartTime()));
       ps.setTimestamp(5, Timestamp.valueOf(appointment.getEndTime()));
-      // Set updated by
-
+      ps.setString(6, user.getName());
+      ps.setInt(7, appointment.getCustomerId());
+      ps.setInt(8, user.getId());
+      ps.setInt(9, appointment.getContactId());
+      ps.setInt(10, appointment.getId());
+      
+      rowsAffected = ps.executeUpdate();
+      
+      if (rowsAffected == 0) {
+        throw new SQLException("Update appointment failed, no rows affected.");
+      }
     } catch (SQLException e) {
       NotificationHandler.sqlPopup("Appointment-Update", e);
     }
 
-    return 0;
+    return rowsAffected;
   }
 
 

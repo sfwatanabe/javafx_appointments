@@ -140,7 +140,7 @@ public class CustomerDAOImpl implements CustomerDAO {
       rowsAffected = ps.executeUpdate();
 
       if (rowsAffected == 0) {
-        throw new SQLException("Create user failed, no rows affected.");
+        throw new SQLException("Update user failed, no rows affected.");
       }
     } catch (SQLException e) {
       NotificationHandler.sqlPopup("Customer-Update", e);

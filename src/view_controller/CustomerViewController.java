@@ -259,7 +259,7 @@ public class CustomerViewController implements Initializable {
   @FXML
   private void saveCustomerHandler(ActionEvent event) throws IOException {
 
-    if (NotificationHandler.confirmPopup(event, "Save changes to record?")) {
+    if (NotificationHandler.confirmPopup(event, "Save changes ?")) {
 
       String name = nameField.getText().strip();
       String address = addressField.getText().strip();
@@ -324,6 +324,7 @@ public class CustomerViewController implements Initializable {
 
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
+    stage.setResizable(false);
     stage.show();
   }
 

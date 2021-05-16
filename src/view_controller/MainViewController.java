@@ -379,7 +379,7 @@ public class MainViewController implements Initializable {
 
     for (Appointment a : appointmentsFiltered) {
       var start = a.getStartTime();
-      if (start.isBefore(timeLimit) && (user.getId().equals(a.getUserId()))) {
+      if ((start.compareTo(timeLimit) <= 0) && (user.getId().equals(a.getUserId()))) {
         if (start.isBefore(LocalDateTime.now()) || start.isEqual(LocalDateTime.now())) {
           messages.add("\nPast Due:\n" + a);
         } else {
@@ -514,6 +514,7 @@ public class MainViewController implements Initializable {
 
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
+    stage.setResizable(false);
     stage.show();
   }
 

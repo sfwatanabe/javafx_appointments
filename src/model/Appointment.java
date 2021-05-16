@@ -386,7 +386,8 @@ public class Appointment {
   public String toString() {
     return "Appt ID: " + id.get() +
         "\nDate: " + startTime.get().toLocalDate() +
-        "\nTime: " + startTime.get().toLocalTime() +
-        "\nType: " + type.get();
+        "\nStart: " + startTime.get().toLocalTime() +
+        "\nEnd: " + endTime.get().toLocalTime() +
+        "\nType: " + type.get() + "\n";
   }
 }

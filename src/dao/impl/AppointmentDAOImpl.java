@@ -94,9 +94,33 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   @Override
   public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends) {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-    String queryBetween = "";
+    String queryBetween = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+                        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+                        + " FROM appointments AS a"
+                        + " INNER JOIN contacts AS c"
+                        + " WHERE a.Contact_ID = c.Contact_ID AND"
+                        + " (End BETWEEN ? AND ? "
+                        + " OR Start BETWEEN ? AND ?)";
 
-    return null;
+    Timestamp startsTime = Timestamp.valueOf(starts);
+    Timestamp endsTime = Timestamp.valueOf(ends);
+
+    try (PreparedStatement ps = conn.prepareStatement(queryBetween)) {
+      ps.setTimestamp(1, startsTime);
+      ps.setTimestamp(2, endsTime);
+      ps.setTimestamp(3, startsTime);
+      ps.setTimestamp(4, endsTime);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          appointments.add(parseAppointment(rs));
+        }
+      }
+    } catch(SQLException e) {
+      NotificationHandler.sqlPopup("Appointment-Interval", e);
+    }
+
+    return appointments;
   }
 
   @Override

@@ -27,11 +27,11 @@ public class BusinessHours {
   /**
    * Opening business local time based on HQ location.
    */
-  private static final LocalTime openHours = LocalTime.of(9, 00);
+  private static final LocalTime openHours = LocalTime.of(8, 00);
   /**
    * Closing business local time based on HQ location.
    */
-  private static final LocalTime closeHours = LocalTime.of(17, 00);
+  private static final LocalTime closeHours = LocalTime.of(22, 00);
   /**
    * ZonedDateTime object for the opening business hours based on HQ.
    */
@@ -56,7 +56,7 @@ public class BusinessHours {
   /**
    * Time slot interval at which time blocks will be spaced.
    */
-  private static final int SPACING = 1;
+  private static final int SPACING = 10;
 
 
   /**

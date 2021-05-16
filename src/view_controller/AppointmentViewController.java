@@ -1,10 +1,12 @@
 package view_controller;
 
+import dao.impl.AppointmentDAOImpl;
 import dao.impl.ContactDAOImpl;
 import dao.impl.CustomerDAOImpl;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -65,6 +68,11 @@ public class AppointmentViewController implements Initializable {
    */
   private Appointment currentAppointment;
 
+  /**
+   * AppointmentDAO implementation for data retrieval.
+   */
+
+  private final AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
 
   /**
    * ContactDAO implementation for data retrieval.
@@ -295,6 +303,47 @@ public class AppointmentViewController implements Initializable {
   //===========================================================================
 
   @FXML
+  private void saveHandler(ActionEvent event) throws IOException {
+    // Check if they want to save first
+    List<String> conflictMessages = new ArrayList<String>();
+
+    if (NotificationHandler.confirmPopup(event, "Save changes ?")) {
+      LocalDateTime start = LocalDateTime.of(datePicker.getValue(), startTime.getValue());
+      LocalDateTime end = LocalDateTime.of(datePicker.getValue(), endTime.getValue());
+      var conflictList = appointmentDAO.getBetween(start, end);
+      //TODO put in the appointments between check here and only parse the appointment if we're good
+      if (conflictList.isEmpty()){
+        int customerId = customerCombo.getValue().getId();
+        int contactId = contactCombo.getValue().getId();
+        String contactName = contactCombo.getValue().getName();
+        String title = titleField.getText().strip();
+        String description = descriptionField.getText().strip();
+        String type = typeField.getText().strip();
+        String location = locationField.getText().strip();
+        // New appointment
+        if (isNew) {
+          currentAppointment = new Appointment(-1, customerId, contactId, contactName, user.getId(),
+              title, description, type, location, start, end);
+          currentAppointment.setId(appointmentDAO.addAppointment(currentAppointment, user));
+
+          if (currentAppointment.getId() > 0) {
+            NotificationHandler.warningPopup("Add Complete", "Appointment\n" +
+                currentAppointment + " has been added.");
+            loadMainView(event);
+          }
+        }
+        // Update appointment
+
+
+      } else {
+        conflictMessages = conflictList.stream().map(Appointment::toString).collect(Collectors.toList());
+        NotificationHandler.warningPopup("Scheduling Overlaps", conflictMessages);
+      }
+
+    }
+  }
+
+  @FXML
   private void checkEndTime(ActionEvent event) {
 
   }
@@ -337,12 +386,8 @@ public class AppointmentViewController implements Initializable {
 
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
+    stage.setResizable(false);
     stage.show();
-  }
-
-  @FXML
-  private void saveHandler(ActionEvent event) {
-
   }
 
 }

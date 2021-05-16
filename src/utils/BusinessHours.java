@@ -114,25 +114,40 @@ public class BusinessHours {
   }
 
   /**
-   * Determines if the start and end times fall within
+   * Determines if the start and end times fall within business hours.
    *
-   * @param start
-   * @param end
-   * @return
+   * @param start Start time in local date time format.
+   * @param end End time in local date time format.
+   * @return True if the appointment is within a valid shift, false otherwise.
    */
   public static boolean insideShift(LocalDateTime start, LocalDateTime end) {
     boolean inside = true;
     // Convert both start and end to zonedDateTime objects
     ZonedDateTime startZDT = toBusinessZDT(start);
     ZonedDateTime endZDT = toBusinessZDT(end);
+    ZonedDateTime openingZDT = ZonedDateTime.of(startZDT.toLocalDate(), openHours, businessZone);
+    ZonedDateTime closingZDT = openingZDT.plusHours(SHIFT_LENGTH);
+
+    System.out.println(start);
+    System.out.println(end);
     // Make a local date time for the starting date that has the opening hours
-    // Make an ending date time that adds 14 hours to above.
+    System.out.println(startZDT);
+    System.out.println(endZDT);
+
+    System.out.println(openingZDT);
+    System.out.println(closingZDT);
     // Start checking conditions.
     // endZDT.isbefore(startZDT.toLocalDate().plusHours(14)) hours and after start
+    if (startZDT.compareTo(endZDT) > 0) {
+      inside = false;
+    }
+    if (startZDT.compareTo(openingZDT) < 0) {
+      inside = false;
+    }
+    if (endZDT.compareTo(closingZDT) > 0) {
+      inside = false;
+    }
     // Start is after close and before end
-
-
-
     return inside;
   }
 
@@ -161,14 +176,11 @@ public class BusinessHours {
     return ldtZDT.withZoneSameInstant(businessZone);
   }
 
-
-
-  // TODO Remove this straggler - > or rewrite as a unit test.
-  public static void main(String[] args) {
-    System.out.println("Open hours " + openHours);
-    System.out.println("Close hours " + closeHours);
-
-//    System.out.println("Start: " + localOpen);
-//    System.out.println("End: " + localClose);
+  /**
+   * @return String representing the open and closing hours range in local time.
+   */
+  public static String getLocalBusinessHours() {
+    return localOpen + " - " + localClose;
   }
+
 }

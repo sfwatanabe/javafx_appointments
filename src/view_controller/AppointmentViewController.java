@@ -307,6 +307,10 @@ public class AppointmentViewController implements Initializable {
 
   /**
    * Attempts to save the new appointment record or update the existing record currently in use.
+   * Start times must be no earlier than opening of business and end times must be within close
+   * of business hours range. The BusinessHours utility helps convert the local date time
+   * selections to the business hours time zone for confirmation if appointments are within
+   * the proper range.
    *
    * @param event ActionEvent triggered by user clicking on the save button.
    * @throws IOException Exception from failure to load the main scene.
@@ -320,16 +324,20 @@ public class AppointmentViewController implements Initializable {
       boolean ready = true;
       LocalDateTime start = LocalDateTime.of(startDate.getValue(), startTime.getValue());
       LocalDateTime end = LocalDateTime.of(endDate.getValue(), endTime.getValue());
-      // TODO add the start before end check here -> too troublesome to try and filter the list.
+
       if (!start.isBefore(end)){
         conflictMessages.add("Start must be before end date & time.");
+        ready = false;
       }
       if (!BusinessHours.insideShift(start, end)) {
-        conflictMessages.add("Outside of business hours.");
+        conflictMessages.add(
+            "\nOutside of business hours:"
+            + "\n\nStart and end must be within:\n"
+            + BusinessHours.getLocalBusinessHours()
+            +" (08:00 - 22:00 EST)"
+        );
+        ready = false;
       }
-
-
-
       // If we fall through and are still ready we'll continue with the save operation.
       if (ready) {
         var apptId = isNew ? -1 : currentAppointment.getId();
@@ -376,18 +384,14 @@ public class AppointmentViewController implements Initializable {
               .collect(Collectors.toList());
           NotificationHandler.warningPopup("Scheduling Overlap", conflictMessages);
         }
+      } else {
+          startDate.setValue(null);
+          startTime.setValue(null);
+          endDate.setValue(null);
+          endTime.setValue(null);
+          NotificationHandler.warningPopup("Start/End Time Alert", conflictMessages);
       }
     }
-  }
-
-  @FXML
-  private void checkEndTime(ActionEvent event) {
-    // TODO Filter the ending times predicate based on the currently selected start time.
-  }
-
-  @FXML
-  private void checkStartTime(ActionEvent event) {
-    // TODO Filter the starting times predicate based on the currently selected end time.
   }
 
   /**

@@ -10,22 +10,22 @@ import utils.DBConnector;
  *
  * @author Sakae Watanabe
  */
-public abstract class Report {
+public abstract class ReportDAO {
 
   /**
    * Connection to the application database.
    */
-  private Connection conn;
+  protected Connection conn;
 
   /**
    * Final string representing the output of the report.
    */
-  private String report;
+  protected String report;
 
   /**
    * Simple constructor for super class grabs connection to the database.
    */
-  public Report() {
+  public ReportDAO() {
     this.conn = DBConnector.getConnection();
   }
 

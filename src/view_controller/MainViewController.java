@@ -31,6 +31,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
@@ -432,6 +433,60 @@ public class MainViewController implements Initializable {
     stage.show();
   }
 
+
+  /**
+   * Handles user request to add a new appointment record and calls scene init method for adding a
+   * new appointment from AppointmentViewController class.
+   *
+   * @param event ActionEvent triggered by user clicking the add appointment button.
+   */
+  @FXML
+  private void loadApptHandler(ActionEvent event) throws IOException {
+    String buttonId = ((Button) event.getSource()).getId();
+
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/AppointmentView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+    AppointmentViewController controller = loader.getController();
+
+    if (buttonId.equals(addApptButton.getId())) {
+      controller.initAppointmentData(true, user);
+
+    } else if (buttonId.equals(updateApptButton.getId())) {
+      Appointment appointment = apptTableView.getSelectionModel().getSelectedItem();
+      if (appointment != null) {
+        controller.initAppointmentData(false, user, appointment);
+
+      } else {
+        warningPopup("No appointment Selected", "Please select a appointment.");
+        return;
+      }
+    }
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.setResizable(false);
+    stage.show();
+  }
+
+
+
+  @FXML
+  void loadReports(ActionEvent event) throws IOException {
+    // TODO Loads report screen with appropriate report.
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/view_controller/ReportsView.fxml"));
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+    Stage stage = new Stage();
+    // TODO setup a simple factory fall through for the init. if button type == XXX then pass arg
+    stage.setScene(scene);
+    stage.initModality(Modality.WINDOW_MODAL);
+    stage.initOwner(divisionReportButton.getScene().getWindow());
+    stage.show();
+  }
+
   //===========================================================================
   // Event Handlers & Helper Methods
   //===========================================================================
@@ -480,42 +535,6 @@ public class MainViewController implements Initializable {
     } else {
       warningPopup("Delete Failed", "Please select a customer.");
     }
-  }
-
-  /**
-   * Handles user request to add a new appointment record and calls scene init method for adding a
-   * new appointment from AppointmentViewController class.
-   *
-   * @param event ActionEvent triggered by user clicking the add appointment button.
-   */
-  @FXML
-  private void loadApptHandler(ActionEvent event) throws IOException {
-    String buttonId = ((Button) event.getSource()).getId();
-
-    FXMLLoader loader = new FXMLLoader();
-    loader.setLocation(getClass().getResource("/view_controller/AppointmentView.fxml"));
-    Parent parent = loader.load();
-    Scene scene = new Scene(parent);
-    AppointmentViewController controller = loader.getController();
-
-    if (buttonId.equals(addApptButton.getId())) {
-      controller.initAppointmentData(true, user);
-
-    } else if (buttonId.equals(updateApptButton.getId())) {
-      Appointment appointment = apptTableView.getSelectionModel().getSelectedItem();
-      if (appointment != null) {
-        controller.initAppointmentData(false, user, appointment);
-
-      } else {
-        warningPopup("No appointment Selected", "Please select a appointment.");
-        return;
-      }
-    }
-
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    stage.setScene(scene);
-    stage.setResizable(false);
-    stage.show();
   }
 
 

@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
@@ -474,13 +475,17 @@ public class MainViewController implements Initializable {
 
   @FXML
   void loadReports(ActionEvent event) throws IOException {
-    // TODO Loads report screen with appropriate report.
+    String buttonId = ((Control)event.getSource()).getId();
+
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("/view_controller/ReportsView.fxml"));
     Parent parent = loader.load();
     Scene scene = new Scene(parent);
     Stage stage = new Stage();
-    // TODO setup a simple factory fall through for the init. if button type == XXX then pass arg
+    ReportsViewController controller = loader.getController();
+
+    controller.initDataFactory(user, buttonId);
+
     stage.setScene(scene);
     stage.initModality(Modality.WINDOW_MODAL);
     stage.initOwner(divisionReportButton.getScene().getWindow());

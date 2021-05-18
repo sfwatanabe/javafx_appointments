@@ -1,8 +1,8 @@
 package utils;
 
-import dao.impl.AppointmentDAOImpl;
-import java.util.List;
-import model.Appointment;
+import dao.ReportDAO;
+import dao.impl.reportDAOImpl.DivisionBookingsDAOImpl;
+import dao.impl.reportDAOImpl.MonthlyReportDAOImpl;
 
 /**
  * @author Sakae Watanabe
@@ -10,17 +10,16 @@ import model.Appointment;
 public class TableStringTest {
 
   public static void main(String[] args) {
-    AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
-    List<Appointment> appointments = appointmentDAO.getAll();
+    ReportDAO report = new MonthlyReportDAOImpl();
 
-    TextTableBuilder<Appointment> reportTest = new TextTableBuilder<>();
-    reportTest.addColumn("ID", Appointment::getId);
-    reportTest.addColumn("Contact Name", Appointment::getContactName);
-    reportTest.addColumn("Customer ID", Appointment::getCustomerId);
-    reportTest.addColumn("Type", Appointment::getType);
-
-    String output = reportTest.createString(appointments);
-
+    report.constructReport();
+    String output = report.getReport();
     System.out.println(output);
+
+    report = new DivisionBookingsDAOImpl();
+    report.constructReport();
+    output = report.getReport();
+    System.out.println(output);
+
   }
 }

@@ -5,7 +5,8 @@ import java.util.List;
 
 /**
  * Data transfer object for appointment sales by type reporting access holds the name of appointment
- * type and summary of bookings for each month.
+ * type and summary of bookings for each month.This class only has getter methods implemented to avoid inadvertent
+ * corruption of the data by user.
  *
  * @author Sakae Watanabe
  */
@@ -24,6 +25,13 @@ public class ApptTypeSalesDTO {
   public ApptTypeSalesDTO(String type, ArrayList<Integer> monthTotal) {
     this.type = type;
     this.monthTotal = monthTotal;
+  }
+
+  /**
+   * @return String value representing the type of appointment.
+   */
+  public String getType() {
+    return type;
   }
 
   /**

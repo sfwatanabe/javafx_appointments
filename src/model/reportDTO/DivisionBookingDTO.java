@@ -2,7 +2,8 @@ package model.reportDTO;
 
 /**
  * Data transfer object to hold booking by division data to be used for report
- * generation.
+ * generation. This class only has getter methods implemented to avoid inadvertent
+ * corruption of the data by user.
  *
  * @author Sakae Watanabe
  */

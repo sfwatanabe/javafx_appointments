@@ -7,37 +7,42 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.reportDTO.ApptTypeSalesDTO;
+import utils.NotificationHandler;
 import utils.TextTableBuilder;
 
 /**
- * Report dao for collecting appointments by type and month. Returns a table
- * formatted string for output with the type of appointments in first column
- * followed by count for each month across columns.
+ * Report dao for collecting appointments by type and month. Returns a table formatted string for
+ * output with the type of appointments in first column followed by count for each month across
+ * columns.
  *
  * @author Sakae Watanabe
  */
 public class MonthlyReportDAOImpl extends ReportDAO {
 
+  //===========================================================================
+  // Data Members & Constructor
+  //===========================================================================
+  
   /**
    * Query for information on type of appointments with the count per month.
    */
-  private final String query = "SELECT a.Type as Type,"
-      + " SUM(CASE WHEN a.Month = 'January' THEN a.Count ELSE 0 END) AS 'Jan',"
-      + " SUM(CASE WHEN a.Month = 'February' THEN a.Count ELSE 0 END) AS 'Feb',"
-      + " SUM(CASE WHEN a.Month = 'March' THEN a.Count ELSE 0 END) AS 'Mar',"
-      + " SUM(CASE WHEN a.Month = 'April' THEN a.Count ELSE 0 END) AS 'Apr',"
-      + " SUM(CASE WHEN a.Month = 'May' THEN a.Count ELSE 0 END) AS 'May',"
-      + " SUM(CASE WHEN a.Month = 'June' THEN a.Count ELSE 0 END) AS 'Jun',"
-      + " SUM(CASE WHEN a.Month = 'July' THEN a.Count ELSE 0 END) AS 'Jul',"
-      + " SUM(CASE WHEN a.Month = 'August' THEN a.Count ELSE 0 END) AS 'Aug',"
-      + " SUM(CASE WHEN a.Month = 'September' THEN a.Count ELSE 0 END) AS 'Sep',"
-      + " SUM(CASE WHEN a.Month = 'October' THEN a.Count ELSE 0 END) AS 'Oct',"
-      + " SUM(CASE WHEN a.Month = 'November' THEN a.Count ELSE 0 END) AS 'Nov',"
-      + " SUM(CASE WHEN a.Month = 'December' THEN a.Count ELSE 0 END) AS December"
+  private final String query = "SELECT a.Type AS Type,"
+      + " SUM(IF(a.Month = 'January', a.Count, 0))AS 'Jan',"
+      + " SUM(IF(a.Month = 'February', a.Count, 0))AS 'Feb',"
+      + " SUM(IF(a.Month = 'March', a.Count, 0))AS 'Mar',"
+      + " SUM(IF(a.Month = 'April', a.Count, 0))AS 'Apr',"
+      + " SUM(IF(a.Month = 'May', a.Count, 0))AS 'May',"
+      + " SUM(IF(a.Month = 'June', a.Count, 0))AS 'Jun',"
+      + " SUM(IF(a.Month = 'July', a.Count, 0))AS 'Jul',"
+      + " SUM(IF(a.Month = 'August', a.Count, 0)) AS 'Aug',"
+      + " SUM(IF(a.Month = 'September', a.Count, 0)) AS 'Sep',"
+      + " SUM(IF(a.Month = 'October', a.Count, 0)) AS 'Oct',"
+      + " SUM(IF(a.Month = 'November', a.Count, 0))AS 'Nov',"
+      + " SUM(IF(a.Month = 'December', a.Count, 0)) AS December"
       + " FROM (SELECT  DATE_FORMAT(Start, '%M') as Month, Type, Count(*) as Count"
-      + " FROM appointments"
-      + " GROUP BY Month, Type"
-      + " ORDER BY Month DESC) as a"
+      + " FROM appointments\n"
+      + " GROUP BY Month, Type\n"
+      + " ORDER BY Month DESC) as a\n"
       + " GROUP BY Type";
 
   /**
@@ -50,39 +55,70 @@ public class MonthlyReportDAOImpl extends ReportDAO {
    */
   private TextTableBuilder<ApptTypeSalesDTO> tableBuilder;
 
+
+  /**
+   * Initializes ArrayList for typeSales and instance of TextTableBuilder.
+   */
   public MonthlyReportDAOImpl() {
     this.typeSales = new ArrayList<>();
     this.tableBuilder = new TextTableBuilder<>();
   }
 
+  //===========================================================================
+  // Report Construction Area
+  //===========================================================================
+
+
+  /**
+   * Report construction for the monthly appointments by type summary. First column
+   * is assigned to type, with subsequent columns for months in ascending order.
+   */
   @Override
   public void constructReport() {
-    // GET THE DATA // Check if we have anything
-    // If we don't - just return --No Results--, otherwise continue.
+    buildData();
 
-    // PUT THE DATA TOGETHER - > we call the builder here
+    if (typeSales.isEmpty()) {
+      setReport("--No results to report--");
+      return;
+    }
 
-    // SET THE STRING
+    tableBuilder.addColumn("Type", ApptTypeSalesDTO::getType);
+    tableBuilder.addColumn("Jan", ApptTypeSalesDTO::getJan);
+    tableBuilder.addColumn("Feb", ApptTypeSalesDTO::getFeb);
+    tableBuilder.addColumn("Mar", ApptTypeSalesDTO::getMar);
+    tableBuilder.addColumn("Apr", ApptTypeSalesDTO::getApr);
+    tableBuilder.addColumn("May", ApptTypeSalesDTO::getMay);
+    tableBuilder.addColumn("Jun", ApptTypeSalesDTO::getJun);
+    tableBuilder.addColumn("Jul", ApptTypeSalesDTO::getJul);
+    tableBuilder.addColumn("Aug", ApptTypeSalesDTO::getAug);
+    tableBuilder.addColumn("Sep", ApptTypeSalesDTO::getSep);
+    tableBuilder.addColumn("Oct", ApptTypeSalesDTO::getOct);
+    tableBuilder.addColumn("Nov", ApptTypeSalesDTO::getNov);
+    tableBuilder.addColumn("Dec", ApptTypeSalesDTO::getDec);
+
+    setReport(tableBuilder.createString(typeSales));
   }
 
-
+  /**
+   * Prepares and executes the report query before parsing results into dto objects for used for
+   * report construction.
+   */
   private void buildData() {
     try (PreparedStatement ps = this.conn.prepareStatement(query);
         ResultSet rs = ps.executeQuery()) {
       while (rs.next()) {
         typeSales.add(parseDTO(rs));
       }
-
     } catch (SQLException e) {
-
+      NotificationHandler.sqlPopup("Monthly Report", e);
     }
   }
 
 
   /**
-   * Parse result set data into a dto object for appointment type sales reports.
+   * Parse result set data to dto object for appointment type sales reports.
    *
-   * @param rs Result set from
+   * @param rs Result set from executed query.
    * @return ApptTypeSalesDTO object containing report data.
    */
   private ApptTypeSalesDTO parseDTO(ResultSet rs) throws SQLException {
@@ -107,6 +143,5 @@ public class MonthlyReportDAOImpl extends ReportDAO {
 
     return dto;
   }
-
 
 }

@@ -43,7 +43,7 @@ public class TextTableBuilder<T> {
    * @param fieldFunction Method taking object of type T and returning a value to be inserted into
    *                      the table.
    */
-  void addColumn(String columnName, Function<? super T, ?> fieldFunction) {
+  public void addColumn(String columnName, Function<? super T, ?> fieldFunction) {
     columnNames.add(columnName);
     stringFunctions.add((p) -> (String.valueOf(fieldFunction.apply(p))));
   }
@@ -60,7 +60,7 @@ public class TextTableBuilder<T> {
   private int computeMaxWidth(int column, Iterable<? extends T> elements) {
     int maxWidth = columnNames.get(column)
         .length(); // Get the length of the column as starting width.
-    double scaleFactor = 1.25;
+    double scaleFactor = 1.0;
 
     Function<? super T, String> f = stringFunctions
         .get(column); // we will get the matching function to map Strings
@@ -69,7 +69,7 @@ public class TextTableBuilder<T> {
       maxWidth = Math.max(maxWidth, s.length()); // always tracking the max width element.
     }
 
-    return (int) (maxWidth * 1.25);
+    return (int) (maxWidth * scaleFactor);
   }
 
 
@@ -118,7 +118,7 @@ public class TextTableBuilder<T> {
 
     for (int i = 0; i < columnNames.size(); i++) {
       if (i > 0) {
-        sb.append(" |");
+        sb.append("  |  ");
       }
       String format = "%" + columnWidths.get(i) + "s";
       sb.append(String.format(format, columnNames.get(i)));
@@ -127,7 +127,7 @@ public class TextTableBuilder<T> {
 
     for (int i = 0; i < columnNames.size(); i++) {
       if (i > 0) {
-        sb.append("-+");
+        sb.append("--+--");
       }
       sb.append(padLeft("", '-', columnWidths.get(i)));
     }
@@ -137,7 +137,7 @@ public class TextTableBuilder<T> {
     for (T element : elements) {
       for (int i = 0; i < columnNames.size(); i++) {
         if (i > 0) {
-          sb.append(" |");
+          sb.append("  |  ");
         }
         String format = "%" + columnWidths.get(i) + "s";
         Function<? super T, String> f = stringFunctions.get(i);

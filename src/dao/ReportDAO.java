@@ -44,7 +44,7 @@ public abstract class ReportDAO {
   /**
    * @param report Update the report information to the given string.
    */
-  private void setReport(String report) {
+  protected void setReport(String report) {
     this.report = report;
   }
 }

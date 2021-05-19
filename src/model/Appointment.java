@@ -359,6 +359,19 @@ public class Appointment {
     return endTime.get().toLocalTime().truncatedTo(ChronoUnit.MINUTES);
   }
 
+  /**
+   * @return String of the local date time for appointment start.
+   */
+  public String getStartLocalString() {
+    return endTime.get().toLocalDate() + " " + getLocalEndTime();
+  }
+
+  /**
+   * @return String of the local date time for appointment end.
+   */
+  public String getEndLocalString() {
+    return startTime.get().toLocalDate() + " " + getLocalStartTime();
+  }
 
   /**
    * @return ObjectProperty holding the appointment end time.

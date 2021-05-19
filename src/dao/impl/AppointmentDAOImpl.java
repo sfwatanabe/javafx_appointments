@@ -155,8 +155,29 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
 
   @Override
-  public ObservableList<Appointment> getByContact(String contactName) {
-    return null;
+  public ObservableList<Appointment> getByContactID(int contactID) {
+    ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    String byContactID = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
+        + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
+        + " FROM appointments AS a"
+        + " INNER JOIN contacts AS c"
+        + " WHERE a.Contact_ID = c.Contact_ID AND"
+        + " c.Contact_ID = ?"
+        + " ORDER BY Start";
+
+    try (PreparedStatement ps = conn.prepareStatement(byContactID)) {
+      ps.setInt(1, contactID);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          appointments.add(parseAppointment(rs));
+        }
+      }
+    } catch (SQLException e) {
+      NotificationHandler.sqlPopup("Contact-By ID", e);
+    }
+
+    return appointments;
   }
 
 

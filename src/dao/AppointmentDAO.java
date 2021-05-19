@@ -50,12 +50,12 @@ public interface AppointmentDAO {
   public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends, int ignore);
 
   /**
-   * getByContact looks up appointment records matching supplied contact name.
+   * getByContact looks up appointment records matching supplied contact id.
    *
-   * @param contactName String representing contact name to match.
-   * @return ObservableList of appointments matching supplied contact name.
+   * @param contactID Integer representing the contact id number.
+   * @return ObservableList of appointments matching supplied contact id.
    */
-  public ObservableList<Appointment> getByContact(String contactName);
+  public ObservableList<Appointment> getByContactID(int contactID);
 
 
   /**

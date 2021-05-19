@@ -364,13 +364,21 @@ public class AppointmentViewController implements Initializable {
               loadMainView(event);
             }
           } else {
+            // TODO Investigate updating title
             currentAppointment.setTitle(title);
+            // TODO Investigate updating location
             currentAppointment.setLocation(location);
+            // TODO Investigate updating type
             currentAppointment.setType(type);
+            // TODO Investigate updating start time
             currentAppointment.setStartTime(start);
+            // TODO Investigate updating end time
             currentAppointment.setEndTime(end);
+            // TODO Investigate updating the contact ID.
             currentAppointment.setContactId(contactId);
+            // TODO Investigate updating contact name
             currentAppointment.setContactName(contactName);
+            // TODO Investigate updating customer id
             currentAppointment.setCustomerId(customerId);
             int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
             if (rowsAffected > 0) {

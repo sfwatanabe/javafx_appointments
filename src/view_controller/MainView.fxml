@@ -84,9 +84,9 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Button fx:id="monthlyReportButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="120.0" text="Monthly Appt" />
-                        <Button fx:id="contactReportButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="120.0" text="Contact Schedules" />
-                        <Button fx:id="divisionReportButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Division Totals" />
+                        <Button fx:id="monthlyReportButton" mnemonicParsing="false" onAction="#loadReports" prefHeight="42.0" prefWidth="120.0" text="Monthly Appt" />
+                        <Button fx:id="contactReportButton" mnemonicParsing="false" onAction="#loadReports" prefHeight="42.0" prefWidth="120.0" text="Contact Schedules" />
+                        <Button fx:id="divisionReportButton" mnemonicParsing="false" onAction="#loadReports" prefHeight="45.0" prefWidth="120.0" text="Division Totals" />
                      </children>
                      <VBox.margin>
                         <Insets />

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -122,7 +123,7 @@ public class BusinessHours {
    */
   public static boolean insideShift(LocalDateTime start, LocalDateTime end) {
     boolean inside = true;
-    // Convert both start and end to zonedDateTime objects
+
     ZonedDateTime startZDT = toBusinessZDT(start);
     ZonedDateTime endZDT = toBusinessZDT(end);
     ZonedDateTime openingZDT = ZonedDateTime.of(startZDT.toLocalDate(), openHours, businessZone);
@@ -130,14 +131,13 @@ public class BusinessHours {
 
     System.out.println(start);
     System.out.println(end);
-    // Make a local date time for the starting date that has the opening hours
+
     System.out.println(startZDT);
     System.out.println(endZDT);
 
     System.out.println(openingZDT);
     System.out.println(closingZDT);
-    // Start checking conditions.
-    // endZDT.isbefore(startZDT.toLocalDate().plusHours(14)) hours and after start
+
     if (startZDT.compareTo(endZDT) > 0) {
       inside = false;
     }
@@ -147,7 +147,7 @@ public class BusinessHours {
     if (endZDT.compareTo(closingZDT) > 0) {
       inside = false;
     }
-    // Start is after close and before end
+
     return inside;
   }
 
@@ -181,6 +181,15 @@ public class BusinessHours {
    */
   public static String getLocalBusinessHours() {
     return localOpen + " - " + localClose;
+  }
+
+  /**
+   * @return Formatted date time string for use in log files or console output in business hours.
+   */
+  public static String businessNow(LocalDateTime ldt) {
+    ZonedDateTime asBusinessZDT = toBusinessZDT(ldt);
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm z");
+    return asBusinessZDT.format(dtf);
   }
 
 }

@@ -1,8 +1,18 @@
 package view_controller;
 
+import static utils.BusinessHours.businessNow;
+
 import dao.impl.UserDAOImpl;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -98,15 +108,22 @@ public class LoginController implements Initializable {
     List<String> errorMessages = new ArrayList<>();
 
     if (userName.isEmpty() || password.isEmpty()) {
+      if (userName.isBlank()) {
+        logUserActivity("NO NAME", false);
+      } else {
+        logUserActivity(userNameField.getText(), false);
+      }
       errorMessages.add(resources.getString("emptyFields"));
     } else {
         user = userDAOImpl.getUserByName(userName);
         if (user != null) {
           if (!password.equals(user.getPassword())) {
             errorMessages.add(resources.getString("invalidPassword"));
+            logUserActivity(userNameField.getText(),false);
           }
         } else {
             errorMessages.add(String.format(resources.getString("userNotFound"), userName));
+            logUserActivity(userNameField.getText(),false);
         }
     }
     if (errorMessages.size() > 0) {
@@ -114,6 +131,7 @@ public class LoginController implements Initializable {
       userNameField.requestFocus();
     } else {
       try {
+        logUserActivity(userNameField.getText(),true);
         loadMainView(event);
       } catch (IOException e) {
         NotificationHandler.warningPopup("Main Screen", e.getMessage());
@@ -155,4 +173,35 @@ public class LoginController implements Initializable {
         zoneID.getDisplayName(TextStyle.FULL, Locale.getDefault());
     loginZone.setText(zoneText);
   }
+
+  /**
+   * Records user activity to the log file for administrative review. Times are recorded
+   * according to business hours (EST).
+   *
+   * @param valid Boolean value indicating if the user login attempt was successful.
+   */
+  private void logUserActivity(String userName, Boolean valid) {
+    Path logActivity = Paths.get("src/", "login_activity.txt");
+    Charset charSet = StandardCharsets.UTF_8;
+    StandardOpenOption primary = StandardOpenOption.APPEND;
+    StandardOpenOption secondary = StandardOpenOption.CREATE;
+    String logMessage;
+
+    if (!valid){
+      logMessage = "Invalid login attempt by user: " + userName + " at "
+          + businessNow(LocalDateTime.now());
+    } else {
+      logMessage = "Successful login by user: " + userName + " at "
+          + businessNow(LocalDateTime.now());
+    }
+
+    try (BufferedWriter writer = Files.newBufferedWriter(logActivity, charSet, primary, secondary)) {
+      writer.write(logMessage);
+      writer.newLine();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+  }
+
 }

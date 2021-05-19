@@ -9,6 +9,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/
+login_activity.txt
 *.iml
 /out
 /src/Test/

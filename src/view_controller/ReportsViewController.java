@@ -3,7 +3,6 @@ package view_controller;
 import dao.ReportDAO;
 import dao.impl.reportDAOImpl.DivisionBookingsDAOImpl;
 import dao.impl.reportDAOImpl.MonthlyReportDAOImpl;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -46,6 +45,7 @@ public class ReportsViewController {
       report = new MonthlyReportDAOImpl();
     } else if (reportType.equals("contactReportButton")) {
       reportTitleLabel.setText("Contact Schedules");
+      // TODO put in the contact schedules DAO impl
       reportText.setText("We hit the contact Report.");
     } else if (reportType.equals("divisionReportButton")) {
       reportTitleLabel.setText("Appointments by Division");

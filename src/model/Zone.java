@@ -19,7 +19,7 @@ public abstract class Zone {
   /**
    * ObjectProperty for holding zone id number.
    */
-  private ObjectProperty<Integer> id = new SimpleObjectProperty();
+  private ObjectProperty<Integer> id = new SimpleObjectProperty<>();
 
   /**
    * StringProperty to hold zone name.

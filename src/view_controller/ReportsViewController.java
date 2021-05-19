@@ -1,6 +1,7 @@
 package view_controller;
 
 import dao.ReportDAO;
+import dao.impl.reportDAOImpl.ContactScheduleDAOImpl;
 import dao.impl.reportDAOImpl.DivisionBookingsDAOImpl;
 import dao.impl.reportDAOImpl.MonthlyReportDAOImpl;
 import java.net.URL;
@@ -15,7 +16,14 @@ import model.User;
 
 public class ReportsViewController {
 
+  /**
+   * User currently logged in to application.
+   */
   private User user;
+
+  /**
+   * Report DAO item for constructing and updating report data.
+   */
   private ReportDAO report;
 
   @FXML
@@ -24,12 +32,21 @@ public class ReportsViewController {
   @FXML
   private URL location;
 
+  /**
+   * Allows user to close the reports window and transfer control back to main.
+   */
   @FXML
   private Button backButton;
 
+  /**
+   * Label indicating which report is currently displayed.
+   */
   @FXML
   private Label reportTitleLabel;
 
+  /**
+   * TextArea containing the output for the chosen report.
+   */
   @FXML
   private TextArea reportText;
 
@@ -39,14 +56,20 @@ public class ReportsViewController {
   }
 
 
+  /**
+   * Initializes the data displayed for the reports view based on the button that was
+   * clicked to launch the scene, calling the appropriate report construction.
+   *
+   * @param user User currently using the application.
+   * @param reportType Button-id from main-view that was clicked to load scene.
+   */
   public void initDataFactory(User user, String reportType) {
     if (reportType.equals("monthlyReportButton")) {
       reportTitleLabel.setText("Appointments by Type");
       report = new MonthlyReportDAOImpl();
     } else if (reportType.equals("contactReportButton")) {
       reportTitleLabel.setText("Contact Schedules");
-      // TODO put in the contact schedules DAO impl
-      reportText.setText("We hit the contact Report.");
+      report = new ContactScheduleDAOImpl();
     } else if (reportType.equals("divisionReportButton")) {
       reportTitleLabel.setText("Appointments by Division");
       report = new DivisionBookingsDAOImpl();

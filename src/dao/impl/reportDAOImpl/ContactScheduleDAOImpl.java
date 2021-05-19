@@ -91,7 +91,7 @@ public class ContactScheduleDAOImpl extends ReportDAO {
 
         reportString.append(sectionHeading).append(tableBuilder.createString(appointments)).append("\n\n");
       } else {
-          reportString.append(sectionHeading).append("----No Appointments Scheduled----\n\n");
+          reportString.append(sectionHeading).append("No Appointments Scheduled\n\n");
       }
     }
 

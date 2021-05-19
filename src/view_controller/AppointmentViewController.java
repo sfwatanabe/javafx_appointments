@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -33,6 +34,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
@@ -208,6 +210,12 @@ public class AppointmentViewController implements Initializable {
   @FXML
   private Label emptyWarning;
 
+  /**
+   * Label for alerting user that date needs to be fixed.
+   */
+  @FXML
+  private Label dateWarning;
+
   //===========================================================================
   // Scene Initialization
   //===========================================================================
@@ -286,7 +294,7 @@ public class AppointmentViewController implements Initializable {
       descriptionField.setText(currentAppointment.getDescription());
 
       contactCombo.setValue((Contact)findPersonById(contacts, currentAppointment.getContactId()));
-      customerCombo.setValue((Customer)findPersonById(customers, currentAppointment.getContactId()));
+      customerCombo.setValue((Customer)findPersonById(customers, currentAppointment.getCustomerId()));
 
       startTime.setValue(currentAppointment.getLocalStartTime());
       endTime.setValue(currentAppointment.getLocalEndTime());
@@ -324,7 +332,7 @@ public class AppointmentViewController implements Initializable {
       if (!BusinessHours.insideShift(start, end)) {
         conflictMessages.add(
             "\nOutside of business hours:"
-            + "\n\nStart and end must be within:\n"
+            + "\n\nStart and end must be within same shift:\n"
             + BusinessHours.getLocalBusinessHours()
             +" (08:00 - 22:00 EST)"
         );
@@ -377,10 +385,13 @@ public class AppointmentViewController implements Initializable {
           NotificationHandler.warningPopup("Scheduling Overlap", conflictMessages);
         }
       } else {
-          startDate.setValue(null);
-          startTime.setValue(null);
-          endDate.setValue(null);
-          endTime.setValue(null);
+          PauseTransition dateWarningPause = new PauseTransition(Duration.seconds(10));
+          dateWarning.setVisible(true);
+          dateWarning.setText("Check start/end times");
+          dateWarningPause.setOnFinished(done -> dateWarning.setVisible(false));
+          dateWarningPause.play();
+
+          startTime.requestFocus();
           NotificationHandler.warningPopup("Start/End Time Alert", conflictMessages);
       }
     }
@@ -446,7 +457,7 @@ public class AppointmentViewController implements Initializable {
           break;
       }
     }
-    if (idx > 0) {
+    if (idx >= 0) {
       return persons.get(idx);
     }
     return null;

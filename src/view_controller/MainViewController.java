@@ -280,7 +280,6 @@ public class MainViewController implements Initializable {
   // Scene Initialization
   //===========================================================================
 
-  // TODO Add javadoc for the initialize -> explain usage of lambda for cellValueFactory
 
   /**
    * Initializes the controller for the main view and sets up the table data for both customer and
@@ -316,6 +315,9 @@ public class MainViewController implements Initializable {
 
     updateCustomersItems();
     updateAppointmentsItems();
+
+    apptTableView.getSortOrder().add(apptStartCol);
+    apptTableView.sort();
 
   }
 

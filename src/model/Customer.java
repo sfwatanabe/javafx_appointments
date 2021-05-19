@@ -23,7 +23,7 @@ public class Customer extends Person {
   /** String representing customer phone number information. */
   private StringProperty phoneNumber = new SimpleStringProperty();
   /** Integer representing the customer division id. */
-  private ObjectProperty<Integer> divisionId = new SimpleObjectProperty();
+  private ObjectProperty<Integer> divisionId = new SimpleObjectProperty<>();
 
   //===========================================================================
   // Constructor

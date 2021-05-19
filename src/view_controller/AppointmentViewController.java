@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
+import model.Person;
 import model.User;
 import utils.BusinessHours;
 import utils.ControlValidation;
@@ -281,20 +284,9 @@ public class AppointmentViewController implements Initializable {
       startDate.setValue(currentAppointment.getStartTime().toLocalDate());
       endDate.setValue(currentAppointment.getEndTime().toLocalDate());
       descriptionField.setText(currentAppointment.getDescription());
-      // TODO Clean this up later and combine refs.
-      // TODO Setup binary search by id that returns an object and then sets value
-      for (Contact c : contacts) {
-        if (currentAppointment.getContactId().equals(c.getId())) {
-          contactCombo.setValue(c);
-          break;
-        }
-      }
-      for (Customer c : customers) {
-        if (currentAppointment.getCustomerId().equals(c.getId())) {
-          customerCombo.setValue(c);
-          break;
-        }
-      }
+
+      contactCombo.setValue((Contact)findPersonById(contacts, currentAppointment.getContactId()));
+      customerCombo.setValue((Customer)findPersonById(customers, currentAppointment.getContactId()));
 
       startTime.setValue(currentAppointment.getLocalStartTime());
       endTime.setValue(currentAppointment.getLocalEndTime());
@@ -338,7 +330,7 @@ public class AppointmentViewController implements Initializable {
         );
         ready = false;
       }
-      // If we fall through and are still ready we'll continue with the save operation.
+
       if (ready) {
         var apptId = isNew ? -1 : currentAppointment.getId();
         var conflictList = appointmentDAO.getBetween(start, end, apptId);
@@ -364,21 +356,13 @@ public class AppointmentViewController implements Initializable {
               loadMainView(event);
             }
           } else {
-            // TODO Investigate updating title
             currentAppointment.setTitle(title);
-            // TODO Investigate updating location
             currentAppointment.setLocation(location);
-            // TODO Investigate updating type
             currentAppointment.setType(type);
-            // TODO Investigate updating start time
             currentAppointment.setStartTime(start);
-            // TODO Investigate updating end time
             currentAppointment.setEndTime(end);
-            // TODO Investigate updating the contact ID.
             currentAppointment.setContactId(contactId);
-            // TODO Investigate updating contact name
             currentAppointment.setContactName(contactName);
-            // TODO Investigate updating customer id
             currentAppointment.setCustomerId(customerId);
             int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
             if (rowsAffected > 0) {
@@ -436,6 +420,36 @@ public class AppointmentViewController implements Initializable {
     stage.setScene(scene);
     stage.setResizable(false);
     stage.show();
+  }
+
+
+  /**
+   * Binary search implementation to find person by id in a list of sorted persons.
+   *
+   * @param persons List of Person type objects that we can search by id.
+   * @param id ID number of the person we would like to find.
+   * @return Person object representing the matching contact from the list, null if not found.
+   */
+  private Person findPersonById(ObservableList<? extends Person> persons, int id) {
+    int low = 0;
+    int high = persons.size() - 1;
+    int idx = -1;
+
+    while (low <= high) {
+      int mid = (low + high) / 2;
+      if (persons.get(mid).getId() < id) {
+        low = mid + 1;
+      } else if (persons.get(mid).getId() > id) {
+        high = mid - 1;
+      } else if (persons.get(mid).getId() == id) {
+          idx = mid;
+          break;
+      }
+    }
+    if (idx > 0) {
+      return persons.get(idx);
+    }
+    return null;
   }
 
 }

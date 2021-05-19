@@ -17,7 +17,7 @@ public abstract class Person {
   // Data Members
   //===========================================================================
   /** SimpleObjectProperty to hold Customer ID number. */
-  private ObjectProperty<Integer> id = new SimpleObjectProperty();
+  private ObjectProperty<Integer> id = new SimpleObjectProperty<>();
 
   /** StringProperty to hold Customer name. */
   private StringProperty name = new SimpleStringProperty();

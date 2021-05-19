@@ -24,7 +24,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
@@ -41,6 +40,10 @@ import utils.NotificationHandler;
  */
 public class CustomerViewController implements Initializable {
 
+  //===========================================================================
+  // Data Members
+  //===========================================================================
+  
   /**
    * User currently editing the customer record.
    */
@@ -165,7 +168,14 @@ public class CustomerViewController implements Initializable {
   // Scene Initialization
   //===========================================================================
 
-  // TODO fill in javadoc comment for customer initialize.
+  /**
+   * Initialize method prepares the scene controls, contents, and adds listeners
+   * for basic field validation to prevent empty field submissions.
+   *
+   * DISCUSSION OF LAMBDA - Lambda used to add focus listeners to all field controls
+   *                        in the scene list of interest. Greatly reduced the lines
+   *                        of code needed to setup the listeners and format the cells.
+   */
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
     divisions = divisionDAO.getAll().filtered(d -> true);
@@ -176,7 +186,7 @@ public class CustomerViewController implements Initializable {
 
     fieldControls.addAll(Arrays.asList(nameField, addressField, postCode, divisionComboBox,
         countryComboBox, phoneNumber));
-//    fieldControls.forEach(this::checkEmptyField);
+
     fieldControls.forEach(c -> ControlValidation
         .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
   }

@@ -471,7 +471,7 @@ public class MainViewController implements Initializable {
 
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
-    stage.setResizable(false);
+    stage.setResizable(true);
     stage.show();
   }
 

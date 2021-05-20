@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="477.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentViewController">
+<VBox maxHeight="477" maxWidth="1000.0" minHeight="477" minWidth="1000.0" prefHeight="477.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentViewController">
    <children>
       <HBox prefHeight="65.0" prefWidth="990.0" spacing="10.0">
          <children>

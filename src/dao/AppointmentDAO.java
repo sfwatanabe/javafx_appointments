@@ -7,7 +7,7 @@ import model.Customer;
 import model.User;
 
 /**
- * AppointmentDAO interface specifies methods to be implemented for apointment
+ * AppointmentDAO interface specifies methods to be implemented for appointment
  * data retrieval.
  *
  * @author Sakae Watanabe

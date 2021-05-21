@@ -21,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -323,7 +324,7 @@ public class MainViewController implements Initializable {
   /**
    * Updates the list of customer records from the database.
    */
-  private void updateCustomersItems() {
+  protected void updateCustomersItems() {
     customers = customerDAO.getAll();
     customerTableView.setItems(customers);
   }
@@ -416,7 +417,6 @@ public class MainViewController implements Initializable {
     loader.setLocation(getClass().getResource("/view_controller/CustomerView.fxml"));
     Parent parent = loader.load();
     Scene scene = new Scene(parent);
-    Stage stage = new Stage();
     CustomerViewController controller = loader.getController();
 
     if (buttonId.equals(addCustomerButton.getId())) {
@@ -433,9 +433,9 @@ public class MainViewController implements Initializable {
       }
     }
 
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
-    stage.initModality(Modality.WINDOW_MODAL);
-    stage.initOwner(customerTableView.getScene().getWindow());
     stage.show();
   }
 
@@ -454,7 +454,6 @@ public class MainViewController implements Initializable {
     loader.setLocation(getClass().getResource("/view_controller/AppointmentView.fxml"));
     Parent parent = loader.load();
     Scene scene = new Scene(parent);
-    Stage stage = new Stage();
     AppointmentViewController controller = loader.getController();
 
     if (buttonId.equals(addApptButton.getId())) {
@@ -471,9 +470,8 @@ public class MainViewController implements Initializable {
       }
     }
 
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
-    stage.initModality(Modality.WINDOW_MODAL);
-    stage.initOwner(apptTableView.getScene().getWindow());
     stage.show();
   }
 

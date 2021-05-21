@@ -4,8 +4,8 @@ import javafx.collections.ObservableList;
 import model.Division;
 
 /**
- * DivisionDAO interface specifies methods to be implemented for data retrieval of appointment
- * records. Used for generating lists of division data.
+ * DivisionDAO interface specifies methods to be implemented for data retrieval
+ * of appointment records. Used for generating lists of division data.
  *
  * @author Sakae Watanabe
  */

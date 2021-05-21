@@ -11,9 +11,9 @@ import utils.NotificationHandler;
 import utils.TextTableBuilder;
 
 /**
- * Report dao for collecting appointments by type and month. Returns a table formatted string for
- * output with the type of appointments in first column followed by count for each month across
- * columns.
+ * Report dao for collecting appointments by type and month. Returns a table
+ * formatted string for output with the type of appointments in first column
+ * followed by count for each month across columns.
  *
  * @author Sakae Watanabe
  */
@@ -55,7 +55,6 @@ public class MonthlyReportDAOImpl extends ReportDAO {
    */
   private TextTableBuilder<ApptTypeSalesDTO> tableBuilder;
 
-
   /**
    * Initializes ArrayList for typeSales and instance of TextTableBuilder.
    */
@@ -70,8 +69,9 @@ public class MonthlyReportDAOImpl extends ReportDAO {
 
 
   /**
-   * Report construction for the monthly appointments by type summary. First column
-   * is assigned to type, with subsequent columns for months in ascending order.
+   * Report construction for the monthly appointments by type summary. First
+   * column is assigned to type, with subsequent columns for months in ascending
+   * order.
    */
   @Override
   public void constructReport() {
@@ -100,8 +100,8 @@ public class MonthlyReportDAOImpl extends ReportDAO {
   }
 
   /**
-   * Prepares and executes the report query before parsing results into dto objects for used for
-   * report construction.
+   * Prepares and executes the report query before parsing results into dto
+   * objects for used for report construction.
    */
   private void buildData() {
     try (PreparedStatement ps = this.conn.prepareStatement(query);

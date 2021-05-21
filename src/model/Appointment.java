@@ -23,20 +23,20 @@ public class Appointment {
   /**
    * Integer property representing appointment id number.
    */
-  private ObjectProperty<Integer> id = new SimpleObjectProperty();
+  private final ObjectProperty<Integer> id = new SimpleObjectProperty<>();
   /**
    * Integer property representing id number for associated customer.
    */
-  private ObjectProperty<Integer> customerId = new SimpleObjectProperty();
+  private final ObjectProperty<Integer> customerId = new SimpleObjectProperty<>();
   /**
    * Integer property representing the contact id for appointment.
    */
-  private ObjectProperty<Integer> contactId = new SimpleObjectProperty();
+  private final ObjectProperty<Integer> contactId = new SimpleObjectProperty<>();
 
   /**
    * Integer property representing the contact id for appointment.
    */
-  private ObjectProperty<Integer> userId = new SimpleObjectProperty();
+  private final ObjectProperty<Integer> userId = new SimpleObjectProperty<>();
 
   /**
    * String property representing the contact name for appointment.

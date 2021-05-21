@@ -5,7 +5,8 @@ import model.Customer;
 import model.User;
 
 /**
- * CustomerDAO interface specifies methods to be implemented for customer data retrieval.
+ * CustomerDAO interface specifies methods to be implemented for customer data
+ * retrieval.
  *
  * @author Sakae Watanabe
  */
@@ -34,8 +35,8 @@ public interface CustomerDAO {
   public int addCustomer(Customer customer, User user);
 
   /**
-   * deleteCustomer will be used to delete customer record from database that matches customer id of
-   * supplied object.
+   * deleteCustomer will be used to delete customer record from database that
+   * matches customer id of supplied object.
    *
    * @param customer Customer object to be removed from database.
    * @return Integer value representing number of affected rows.
@@ -43,8 +44,8 @@ public interface CustomerDAO {
   public int deleteCustomer(Customer customer);
 
   /**
-   * updateCustomer will be used to update customer record in database matching customer id of
-   * supplied object.
+   * updateCustomer will be used to update customer record in database matching
+   * customer id of supplied object.
    *
    * @param customer Customer object to be updated in database.
    * @param user     User submitting the customer to be updated.

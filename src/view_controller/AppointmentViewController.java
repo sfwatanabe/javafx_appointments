@@ -23,6 +23,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -424,15 +426,17 @@ public class AppointmentViewController implements Initializable {
    */
   @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
-    Node node = (Node) event.getSource();
-    Stage stage = (Stage) node.getScene().getWindow();
-    stage.close();
-
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
-    loader.load();
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+
     MainViewController controller = loader.getController();
     controller.initData(user);
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
   }
 
 

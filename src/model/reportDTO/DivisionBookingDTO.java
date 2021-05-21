@@ -20,8 +20,8 @@ public class DivisionBookingDTO {
   private int bookings;
 
   /**
-   * Accepts a string for the name of division and an integer representing the
-   * number of bookings currently attributed.
+   * Accepts a string for the name of division and an integer representing number
+   * of bookings currently attributed.
    *
    * @param divisionName Name of division.
    * @param bookings Integer value representing number of bookings for division.

@@ -25,7 +25,7 @@ public class DivisionDAOImpl implements DivisionDAO {
   /**
    * Connection instance for accessing application database.
    */
-  private Connection conn;
+  private final Connection conn;
 
   /**
    * Constructor for DivisionDAOImpl obtains connection reference from the
@@ -83,7 +83,7 @@ public class DivisionDAOImpl implements DivisionDAO {
    * @return Division object with parsed information.
    */
   private Division parseDivision(ResultSet rs) throws SQLException {
-    Division division = null;
+    Division division;
 
     int id = rs.getInt("Division_ID");
     String name = rs.getString("Division");

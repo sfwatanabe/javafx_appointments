@@ -326,15 +326,18 @@ public class CustomerViewController implements Initializable {
    */
   @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
-    Node node = (Node) event.getSource();
-    Stage stage = (Stage) node.getScene().getWindow();
-    stage.close();
 
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
-    loader.load();
+    Parent parent = loader.load();
+    Scene scene = new Scene(parent);
+
     MainViewController controller = loader.getController();
     controller.initData(user);
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
   }
 
   /**

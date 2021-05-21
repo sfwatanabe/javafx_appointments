@@ -25,7 +25,7 @@ public class CountryDAOImpl implements CountryDAO {
   /**
    * Connection instance for accessing application database.
    */
-  private Connection conn;
+  private final Connection conn;
 
   /**
    * Constructor for CountryDAOImpl obtains connection reference from the
@@ -81,7 +81,7 @@ public class CountryDAOImpl implements CountryDAO {
    * @return Country object with parsed information.
    */
   private Country parseCountry(ResultSet rs) throws SQLException {
-    Country country = null;
+    Country country;
 
     int id = rs.getInt("Country_ID");
     String name = rs.getString("Country");

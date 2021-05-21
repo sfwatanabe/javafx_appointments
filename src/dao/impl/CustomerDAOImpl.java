@@ -26,10 +26,11 @@ public class CustomerDAOImpl implements CustomerDAO {
   /**
    * Connection instance for accessing application database.
    */
-  private Connection conn;
+  private final Connection conn;
 
   /**
-   * Constructor for CustomerDAOImpl obtains connection reference from the DBConnector class.
+   * Constructor for CustomerDAOImpl obtains connection reference from the
+   * DBConnector class.
    */
   public CustomerDAOImpl() {
     this.conn = DBConnector.getConnection();
@@ -59,6 +60,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     return customer;
   }
 
+
   @Override
   public ObservableList<Customer> getAll() {
     ObservableList<Customer> customers = FXCollections.observableArrayList();
@@ -78,10 +80,11 @@ public class CustomerDAOImpl implements CustomerDAO {
     return customers;
   }
 
+
   @Override
   public int addCustomer(Customer customer, User user) {
     int newCustomerId = 0;
-    int rowsAffected = 0;
+    int rowsAffected;
     String newCustomer =
         "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date,"
             + " Created_By, Last_Update, Last_Updated_By, Division_ID)"
@@ -149,6 +152,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     return rowsAffected;
   }
 
+
   @Override
   public int deleteCustomer(Customer customer) {
     int rowsAffected = 0;
@@ -164,6 +168,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     return rowsAffected;
   }
 
+
   /**
    * Helper method to assist with parsing result set data into Customer objects.
    *
@@ -171,7 +176,7 @@ public class CustomerDAOImpl implements CustomerDAO {
    * @return Customer object with parsed information.
    */
   private Customer parseCustomer(ResultSet rs) throws SQLException {
-    Customer customer = null;
+    Customer customer;
 
     int customerId = rs.getInt("Customer_ID");
     String customerName = rs.getString("Customer_Name");

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Data transfer object for appointment sales by type reporting access holds the name of appointment
- * type and summary of bookings for each month.This class only has getter methods implemented to avoid inadvertent
- * corruption of the data by user.
+ * Data transfer object for appointment sales by type reporting access holds the
+ * name of appointment type and summary of bookings for each month.This class
+ * only has getter methods implemented to avoid inadvertent corruption of the
+ * data by user.
  *
  * @author Sakae Watanabe
  */
@@ -15,12 +16,12 @@ public class ApptTypeSalesDTO {
   /**
    * Appointment type.
    */
-  private String type;
+  private final String type;
 
   /**
    * Sales for the given type of appointment over each month.
    */
-  private List<Integer> monthTotal;
+  private final List<Integer> monthTotal;
 
   public ApptTypeSalesDTO(String type, ArrayList<Integer> monthTotal) {
     this.type = type;

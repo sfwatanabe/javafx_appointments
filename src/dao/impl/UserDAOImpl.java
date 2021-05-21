@@ -24,15 +24,20 @@ public class UserDAOImpl implements UserDAO {
   /**
    * Connection instance for accessing application database.
    */
-  private Connection conn;
+  private final Connection conn;
 
   /**
-   * Constructor for UserDAOImpl obtains connection reference from the DBConnector class.
+   * Constructor for UserDAOImpl obtains connection reference from the
+   * DBConnector class.
    */
   public UserDAOImpl() {
     this.conn = DBConnector.getConnection();
   }
 
+  //===========================================================================
+  // Methods
+  //===========================================================================
+  
   @Override
   public ObservableList<User> getAll() {
     ObservableList<User> users = FXCollections.observableArrayList();
@@ -77,7 +82,7 @@ public class UserDAOImpl implements UserDAO {
    * @return User object with parsed information.
    */
   private User parseUser(ResultSet rs) throws SQLException {
-    User user = null;
+    User user;
 
     int id = rs.getInt("User_ID");
     String name = rs.getString("User_Name");

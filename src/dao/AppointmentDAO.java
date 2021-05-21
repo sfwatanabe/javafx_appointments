@@ -28,15 +28,6 @@ public interface AppointmentDAO {
   public ObservableList<Appointment> getAll();
 
   /**
-   * getBefore queries appointment data for all appointments starting at or
-   * before the given start time.
-   *
-   * @param startLimit LocalDateTime to use as upper bound for search.
-   * @return ObservableList where appointments start on or before given time.
-   */
-  public ObservableList<Appointment> getBefore(LocalDateTime startLimit);
-
-  /**
    * getBefore queries appointment data for all appointments starting between
    * the start and end time not matching ignore. Method used to check for list
    * of conflicting appointments when adding or updating new entries while not

@@ -86,15 +86,10 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return appointments;
   }
 
-  // TODO Decide if this will be  needed.
-  @Override
-  public ObservableList<Appointment> getBefore(LocalDateTime startLimit) {
-    return null;
-  }
-
 
   @Override
-  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends, int ignore) {
+  public ObservableList<Appointment> getBetween(LocalDateTime starts, LocalDateTime ends,
+      int ignore) {
     ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     String queryBetween = "SELECT a.Appointment_ID, a.Customer_ID, a.Contact_ID, c.Contact_Name,"
         + " a.User_ID, a.Title, a.Description, a.Type, a.Location, a.Start, a.End"
@@ -251,9 +246,9 @@ public class AppointmentDAOImpl implements AppointmentDAO {
       ps.setInt(8, user.getId());
       ps.setInt(9, appointment.getContactId());
       ps.setInt(10, appointment.getId());
-      
+
       rowsAffected = ps.executeUpdate();
-      
+
       if (rowsAffected == 0) {
         throw new SQLException("Update appointment failed, no rows affected.");
       }

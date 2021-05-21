@@ -35,7 +35,7 @@ public class ContactScheduleDAOImpl extends ReportDAO {
 
 
   /**
-   * Complete list of contacts currently in the company databse.
+   * Complete list of contacts currently in the company database.
    */
   private List<Contact> contacts;
 

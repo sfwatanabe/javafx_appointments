@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="477.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentViewController">
+<VBox maxHeight="477" maxWidth="1000.0" minHeight="477" minWidth="1000.0" prefHeight="477.0" prefWidth="1000.0" spacing="10.0" stylesheets="@../resources/styles/mainTheme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentViewController">
    <children>
       <HBox prefHeight="65.0" prefWidth="990.0" spacing="10.0">
          <children>
@@ -150,7 +150,7 @@
       </HBox>
       <HBox prefHeight="94.0" prefWidth="990.0" spacing="10.0">
          <children>
-            <VBox fillWidth="false" prefHeight="301.0" prefWidth="783.0" spacing="5.0">
+            <VBox fillWidth="false" prefHeight="74.0" prefWidth="518.0" spacing="5.0">
                <children>
                   <Label prefHeight="27.0" prefWidth="299.0" styleClass="main-view-label" text="Description" />
                   <TextField fx:id="descriptionField" prefHeight="32.0" prefWidth="504.0" promptText="Enter Description" styleClass="form-text-field" />
@@ -159,10 +159,15 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane prefHeight="74.0" prefWidth="452.0">
                <children>
-                  <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" layoutX="21.0" layoutY="14.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveHandler" prefHeight="40.0" prefWidth="70.0" text="Save" textAlignment="CENTER" />
-                  <Button fx:id="cancelButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="14.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#cancelHandler" prefHeight="40.0" prefWidth="70.0" text="Cancel" />
+                  <Label fx:id="dateWarning" alignment="CENTER" layoutX="29.0" layoutY="6.0" prefHeight="63.0" prefWidth="250.0" textFill="#ee0909" wrapText="true">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" layoutX="279.0" layoutY="17.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveHandler" prefHeight="40.0" prefWidth="70.0" text="Save" textAlignment="CENTER" />
+                  <Button fx:id="cancelButton" alignment="CENTER" contentDisplay="CENTER" layoutX="368.0" layoutY="17.0" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#cancelHandler" prefHeight="40.0" prefWidth="70.0" text="Cancel" />
                </children>
             </AnchorPane>
          </children>

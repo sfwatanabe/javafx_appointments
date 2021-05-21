@@ -313,7 +313,6 @@ public class CustomerViewController implements Initializable {
     String message = "Discard changes and return to main?";
 
     if (NotificationHandler.confirmPopup(event, message)) {
-      // TODO change to a close window call
       loadMainView(event);
 
     }

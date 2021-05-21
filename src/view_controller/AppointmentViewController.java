@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +23,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -220,7 +216,16 @@ public class AppointmentViewController implements Initializable {
   // Scene Initialization
   //===========================================================================
 
-  // TODO fill in javadoc comment for customer initialize.
+  /**
+   * Initialize values for combo boxes, start times, end times, and add empty
+   * field listeners to all controls that require data completion.
+   *
+   * DISCUSSION OF LAMBDA - Lambda used to add focus listeners to all field controls
+   *                        for scene that require data collection. Reduced necessary
+   *                        lines of code for implementation using this consumer
+   *                        interface. Same method as implemented in Customer View
+   *                        Controller.
+   */
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     contacts = contactDAO.getAll();
@@ -413,24 +418,21 @@ public class AppointmentViewController implements Initializable {
 
 
   /**
-   * Loads the main view and initializes user data.
+   * Close the current scene and refresh the data in the main view.
    *
    * @param event ActionEvent triggered by save or cancel button handlers.
    */
   @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
+    Node node = (Node) event.getSource();
+    Stage stage = (Stage) node.getScene().getWindow();
+    stage.close();
+
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
-    Parent parent = loader.load();
-    Scene scene = new Scene(parent);
-
+    loader.load();
     MainViewController controller = loader.getController();
     controller.initData(user);
-
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    stage.setScene(scene);
-    stage.setResizable(true);
-    stage.show();
   }
 
 

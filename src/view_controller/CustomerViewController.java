@@ -173,8 +173,10 @@ public class CustomerViewController implements Initializable {
    * for basic field validation to prevent empty field submissions.
    *
    * DISCUSSION OF LAMBDA - Lambda used to add focus listeners to all field controls
-   *                        in the scene list of interest. Greatly reduced the lines
-   *                        of code needed to setup the listeners and format the cells.
+   *                        for scene that require data collection. Reduced necessary
+   *                        lines of code for implementation using this consumer
+   *                        interface. Same method as implemented in Appointment View
+   *                        Controller.
    */
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
@@ -319,24 +321,21 @@ public class CustomerViewController implements Initializable {
 
 
   /**
-   * Loads the main view and initializes user data.
+   * Close the current scene and refresh the data in the main view.
    *
    * @param event ActionEvent triggered by save or cancel button handlers.
    */
   @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {
+    Node node = (Node) event.getSource();
+    Stage stage = (Stage) node.getScene().getWindow();
+    stage.close();
+
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("/view_controller/MainView.fxml"));
-    Parent parent = loader.load();
-    Scene scene = new Scene(parent);
-
+    loader.load();
     MainViewController controller = loader.getController();
     controller.initData(user);
-
-    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    stage.setScene(scene);
-    stage.setResizable(true);
-    stage.show();
   }
 
   /**

@@ -1,9 +1,9 @@
 package model;
 
 /**
- * The Division class extends the abstract Zone class. Divisions must have an associated
- * country.This class may be extended in the future to add key attributes unique to a country
- * throughout the development process.
+ * The Division class extends the abstract Zone class. Divisions must have an
+ * associated country.This class may be extended in the future to add key
+ * attributes unique to a country throughout the development process.
  *
  * @author Sakae Watanabe
  */

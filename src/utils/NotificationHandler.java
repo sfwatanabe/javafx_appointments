@@ -20,7 +20,8 @@ public class NotificationHandler {
   //===========================================================================
 
   /**
-   * Displays warning message advising type of issue along with a short message to the user.
+   * Displays warning message advising type of issue along with a short message
+   * to user.
    *
    * @param warningName The name of warning being issued to the user.
    * @param message     The context of the warning message to be displayed.
@@ -33,7 +34,8 @@ public class NotificationHandler {
   }
 
   /**
-   * Overloaded method for accepting a list of error messages for display in context text area.
+   * Overloaded method for accepting a list of error messages for display in
+   * context text area.
    *
    * @param warningName The name of warning being issued to the user.
    * @param messages    List containing messages to be added to context text.
@@ -63,11 +65,12 @@ public class NotificationHandler {
   }
 
   /**
-   * The confirmPopup method will open a confirmation dialog window for user interaction and returns
-   * true when OK is clicked.
+   * The confirmPopup method will open a confirmation dialog window for user
+   * interaction and returns true when OK is clicked.
    *
    * @param event   Action event passed through by calling method.
-   * @param content String value to be used as the confirmation dialog content text.
+   * @param content String value to be used as the confirmation dialog content
+   *                text.
    * @return True if the user clicks OK, false otherwise.
    */
   public static boolean confirmPopup(ActionEvent event, String content) {

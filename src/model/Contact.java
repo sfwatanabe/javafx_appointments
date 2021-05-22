@@ -18,7 +18,7 @@ public class Contact extends Person {
   /**
    * String representing contact email address.
    */
-  private StringProperty email = new SimpleStringProperty();
+  private final StringProperty email = new SimpleStringProperty();
 
   //===========================================================================
   // Constructor

@@ -11,9 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Utility class for providing the business hours to the application in local time format matching
- * the system default zone id. To change the business hours for the application we can adjust the
- * time zone, open, or closing hours.
+ * Utility class for providing the business hours to the application in local
+ * time format matching the system default zone id. To change the business hours
+ * for the application we can adjust the time zone, open, or closing hours.
  *
  * @author Sakae Watanabe
  */
@@ -36,7 +36,7 @@ public class BusinessHours {
   /**
    * Opening business local time based on HQ location.
    */
-  private static final LocalTime openHours = LocalTime.of(8, 00);
+  private static final LocalTime openHours = LocalTime.of(8, 0);
 
   /**
    * Closing business local time based on HQ location.
@@ -71,44 +71,39 @@ public class BusinessHours {
 
 
   /**
-   * Provides ObservableList of local times that are spaced according to provided business rules
-   * before closing time.
+   * Provides ObservableList of local times that are spaced according to provided
+   * business rules before closing time.
    *
    * @return ObservableList of local time slots before the closing time.
    */
   public static ObservableList<LocalTime> getStartTimes() {
-    return getTimes(localOpen, localClose.minusMinutes(SPACING));
+    return getTimes(localOpen);
   }
 
   /**
-   * Provides ObservableList of local times that are spaced according to provided business rules
-   * before closing time.
+   * Provides ObservableList of local times that are spaced according to provided
+   * business rules before closing time.
    *
    * @return ObservableList of local time slots before the closing time.
    */
   public static ObservableList<LocalTime> getEndTimes() {
-    return getTimes(localOpen.plusMinutes(SPACING), localClose);
+    return getTimes(localOpen.plusMinutes(SPACING));
   }
 
   /**
-   * Creates an ObservableList of local times starting at start time until the end of SHIFT_LENGTH.
-   * List will be spaced out using the minutes value of SPACING .
+   * Creates an ObservableList of local times starting at start time until the
+   * end of SHIFT_LENGTH. List will be spaced out by minutes value SPACING.
    *
    * @param start Starting time for the local time list.
-   * @param end   Upper bound for the local time list.
    * @return ObservableList of local time objects in the range [start, end]
    */
-  private static ObservableList<LocalTime> getTimes(LocalTime start, LocalTime end) {
+  private static ObservableList<LocalTime> getTimes(LocalTime start) {
     ObservableList<LocalTime> times = FXCollections.observableArrayList();
-    int hours = start.getHour();
-    int minutes = start.getMinute();
-    var currentTime = start;
     var addMinutes = 0;
     var shiftMinutes = (SHIFT_LENGTH * 60) - SPACING;
 
-//    while (currentTime.isBefore(end) || currentTime.equals(end)) {
     while (addMinutes <= shiftMinutes) {
-      times.add(currentTime.plusMinutes(addMinutes));
+      times.add(start.plusMinutes(addMinutes));
       addMinutes += SPACING;
     }
     return times;
@@ -184,7 +179,8 @@ public class BusinessHours {
   }
 
   /**
-   * @return Formatted date time string for use in log files or console output in business hours.
+   * @return Formatted date time string for use in log files or console output
+   *         in business hours.
    */
   public static String businessNow(LocalDateTime ldt) {
     ZonedDateTime asBusinessZDT = toBusinessZDT(ldt);

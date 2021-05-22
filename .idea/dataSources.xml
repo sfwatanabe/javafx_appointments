@@ -6,7 +6,7 @@
       <synchronize>true</synchronize>
       <remarks>Software 2 project uCertify DB</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://wgudb.ucertify.com/WJ08Eq0</jdbc-url>
+      <jdbc-url>jdbc:mysql://wgudb.ucertify.com:3306/WJ08Eq0</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <time-zone>UTC</time-zone>
     </data-source>

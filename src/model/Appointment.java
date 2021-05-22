@@ -41,32 +41,32 @@ public class Appointment {
   /**
    * String property representing the contact name for appointment.
    */
-  private StringProperty contactName = new SimpleStringProperty();
+  private final StringProperty contactName = new SimpleStringProperty();
 
   /**
    * String property representing the appointment's title.
    */
-  private StringProperty title = new SimpleStringProperty();
+  private final StringProperty title = new SimpleStringProperty();
   /**
    * String property representing the appointment's description.
    */
-  private StringProperty description = new SimpleStringProperty();
+  private final StringProperty description = new SimpleStringProperty();
   /**
    * String property representing the appointment's type.
    */
-  private StringProperty type = new SimpleStringProperty();
+  private final StringProperty type = new SimpleStringProperty();
   /**
    * String property representing the appointment's location.
    */
-  private StringProperty location = new SimpleStringProperty();
+  private final StringProperty location = new SimpleStringProperty();
   /**
    * Scheduled starting time for appointment.
    */
-  private ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty();
+  private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
   /**
    * Scheduled ending time for appointment.
    */
-  private ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty();
+  private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
 
   //===========================================================================
   // Constructor

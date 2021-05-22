@@ -14,10 +14,10 @@ public class User extends Person {
   // Data Members
   //===========================================================================
   /** String representing the user password. */
-  private String password;
+  private final String password;
 
   /** LocalDateTime representing start of user session. */
-  private LocalDateTime start;
+  private final LocalDateTime start;
 
   //===========================================================================
   // Constructor

@@ -17,13 +17,13 @@ public class Customer extends Person {
   // Data Members
   //===========================================================================
   /** String representing customer street address information. */
-  private StringProperty address = new SimpleStringProperty();
+  private final StringProperty address = new SimpleStringProperty();
   /** String representing customer postal code information. */
-  private StringProperty postalCode = new SimpleStringProperty();
+  private final StringProperty postalCode = new SimpleStringProperty();
   /** String representing customer phone number information. */
-  private StringProperty phoneNumber = new SimpleStringProperty();
+  private final StringProperty phoneNumber = new SimpleStringProperty();
   /** Integer representing the customer division id. */
-  private ObjectProperty<Integer> divisionId = new SimpleObjectProperty<>();
+  private final ObjectProperty<Integer> divisionId = new SimpleObjectProperty<>();
 
   //===========================================================================
   // Constructor

@@ -21,7 +21,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -49,7 +48,7 @@ import utils.NotificationHandler;
  * @author Sakae Watanabe
  */
 
-public class AppointmentViewController implements Initializable {
+public class AppointmentViewController {
 
   //===========================================================================
   // Data Members
@@ -105,6 +104,12 @@ public class AppointmentViewController implements Initializable {
    * FilteredList of ending times for appointments.
    */
   private FilteredList<LocalTime> endTimes;
+
+  @FXML
+  private ResourceBundle resources;
+
+  @FXML
+  private URL location;
 
   /**
    * Indicates type of appointment record operation in process.
@@ -228,8 +233,8 @@ public class AppointmentViewController implements Initializable {
    *                        interface. Same method as implemented in Customer View
    *                        Controller.
    */
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
+  @FXML
+  public void initialize() {
     contacts = contactDAO.getAll();
     customers = customerDAO.getAll();
 
@@ -249,8 +254,8 @@ public class AppointmentViewController implements Initializable {
   }
 
   /**
-   * Overloaded method for initializing user data and isNew flags for the appointment record
-   * scene,preparing appropriate scene labels as well.
+   * Overloaded method for initializes user data and isNew flag for appointment
+   * record scene,preparing appropriate scene labels as well.
    *
    * @param isNew Indicates if we are adding a new appointment record.
    * @param user  User currently accessing the application.
@@ -265,8 +270,8 @@ public class AppointmentViewController implements Initializable {
   }
 
   /**
-   * Overloaded method for initializing user data and isNew flags for the appointment record
-   * scene,preparing appropriate scene labels as well.
+   * Overloaded method for initializes user data and isNew flag for appointment
+   * record scene,preparing appropriate scene labels as well.
    *
    * @param isNew       Indicates if we are adding a new appointment record.
    * @param appointment Appointment record to open for updating.
@@ -283,7 +288,7 @@ public class AppointmentViewController implements Initializable {
 
 
   /**
-   * Prepares scene labels and text fields for either adding or updating the appointment record.
+   * Prepares scene labels and text fields for adding or updating appointments.
    */
   private void updateAppointmentLabels() {
     if (isNew) {
@@ -313,11 +318,11 @@ public class AppointmentViewController implements Initializable {
   //===========================================================================
 
   /**
-   * Attempts to save the new appointment record or update the existing record currently in use.
-   * Start times must be no earlier than opening of business and end times must be within close
-   * of business hours range. The BusinessHours utility helps convert the local date time
-   * selections to the business hours time zone for confirmation if appointments are within
-   * the proper range.
+   * Attempts to save the new appointment record or update the existing record
+   * currently in use. Start times must be no earlier than opening of business
+   * and end times must be within close of business hours range. The BusinessHours
+   * utility helps convert the local date time selections to the business hours
+   * time zone for confirmation if appointments are within the proper range.
    *
    * @param event ActionEvent triggered by user clicking on the save button.
    * @throws IOException Exception from failure to load the main scene.
@@ -445,7 +450,7 @@ public class AppointmentViewController implements Initializable {
    *
    * @param persons List of Person type objects that we can search by id.
    * @param id ID number of the person we would like to find.
-   * @return Person object representing the matching contact from the list, null if not found.
+   * @return Person object representing the matching contact from the list or null.
    */
   private Person findPersonById(ObservableList<? extends Person> persons, int id) {
     int low = 0;

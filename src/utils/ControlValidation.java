@@ -20,9 +20,13 @@ public class ControlValidation {
    * field, sets warning message, and disables button. If no input present in
    * the field border changed to red and flagged as false in field status map.
    *
+   * DISCUSSION OF LAMBDA - Lambda function used to implement predicate interface
+   *                        to remove styleClass if our control filled. Choice to
+   *                        use lambda based on better readability for the code.
+   *
    * @param control Data collection control on form that must contain input.
-   * @param statusMap hash map contains key from control-id, boolean indicating if
-   *                  fields are true if filled, false if blank.
+   * @param statusMap hash map contains key from control-id, boolean true if
+   *                  filled, false if blank.
    * @param warning Label on scene to be updated with the empty warning text.
    * @param button Button that will be disabled if empty fields are present.
    *

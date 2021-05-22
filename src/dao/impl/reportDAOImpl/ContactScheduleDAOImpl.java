@@ -26,12 +26,12 @@ public class ContactScheduleDAOImpl extends ReportDAO {
   /**
    * DAO for accessing appointment data.
    */
-  private AppointmentDAO appointmentDAO;
+  private final AppointmentDAO appointmentDAO;
 
   /**
    * DAO for accessing contact list data.
    */
-  private ContactDAO contactDAO;
+  private final ContactDAO contactDAO;
 
 
   /**
@@ -50,13 +50,14 @@ public class ContactScheduleDAOImpl extends ReportDAO {
   private TextTableBuilder<Appointment> tableBuilder;
 
   /**
-   * StringBuilder that will hold different parts of the report before final assembly.
+   * StringBuilder that will hold different parts of the report before final
+   * assembly.
    */
-  private StringBuilder reportString;
+  private final StringBuilder reportString;
 
   /**
-   * Initializes ArrayLists for both contacts and appointments as well as StringBuilder
-   * for reportString.
+   * Initializes ArrayLists for both contacts and appointments as well as
+   * StringBuilder for reportString.
    */
   public ContactScheduleDAOImpl() {
     this.contactDAO = new ContactDAOImpl();

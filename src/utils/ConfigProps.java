@@ -55,12 +55,12 @@ public class ConfigProps {
    * Returns a string value for the user name.
    *
    * @return String representing user name for login credentials.
-   * @throws IOException getPropValues unable to get InputStream.
    */
   public String getUsername() {
     if(!loaded) {
       try {
         getPropValues();
+        loaded = true;
       } catch (IOException e) {
         e.printStackTrace();
         NotificationHandler.warningPopup(e.getMessage(),
@@ -74,12 +74,12 @@ public class ConfigProps {
    * Returns a string value for the user password.
    *
    * @return String representing user name for login credentials.
-   * @throws IOException getPropValues unable to get InputStream.
    */
   public String getPassword() {
     if(!loaded) {
       try {
         getPropValues();
+        loaded = true;
       } catch (IOException e) {
         e.printStackTrace();
         NotificationHandler.warningPopup(e.getMessage(),

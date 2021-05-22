@@ -4,9 +4,8 @@ import javafx.collections.ObservableList;
 import model.Contact;
 
 /**
- * ContactDAO interface specifies methods to be implemented for data
- * retrieval of appointment records. Used for generating list of contact
- * data.
+ * ContactDAO interface specifies methods to be implemented for data retrieval
+ * of appointment records. Used for generating list of contact data.
  *
  * @author Sakae Watanabe
  */

@@ -16,7 +16,7 @@ import utils.DBConnector;
 import utils.NotificationHandler;
 
 /**
- * Implementations for the AppointmentDAO interface.
+ * Implementations for the AppointmentDAO interface for use with MySQL connector.
  *
  * @author Sakae Watanabe
  */
@@ -29,10 +29,11 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   /**
    * Connection instance for accessing application database.
    */
-  private Connection conn;
+  private final Connection conn;
 
   /**
-   * Constructor for AppointmentDAOImpl obtains connection reference from the DBConnector class.
+   * Constructor for AppointmentDAOImpl obtains connection reference from the
+   * DBConnector class.
    */
   public AppointmentDAOImpl() {
     this.conn = DBConnector.getConnection();
@@ -64,6 +65,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
     return appointment;
   }
+
 
   @Override
   public ObservableList<Appointment> getAll() {
@@ -179,7 +181,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   @Override
   public int addAppointment(Appointment appointment, User user) {
     int newAppointmentID = 0;
-    int rowsAffected = 0;
+    int rowsAffected;
 
     String newAppointment = "INSERT INTO appointments (Title, Description, Location, Type,"
         + " Start, End, Create_Date, Created_By, Last_Update,"
@@ -300,7 +302,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
    */
 
   private Appointment parseAppointment(ResultSet rs) throws SQLException {
-    Appointment appointment = null;
+    Appointment appointment;
 
     int id = rs.getInt("a.Appointment_ID");
     int customerId = rs.getInt("a.Customer_ID");

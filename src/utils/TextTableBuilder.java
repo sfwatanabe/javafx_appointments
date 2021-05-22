@@ -31,17 +31,17 @@ public class TextTableBuilder<T> {
    * Constructor assigns new array lists for data members to accept new items.
    */
   public TextTableBuilder() {
-    columnNames = new ArrayList<String>();
-    stringFunctions = new ArrayList<Function<? super T, String>>();
+    columnNames = new ArrayList<>();
+    stringFunctions = new ArrayList<>();
   }
 
   /**
-   * Adds column heading and cell value factory method for items added to the table. The method will
-   * be called on table objects to fill the necessary information.
+   * Adds column heading and cell value factory method for attributes added to
+   * table. Method will be called on table objects to fill data values.
    *
    * @param columnName    String name of the column we wish to add to the table.
-   * @param fieldFunction Method taking object of type T and returning a value to be inserted into
-   *                      the table.
+   * @param fieldFunction Method taking object of type T and returning a value
+   *                      to be inserted into the table.
    */
   public void addColumn(String columnName, Function<? super T, ?> fieldFunction) {
     columnNames.add(columnName);
@@ -50,8 +50,8 @@ public class TextTableBuilder<T> {
 
 
   /**
-   * Calculates the maximum width required for the given column index multiplied by the specified
-   * scale factor. Result is returned as integer value.
+   * Calculates the maximum width required for the given column index multiplied
+   * by the specified scale factor. Result is returned as integer value.
    *
    * @param column   Index of the current column we're passing elements into.
    * @param elements Elements that will be passed into the column.
@@ -59,14 +59,14 @@ public class TextTableBuilder<T> {
    */
   private int computeMaxWidth(int column, Iterable<? extends T> elements) {
     int maxWidth = columnNames.get(column)
-        .length(); // Get the length of the column as starting width.
+        .length();
     double scaleFactor = 1.0;
 
     Function<? super T, String> f = stringFunctions
-        .get(column); // we will get the matching function to map Strings
+        .get(column);
     for (T element : elements) {
       String s = f.apply(element);
-      maxWidth = Math.max(maxWidth, s.length()); // always tracking the max width element.
+      maxWidth = Math.max(maxWidth, s.length());
     }
 
     return (int) (maxWidth * scaleFactor);
@@ -95,7 +95,7 @@ public class TextTableBuilder<T> {
    * @return List of integers representing the width for each column.
    */
   private List<Integer> computeColumnWidths(Iterable<? extends T> elements) {
-    List<Integer> columnWidths = new ArrayList<Integer>();
+    List<Integer> columnWidths = new ArrayList<>();
     for (int i = 0; i < columnNames.size(); i++) {
       int maxWidth = computeMaxWidth(i, elements);
       columnWidths.add(maxWidth);
@@ -105,9 +105,9 @@ public class TextTableBuilder<T> {
   }
 
   /**
-   * Formats result string using the given list of elements. Column headers & separator are
-   * formatted before row data is appended to the string builder. Returns fully formatted string for
-   * output.
+   * Formats result string using the given list of elements. Column headers &
+   * separator formatted before row data appended to string builder. Returns
+   * formatted string for output.
    *
    * @param elements Iterable containing the elements with our table data.
    * @return Formatted string result with table style.

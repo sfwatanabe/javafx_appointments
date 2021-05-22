@@ -25,15 +25,16 @@ public class ContactDAOImpl implements ContactDAO {
   /**
    * Connection instance for accessing application database.
    */
-  private Connection conn;
+  private final Connection conn;
 
   /**
    * Query select statement for lookup of all contact data.
    */
-  private String allContacts = "SELECT * FROM contacts";
+  private final String allContacts = "SELECT * FROM contacts";
 
   /**
-   * Constructor for ContactDAOImpl obtains connection reference from the DBConnector class.
+   * Constructor for ContactDAOImpl obtains connection reference from the
+   * DBConnector class.
    */
   public ContactDAOImpl() {
     this.conn = DBConnector.getConnection();
@@ -69,7 +70,7 @@ public class ContactDAOImpl implements ContactDAO {
    * @return Contact object with parsed information.
    */
   private Contact parseContact(ResultSet rs) throws SQLException {
-    Contact contact = null;
+    Contact contact;
 
     int contactId = rs.getInt("Contact_ID");
     String name = rs.getString("Contact_Name");

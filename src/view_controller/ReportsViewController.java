@@ -57,7 +57,7 @@ public class ReportsViewController {
 
 
   /**
-   * Initializes the data displayed for the reports view based on the button that was
+   * Initializes the data displayed for the reports view based on the button
    * clicked to launch the scene, calling the appropriate report construction.
    *
    * @param user User currently using the application.

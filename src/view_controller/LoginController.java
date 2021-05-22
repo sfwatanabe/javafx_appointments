@@ -164,8 +164,8 @@ public class LoginController implements Initializable {
   }
 
   /**
-   * Checks default ZoneID to adjust timezone displayed on loginZone label. Time ZoneID displayed in
-   * short format using default Locale.
+   * Checks default ZoneID to adjust timezone displayed on loginZone label.
+   * Time ZoneID displayed in short format using default Locale.
    */
   private void detectZoneID() {
     ZoneId zoneID = ZoneId.systemDefault();
@@ -175,8 +175,8 @@ public class LoginController implements Initializable {
   }
 
   /**
-   * Records user activity to the log file for administrative review. Times are recorded
-   * according to business hours (EST).
+   * Records user activity to the log file for administrative review. Times are
+   * recorded according to business hours (EST).
    *
    * @param valid Boolean value indicating if the user login attempt was successful.
    */

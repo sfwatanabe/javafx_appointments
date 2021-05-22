@@ -5,8 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Singleton utility to initialize connection to the database for use by
- * application DAO classes.
+ * Singleton utility to initialize connection to the database for DAO classes.
  *
  * @author Sakae Watanabe
  */
@@ -23,6 +22,7 @@ public class DBConnector {
   private static final String jdbcURL = protocol + vendor + ipAddress + timeZone;
 
   private static final String MYSQL_JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+
   /** Connection object for the utility. */
   private static Connection conn = null;
 
@@ -33,34 +33,36 @@ public class DBConnector {
    * and returns Connection object. If connection has already been initialized
    * simply returns a reference to the connection.
    *
-   * @return Connection object for use with DAO operations.
    */
-  public static Connection startConnection() {
+  public static void startConnection() throws ClassNotFoundException, SQLException{
     if(conn == null){
-      try {
-        ConfigProps config = new ConfigProps();
-        Class.forName(MYSQL_JDBC_DRIVER);
-        conn = DriverManager.getConnection(jdbcURL, config.getUsername(),
-            config.getPassword());
-        System.out.println("Connection successful.");
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      } catch (SQLException e) { ;
-        e.printStackTrace();
-      }
+
+      ConfigProps config = new ConfigProps();
+      Class.forName(MYSQL_JDBC_DRIVER);
+      conn = DriverManager.getConnection(jdbcURL, config.getUsername(),
+          config.getPassword());
+      System.out.println("Connection successful.");
+
     }
-    return conn;
   }
 
   /**
    * Returns a reference for the database connection. If connection has not yet
    * been initialized will call the startConnection method.
    *
-   * @return
+   * @return Connection object to the application database.
    */
   public static Connection getConnection() {
     if(conn == null) {
-      startConnection();
+      try {
+        startConnection();
+      } catch (ClassNotFoundException e) {
+        NotificationHandler.warningPopup("Database Connector", e.getMessage());
+        e.printStackTrace();
+      } catch (SQLException e) {
+        NotificationHandler.sqlPopup("Database Connector", e);
+        e.printStackTrace();
+      }
     }
     return conn;
   }

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.reportDTO.ApptTypeSalesDTO;
 import model.reportDTO.DivisionBookingDTO;
 import utils.NotificationHandler;
 import utils.TextTableBuilder;
@@ -25,10 +24,10 @@ public class DivisionBookingsDAOImpl extends ReportDAO {
   //===========================================================================
 
   /**
-   * Query string for collecting results of top performing division bookings. Report
-   * requires two joins to access the division name in a human readable format.
-   * Useful for determining where staffing needs may be most urgent, top performing
-   * regions, or other localized insights.
+   * Query string for collecting results of top performing division bookings.
+   * Report requires two joins to access the division name in a human readable
+   * format. Useful for determining where staffing needs may be most urgent, top
+   * performing regions, or other localized insights.
    */
   private final String query = "SELECT d.Division as Division, COUNT(*) as Bookings"
       + " FROM appointments"
@@ -40,12 +39,12 @@ public class DivisionBookingsDAOImpl extends ReportDAO {
   /**
    * List for holding division booking dto objects after retrieval from database.
    */
-  private List<DivisionBookingDTO> divisionBookings;
+  private final List<DivisionBookingDTO> divisionBookings;
 
   /**
    * Builds report string after data has been retrieved from database.
    */
-  private TextTableBuilder<DivisionBookingDTO> tableBuilder;
+  private final TextTableBuilder<DivisionBookingDTO> tableBuilder;
 
   public DivisionBookingsDAOImpl() {
     this.divisionBookings = new ArrayList<>();
@@ -78,10 +77,9 @@ public class DivisionBookingsDAOImpl extends ReportDAO {
     setReport(tableBuilder.createString(divisionBookings));
   }
 
-
   /**
-   * Prepares and executes report query before parsing results into dto objects to be
-   * used for report construction.
+   * Prepares and executes report query before parsing results into dto objects
+   * to be used for report construction.
    */
   private void buildData() {
     try (PreparedStatement ps = this.conn.prepareStatement(query);

@@ -163,8 +163,8 @@ public class CustomerViewController {
   private Label customerFormType;
 
   /**
-   * Displays warning messages to user regarding empty fields that need to be completed before able
-   * to save/update record.
+   * Displays warning messages to user regarding empty fields that need to be
+   * completed before able to save/update record.
    */
   @FXML
   private Label emptyWarning;

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import utils.DBConnector;
 import utils.NotificationHandler;
 
@@ -27,7 +28,16 @@ public class Main extends Application {
         primaryStage.setTitle(resources.getString("appTitle"));
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
+        primaryStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST,
+            this::confirmClose);
         primaryStage.show();
+    }
+
+    private void confirmClose(WindowEvent event) {
+        System.out.println("We did this");
+        if(!NotificationHandler.confirmPopup(event, "Changes will not be saved.")) {
+            event.consume();
+        }
     }
 
 

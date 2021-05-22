@@ -78,8 +78,8 @@ public class MainViewController implements Initializable {
   private static User user = null;
 
   /**
-   * Indicates if this is the first time the scene has been loaded to determine if appointment
-   * alert will be shown.
+   * Indicates if this is the first time the scene has been loaded to determine
+   * if appointment alert will be shown.
    */
   private static boolean firstLoad = true;
 
@@ -282,14 +282,15 @@ public class MainViewController implements Initializable {
 
 
   /**
-   * Initializes the controller for the main view and sets up the table data for both customer and
-   * appointment table views.
-   * <p>
-   * DISCUSSION OF LAMBDA (1) -> Lambda expression used for setting cell value factories for all table
-   * data via property access, reducing the necessary lines of code to implement the Callback
-   * interface.
-   * DISCUSSION OF LAMBDA (2) -> Lambda expression used for setting cell factory for date
-   * columns allowing use of method defined within class to return table cell data.
+   * Initializes the controller for the main view and sets up the table data for
+   * both customer and appointment table views.
+   *
+   * DISCUSSION OF LAMBDA (1) -> Lambda expression used for setting cell value
+   *                             factories for all table data via property access,
+   *                             reducing the necessary code to implement interface.
+   * DISCUSSION OF LAMBDA (2) -> Lambda expression used for setting cell factory
+   *                             for date columns allowing use of method defined
+   *                             within class to return table cell data.
    */
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
@@ -318,6 +319,7 @@ public class MainViewController implements Initializable {
 
     apptTableView.getSortOrder().add(apptStartCol);
     apptTableView.sort();
+
 
   }
 
@@ -362,7 +364,8 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Initializes user data for the scene and makes call to check for upcoming appointments.
+   * Initializes user data for the scene and makes call to check for upcoming
+   * appointments.
    *
    * @param user User currently accessing the application.
    */
@@ -376,8 +379,8 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Checks list of appointment data for any start times that are within 15 minutes of user login
-   * and provides on screen alert.
+   * Checks list of appointment data for any start times that are within 15
+   * minutes of user login and provides on screen alert.
    */
   private void checkForUpcoming() {
     List<String> messages = new ArrayList<>();
@@ -404,8 +407,8 @@ public class MainViewController implements Initializable {
 
 
   /**
-   * Loads customer record view and calls appropriate init method for the customer records screen
-   * based on adding new customer or updating existing.
+   * Loads customer record view and calls appropriate init method for the customer
+   * records screen based on adding new customer or updating existing.
    *
    * @param event ActionEvent passed through by the add and update customer buttons
    */
@@ -441,8 +444,8 @@ public class MainViewController implements Initializable {
 
 
   /**
-   * Handles user request to add a new appointment record and calls scene init method for adding a
-   * new appointment from AppointmentViewController class.
+   * Handles user request to add a new appointment record and calls scene init
+   * method for adding a new appointment from AppointmentViewController class.
    *
    * @param event ActionEvent triggered by user clicking the add appointment button.
    */
@@ -506,10 +509,10 @@ public class MainViewController implements Initializable {
   //===========================================================================
 
   /**
-   * Handles user request to delete customer if selected and will also confirm deletion of
-   * associated customer appointments from the system. Provides user with a list of associated
-   * appointments that will be removed. Updates both customer and appointment views after
-   * transaction has been completed.
+   * Handles user request to delete customer if selected and will also confirm
+   * deletion of associated customer appointments from the system. Provides user
+   * with a list of associated appointments that will be removed. Updates both
+   * customer and appointment views after transaction has been completed.
    *
    * @param event Event triggered when user clicks on delete customer.
    */
@@ -534,7 +537,7 @@ public class MainViewController implements Initializable {
 
       System.out.println(confirmationMsg);
       if (confirmPopup(event, confirmationMsg)) {
-        // user confirmed now we delete the appointments then the customer FK Constraints
+
         int appointmentsDeleted = appointmentDAO.deleteAppointmentByCustomer(customer);
         int customerDeleted = customerDAO.deleteCustomer(customer);
 
@@ -553,8 +556,8 @@ public class MainViewController implements Initializable {
 
 
   /**
-   * Handles user request to delete selected appointment and updates the contents of the table
-   * view.
+   * Handles user request to delete selected appointment and updates the contents
+   * of the table view.
    *
    * @param event Event triggered when user clicks on delete appointment.
    */
@@ -598,9 +601,9 @@ public class MainViewController implements Initializable {
   /**
    * Monitor action events triggered by the appointment view by toggle group. Sets predicate for the
    * filtered list based on selected radio button using lambda expression.
-   * <p>
-   * DISCUSSION OF LAMBDA (3) -> Filtered list predicates are updated using lambda expressions,
-   * allowing reduced code for implementing the Predicate interface.
+   *
+   * DISCUSSION OF LAMBDA (3) -> Filtered list predicates are updated using lambda
+   *                             expressions, allowing reduced code for interface.
    *
    * @param event ActionEvent triggered by user selecting radio button.
    */

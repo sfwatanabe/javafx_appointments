@@ -33,6 +33,8 @@ public class DBConnector {
    * and returns Connection object. If connection has already been initialized
    * simply returns a reference to the connection.
    *
+   * @throws ClassNotFoundException if unable to locate the JDBC driver.
+   * @throws SQLException if unable to establish connection to database.
    */
   public static void startConnection() throws ClassNotFoundException, SQLException{
     if(conn == null){

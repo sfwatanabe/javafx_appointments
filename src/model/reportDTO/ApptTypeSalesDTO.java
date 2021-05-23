@@ -36,84 +36,84 @@ public class ApptTypeSalesDTO {
   }
 
   /**
-   * Return number of sales for January.
+   * @return Number of sales for January.
    */
   public int getJan() {
     return monthTotal.get(0);
   }
 
   /**
-   * Return number of sales for February.
+   * @return Number of sales for February.
    */
   public int getFeb() {
     return monthTotal.get(1);
   }
 
   /**
-   * Return number of sales for March.
+   * @return Number of sales for March.
    */
   public int getMar() {
     return monthTotal.get(2);
   }
 
   /**
-   * Return number of sales for April.
+   * @return Number of sales for April.
    */
   public int getApr() {
     return monthTotal.get(3);
   }
 
   /**
-   * Return number of sales for May.
+   * @return Number of sales for May.
    */
   public int getMay() {
     return monthTotal.get(4);
   }
 
   /**
-   * Return number of sales for June.
+   * @return Number of sales for June.
    */
   public int getJun() {
     return monthTotal.get(5);
   }
 
   /**
-   * Return number of sales for July.
+   * @return Number of sales for July.
    */
   public int getJul() {
     return monthTotal.get(6);
   }
 
   /**
-   * Return number of sales for August.
+   * @return Number of sales for August.
    */
   public int getAug() {
     return monthTotal.get(7);
   }
 
   /**
-   * Return number of sales for September.
+   * @return Number of sales for September.
    */
   public int getSep() {
     return monthTotal.get(8);
   }
 
   /**
-   * Return number of sales for October.
+   * @return Number of sales for October.
    */
   public int getOct() {
     return monthTotal.get(9);
   }
 
   /**
-   * Return number of sales for November.
+   * @return Number of sales for November.
    */
   public int getNov() {
     return monthTotal.get(10);
   }
 
   /**
-   * Return number of sales for December.
+   * @return Number of sales for December.
    */
   public int getDec() {
     return monthTotal.get(11);

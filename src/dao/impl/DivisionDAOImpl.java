@@ -81,6 +81,8 @@ public class DivisionDAOImpl implements DivisionDAO {
    *
    * @param rs Result set from division DAO query.
    * @return Division object with parsed information.
+   * @throws SQLException if error parsing column from result set.
+   *
    */
   private Division parseDivision(ResultSet rs) throws SQLException {
     Division division;

@@ -68,7 +68,7 @@ public class NotificationHandler {
    * The confirmPopup method will open a confirmation dialog window for user
    * interaction and returns true when OK is clicked.
    *
-   * @param t   Event calling the confirmation popup.
+   * @param <T> Event calling the confirmation popup.
    * @param content String value to be used as the confirmation dialog content
    *                text.
    * @return True if the user clicks OK, false otherwise.

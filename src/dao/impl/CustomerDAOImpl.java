@@ -174,6 +174,7 @@ public class CustomerDAOImpl implements CustomerDAO {
    *
    * @param rs Result set from customer DAO query.
    * @return Customer object with parsed information.
+   * @throws SQLException if error parsing column from result set.
    */
   private Customer parseCustomer(ResultSet rs) throws SQLException {
     Customer customer;

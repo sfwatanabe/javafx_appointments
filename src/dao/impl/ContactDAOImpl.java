@@ -68,6 +68,7 @@ public class ContactDAOImpl implements ContactDAO {
    *
    * @param rs Result set from contact DAO query.
    * @return Contact object with parsed information.
+   * @throws SQLException if error parsing column from result set.
    */
   private Contact parseContact(ResultSet rs) throws SQLException {
     Contact contact;

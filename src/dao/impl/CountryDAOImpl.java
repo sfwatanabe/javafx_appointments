@@ -79,6 +79,7 @@ public class CountryDAOImpl implements CountryDAO {
    *
    * @param rs Result set from country DAO query.
    * @return Country object with parsed information.
+   * @throws SQLException if error parsing column from result set.
    */
   private Country parseCountry(ResultSet rs) throws SQLException {
     Country country;

@@ -80,6 +80,7 @@ public class UserDAOImpl implements UserDAO {
    *
    * @param rs Result set from user DAO query.
    * @return User object with parsed information.
+   * @throws SQLException if error parsing column from result set.
    */
   private User parseUser(ResultSet rs) throws SQLException {
     User user;

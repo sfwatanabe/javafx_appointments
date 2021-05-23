@@ -97,6 +97,7 @@ public class DivisionBookingsDAOImpl extends ReportDAO {
    *
    * @param rs Result set from executed query.
    * @return DivisionBookingDTO object containing report data.
+   * @throws SQLException thrown when result set unable to get columns.
    */
   private DivisionBookingDTO parseDTO(ResultSet rs) throws SQLException {
     DivisionBookingDTO dto = null;

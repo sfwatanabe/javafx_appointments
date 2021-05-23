@@ -80,7 +80,11 @@ public class Customer extends Person {
     return address;
   }
 
-  /** Set customer postal code to supplied string value. */
+  /**
+   * Set customer postal code to supplied string value.
+   *
+   * @param address String representing the new postal code value.
+   */
   public void setAddress(String address) {
     this.address.set(address);
   }
@@ -118,7 +122,11 @@ public class Customer extends Person {
     return phoneNumber;
   }
 
-  /** Set customer phone number to supplied string value. */
+  /**
+   * Set customer phone number to supplied string value.
+   *
+   * @param phoneNumber String representing new phone number value.
+   */
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber.set(phoneNumber);
   }
@@ -137,7 +145,11 @@ public class Customer extends Person {
     return divisionId;
   }
 
-  /** Set divisionId to supplied integer value. */
+  /**
+   * Set divisionId to supplied integer value.
+   *
+   * @param divisionId Integer value to set division id to.
+   */
   public void setDivisionId(Integer divisionId) {
     this.divisionId.set(divisionId);
   }

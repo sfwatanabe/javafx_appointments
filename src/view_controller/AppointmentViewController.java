@@ -413,6 +413,7 @@ public class AppointmentViewController {
    * Cancel the current add or update operation and revert scene to the main view.
    *
    * @param event ActionEvent from user clicking on the cancel button.
+   * @throws IOException if unable to load fxml for main view.
    */
   @FXML
   private void cancelHandler(ActionEvent event) throws IOException {
@@ -428,6 +429,7 @@ public class AppointmentViewController {
    * Close the current scene and refresh the data in the main view.
    *
    * @param event ActionEvent triggered by save or cancel button handlers.
+   * @throws IOException if unable to load main view fxml.
    */
   @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {

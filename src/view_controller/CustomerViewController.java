@@ -217,7 +217,9 @@ public class CustomerViewController {
    * Overloaded method initializes user data, isNew flag, and current record and
    * prepares labels.
    *
+   * @param isNew Flag indicating if we are adding a new user.
    * @param user User currently accessing the application.
+   * @param customer Customer record currently being updated.
    */
   public void initCustomerData(boolean isNew, User user, Customer customer) {
     this.user = user;
@@ -314,6 +316,7 @@ public class CustomerViewController {
    * Cancel the current add or update operation and revert scene to the main view.
    *
    * @param event ActionEvent from user clicking on the cancel button.
+   * @throws IOException if unable to load main view fxml.
    */
   @FXML
   private void cancelHandler(ActionEvent event) throws IOException {
@@ -329,6 +332,7 @@ public class CustomerViewController {
    * Close the current scene and refresh the data in the main view.
    *
    * @param event ActionEvent triggered by save or cancel button handlers.
+   * @throws IOException if unable to load main view fxml.
    */
   @SuppressWarnings("DuplicatedCode")
   private void loadMainView(ActionEvent event) throws IOException {

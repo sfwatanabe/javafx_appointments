@@ -105,7 +105,7 @@ public class TextTableBuilder<T> {
   }
 
   /**
-   * Formats result string using the given list of elements. Column headers &
+   * Formats result string using the given list of elements. Column headers &amp
    * separator formatted before row data appended to string builder. Returns
    * formatted string for output.
    *

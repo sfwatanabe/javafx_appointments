@@ -178,7 +178,12 @@ public class BusinessHours {
     return localOpen + " - " + localClose;
   }
 
+
   /**
+   * Converts the given local date time into business time based on the home
+   * zone id of the business application.
+   *
+   * @param ldt Local date time in system default time zone.
    * @return Formatted date time string for use in log files or console output
    *         in business hours.
    */

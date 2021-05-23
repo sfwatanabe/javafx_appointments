@@ -120,6 +120,7 @@ public class MonthlyReportDAOImpl extends ReportDAO {
    *
    * @param rs Result set from executed query.
    * @return ApptTypeSalesDTO object containing report data.
+   * @throws SQLException thrown when result set unable to get columns.
    */
   private ApptTypeSalesDTO parseDTO(ResultSet rs) throws SQLException {
     ApptTypeSalesDTO dto = null;

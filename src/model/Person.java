@@ -49,12 +49,12 @@ public abstract class Person {
   // Getter & Setter Methods
   //===========================================================================
   
-  /** Returns integer value of customer id. */
+  /** @return integer value of customer id. */
   public Integer getId() {
     return id.get();
   }
 
-  /** Returns ObjectProperty representing value of customer id. */
+  /** @return ObjectProperty representing value of customer id. */
   public ObjectProperty<Integer> idProperty() {
     return id;
   }
@@ -68,12 +68,12 @@ public abstract class Person {
     this.id.set(id);
   }
 
-  /** Returns string value of customer name. */
+  /** @return string value of customer name. */
   public String getName() {
     return name.get();
   }
 
-  /** Returns StringProperty representing value of customer name. */
+  /** @return StringProperty representing value of customer name. */
   public StringProperty nameProperty() {
     return name;
   }

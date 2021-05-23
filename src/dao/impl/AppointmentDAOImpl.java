@@ -299,6 +299,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
    *
    * @param rs Result set form appointment DAO query.
    * @return Appointment object with parsed information.
+   * @throws SQLException if error getting values from result set.
    */
 
   private Appointment parseAppointment(ResultSet rs) throws SQLException {

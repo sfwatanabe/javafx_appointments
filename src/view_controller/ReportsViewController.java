@@ -14,6 +14,23 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import model.User;
 
+
+/**
+ * Handles the displaying of requested report data from the main view using a
+ * factory method to generate text reports for the view.
+ *
+ * <p>
+ *   <strong>Idea for Extension:</strong>
+ *   <blockquote>
+ *     Convert text area view to dynamic table view which adjusts based on type
+ *     of report called. May require addition of a separate object for report
+ *     assembly to hold sub title and associated table view data.
+ *   </blockquote>
+ *
+ *
+ *
+ * @author Sakae Watanabe
+ */
 public class ReportsViewController {
 
   /**

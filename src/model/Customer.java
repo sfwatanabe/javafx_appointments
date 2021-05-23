@@ -103,7 +103,11 @@ public class Customer extends Person {
     return postalCode;
   }
 
-  /** Set customer postal code to supplied string value. */
+  /**
+   * Set customer postal code to supplied string value.
+   *
+   * @param postalCode String value representing new postal code.
+   */
   public void setPostalCode(String postalCode) {
     this.postalCode.set(postalCode);
   }

@@ -1,7 +1,7 @@
-Project: Appointment Scheduler v1.0
+Project: Appointment Scheduler v1.0.1
 Author: Sakae Watanabe
 Contact: swatan3@wgu.edu
-Date: 2021-05-19
+Date: 2021-05-26
 
 Appointment Scheduler is a Java based application built using Java SE 11 with JavaFX and JDBC
 libraries to provide a GUI app for creating, updating, and deleting customers and appointments
@@ -51,3 +51,6 @@ Discussion of Lambda References:
     * view_controller.CustomerViewController.initialize
     * view_controller.MainViewController.initialize
     * view_controller.MainViewController.apptViewRadio
+
+Javadoc:
+  Located in root under Javadocs directory.

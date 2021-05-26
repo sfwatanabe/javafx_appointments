@@ -43,14 +43,14 @@ Report Description for Part A3F:
   through the customer table.
 
 Discussion of Lambda References:
-  Comments and explanations can be found within the javadoc comments for each of
-  the following methods:
-    * utils.ControlValidation.checkEmptySelections
-    * view_controller.AppointmentViewController.initialize
-    * view_controller.AppointmentViewController.initAppointmentData
-    * view_controller.CustomerViewController.initialize
+  Comments and explanations can be found within the javadoc comments by searching
+  Lambda for each of the following methods:
     * view_controller.MainViewController.initialize
     * view_controller.MainViewController.apptViewRadio
+    * view_controller.CustomerViewController.initialize
+    * view_controller.AppointmentViewController.initialize
+    * view_controller.AppointmentViewController.initAppointmentData
+    * utils.ControlValidation.checkEmptySelections
 
 Javadoc:
   Located in root under Javadocs directory.

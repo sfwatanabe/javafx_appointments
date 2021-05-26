@@ -245,7 +245,7 @@ public class AppointmentViewController {
    * field listeners to all controls that require data completion.
    *
    * <p>
-   * <strong>DISCUSSION OF LAMBDA</strong> - <blockquote>Lambda used to add focus listeners to all field controls
+   * <strong>DISCUSSION OF {@index LAMBDA_5}</strong> - <blockquote>Lambda used to add focus listeners to all field controls
    *                        for scene that require data collection. Reduced necessary
    *                        lines of code for implementation using this consumer
    *                        interface. Same method as implemented in Customer View
@@ -278,7 +278,7 @@ public class AppointmentViewController {
    * record scene,preparing appropriate scene labels as well.
    *
    * <p>
-   *   <strong>DISCUSSION OF LAMBDA</strong> -
+   *   <strong>DISCUSSION OF {@index LAMBDA_6}</strong> -
    *   <blockquote>
    *     Use of lambda function to initialize the field status map that indicates
    *     if the field has been completed. The BiFunction interface of replaceAll

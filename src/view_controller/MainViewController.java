@@ -286,12 +286,12 @@ public class MainViewController implements Initializable {
    * both customer and appointment table views.
    *
    * <p>
-   *   <strong>DISCUSSION OF LAMBDA (1)</strong> - <blockquote>Lambda expression used for setting cell value
+   *   <strong>DISCUSSION OF {@index LAMBDA_1} </strong> - <blockquote>Lambda expression used for setting cell value
    *                             factories for all table data via property access,
    *                             reducing the necessary code to implement interface.</blockquote>
    *
    * <p>
-   *   <strong>DISCUSSION OF LAMBDA (2)</strong> - <blockquote>Lambda expression used for setting cell factory
+   *   <strong>DISCUSSION OF {@index LAMBDA_2} </strong> - <blockquote>Lambda expression used for setting cell factory
    *                               for date columns allowing use of method defined
    *                               within class to return table cell data.</blockquote>
    *
@@ -612,7 +612,7 @@ public class MainViewController implements Initializable {
    * filtered list based on selected radio button using lambda expression.
    *
    * <p>
-   *   <strong>DISCUSSION OF LAMBDA (3)</strong> -  <blockquote>Filtered list predicates are updated using lambda
+   *   <strong>DISCUSSION OF {@index LAMBDA_3} </strong> -  <blockquote>Filtered list predicates are updated using lambda
    *                               expressions, allowing reduced code for interface.</blockquote>
    *
    *

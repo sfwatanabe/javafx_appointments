@@ -3,6 +3,7 @@ package view_controller;
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.ContactDAOImpl;
 import dao.impl.CustomerDAOImpl;
+import dao.impl.UserDAOImpl;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -86,14 +87,24 @@ public class AppointmentViewController {
   private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
 
   /**
+   * UserDAO implementation for data retrieval.
+   */
+  private final UserDAOImpl userDAO = new UserDAOImpl();
+
+  /**
    * List of contacts for use in the contact combo box.
    */
-  private ObservableList<Contact> contacts = contactDAO.getAll();
+  private ObservableList<Contact> contacts;
 
   /**
    * List of customers for use in the customer combo box.
    */
-  private ObservableList<Customer> customers = customerDAO.getAll();
+  private ObservableList<Customer> customers;
+
+  /**
+   * List of users for use in user combo box.
+   */
+  private ObservableList<User> users;
 
   /**
    * FilteredList of starting times for appointments.
@@ -238,6 +249,7 @@ public class AppointmentViewController {
   public void initialize() {
     contacts = contactDAO.getAll();
     customers = customerDAO.getAll();
+    users = userDAO.getAll();
 
     startTimes = BusinessHours.getStartTimes().filtered(s -> true);
     endTimes = BusinessHours.getEndTimes().filtered(e -> true);

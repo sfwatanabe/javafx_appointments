@@ -44,7 +44,6 @@ public class DBConnector {
       conn = DriverManager.getConnection(jdbcURL, config.getUsername(),
           config.getPassword());
       System.out.println("Connection successful.");
-
     }
   }
 

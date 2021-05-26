@@ -177,6 +177,12 @@ public class AppointmentViewController {
   private ComboBox<LocalTime> endTime;
 
   /**
+   * Contains list of available users to assign to appointment.
+   */
+  @FXML
+  private ComboBox<User> userCombo;
+
+  /**
    * Date picker for appointment start date.
    */
   @FXML
@@ -256,11 +262,12 @@ public class AppointmentViewController {
 
     contactCombo.setItems(contacts);
     customerCombo.setItems(customers);
+    userCombo.setItems(users);
     startTime.setItems(startTimes);
     endTime.setItems(endTimes);
 
     fieldControls.addAll(Arrays.asList(titleField, locationField, typeField, contactCombo,
-        customerCombo, startTime, endTime, startDate, endTime, endDate, descriptionField));
+        customerCombo, userCombo, startTime, endTime, startDate, endTime, endDate, descriptionField));
     fieldControls.forEach(c -> ControlValidation
         .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
 
@@ -269,6 +276,14 @@ public class AppointmentViewController {
   /**
    * Overloaded method for initializes user data and isNew flag for appointment
    * record scene,preparing appropriate scene labels as well.
+   *
+   * <p>
+   *   <strong>DISCUSSION OF LAMBDA</strong> -
+   *   <blockquote>
+   *     Use of lambda function to initialize the field status map that indicates
+   *     if the field has been completed. The BiFunction interface of replaceAll
+   *     allows better code readability and removes the need for an iterative loop.
+   *   </blockquote>
    *
    * @param isNew Indicates if we are adding a new appointment record.
    * @param user  User currently accessing the application.
@@ -279,7 +294,6 @@ public class AppointmentViewController {
     this.isNew = isNew;
     this.currentAppointment = null;
     updateAppointmentLabels();
-    fieldControlStatus.replaceAll((k, v) -> v = false);
   }
 
   /**
@@ -296,7 +310,6 @@ public class AppointmentViewController {
     this.isNew = isNew;
     this.currentAppointment = appointment;
     updateAppointmentLabels();
-    fieldControlStatus.replaceAll((k, v) -> v = true);
   }
 
 
@@ -305,8 +318,10 @@ public class AppointmentViewController {
    */
   private void updateAppointmentLabels() {
     if (isNew) {
+      fieldControlStatus.replaceAll((k, v) -> v = false);
       appointmentType.setText("Create New");
       startDate.setValue(LocalDate.now());
+      userCombo.setValue(user);
 
     } else if (!isNew && currentAppointment != null) {
       appointmentType.setText("Update Existing");
@@ -320,9 +335,12 @@ public class AppointmentViewController {
 
       contactCombo.setValue((Contact)findPersonById(contacts, currentAppointment.getContactId()));
       customerCombo.setValue((Customer)findPersonById(customers, currentAppointment.getCustomerId()));
+      userCombo.setValue((User)findPersonById(users, currentAppointment.getUserId()));
 
       startTime.setValue(currentAppointment.getLocalStartTime());
       endTime.setValue(currentAppointment.getLocalEndTime());
+
+      fieldControlStatus.replaceAll((k, v) -> v = true);
     }
 
   }

@@ -1,5 +1,6 @@
 Project: Appointment Scheduler v1.0
 Author: Sakae Watanabe
+Contact: swatan3@wgu.edu
 Date: 2021-05-19
 
 Appointment Scheduler is a Java based application built using Java SE 11 with JavaFX and JDBC
@@ -40,3 +41,12 @@ Report Description for Part A3F:
   performance incentives based on similar criteria. In order to pull the report to include
   division name a three table join was required as the transitive relationship flows
   through the customer table.
+
+Discussion of Lambda References:
+  Comments and explanations can be found within the javadoc comments for each of
+  the following methods:
+    * utils.ControlValidation.checkEmptySelections
+    * view_controller.AppointmentViewController.initialize
+    * view_controller.CustomerViewController.initialize
+    * view_controller.MainViewController.initialize
+    * view_controller.MainViewController.apptViewRadio

@@ -286,15 +286,15 @@ public class MainViewController implements Initializable {
    * both customer and appointment table views.
    *
    * <p>
-   *   DISCUSSION OF LAMBDA (1) :  Lambda expression used for setting cell value
+   *   <strong>DISCUSSION OF LAMBDA (1)</strong> - <blockquote>Lambda expression used for setting cell value
    *                             factories for all table data via property access,
-   *                             reducing the necessary code to implement interface.
-   * </p>
+   *                             reducing the necessary code to implement interface.</blockquote>
+   *
    * <p>
-   *   DISCUSSION OF LAMBDA (2) :  Lambda expression used for setting cell factory
+   *   <strong>DISCUSSION OF LAMBDA (2)</strong> - <blockquote>Lambda expression used for setting cell factory
    *                               for date columns allowing use of method defined
-   *                               within class to return table cell data.
-   * </p>
+   *                               within class to return table cell data.</blockquote>
+   *
    */
   @FXML
   public void initialize(URL Location, ResourceBundle resources) {
@@ -612,9 +612,9 @@ public class MainViewController implements Initializable {
    * filtered list based on selected radio button using lambda expression.
    *
    * <p>
-   *   DISCUSSION OF LAMBDA (3) :  Filtered list predicates are updated using lambda
-   *                               expressions, allowing reduced code for interface.
-   * </p>
+   *   <strong>DISCUSSION OF LAMBDA (3)</strong> -  <blockquote>Filtered list predicates are updated using lambda
+   *                               expressions, allowing reduced code for interface.</blockquote>
+   *
    *
    *
    * @param event ActionEvent triggered by user selecting radio button.

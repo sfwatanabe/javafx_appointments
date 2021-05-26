@@ -227,11 +227,12 @@ public class AppointmentViewController {
    * Initialize values for combo boxes, start times, end times, and add empty
    * field listeners to all controls that require data completion.
    *
-   * DISCUSSION OF LAMBDA - Lambda used to add focus listeners to all field controls
+   * <p>
+   * <strong>DISCUSSION OF LAMBDA</strong> - <blockquote>Lambda used to add focus listeners to all field controls
    *                        for scene that require data collection. Reduced necessary
    *                        lines of code for implementation using this consumer
    *                        interface. Same method as implemented in Customer View
-   *                        Controller.
+   *                        Controller.</blockquote>
    */
   @FXML
   public void initialize() {

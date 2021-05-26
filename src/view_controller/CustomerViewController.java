@@ -176,12 +176,12 @@ public class CustomerViewController {
   /**
    * Initialize method prepares the scene controls, contents, and adds listeners
    * for basic field validation to prevent empty field submissions.
-   *
-   * DISCUSSION OF LAMBDA - Lambda used to add focus listeners to all field controls
+   * <p>
+   * <strong>DISCUSSION OF LAMBDA</strong> - <blockquote>Lambda used to add focus listeners to all field controls
    *                        for scene that require data collection. Reduced necessary
    *                        lines of code for implementation using this consumer
    *                        interface. Same method as implemented in Appointment View
-   *                        Controller.
+   *                        Controller.</blockquote>
    */
   @FXML
   public void initialize() {

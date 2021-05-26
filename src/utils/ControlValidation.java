@@ -19,10 +19,12 @@ public class ControlValidation {
    * Adds listener to data collection control that check if input is present in
    * field, sets warning message, and disables button. If no input present in
    * the field border changed to red and flagged as false in field status map.
-   *
-   * DISCUSSION OF LAMBDA - Lambda function used to implement predicate interface
-   *                        to remove styleClass if our control filled. Choice to
-   *                        use lambda based on better readability for the code.
+   *<p>
+   * <strong>DISCUSSION OF LAMBDA</strong> -
+   * <blockquote>
+   *   Lambda function used to implement predicate interface to remove styleClass
+   *   if our control filled. Choice to use lambda based on better code readability.
+   * </blockquote>
    *
    * @param control Data collection control on form that must contain input.
    * @param statusMap hash map contains key from control-id, boolean true if

@@ -389,6 +389,7 @@ public class AppointmentViewController {
         if (conflictList.isEmpty()) {
           int customerId = customerCombo.getValue().getId();
           int contactId = contactCombo.getValue().getId();
+          int userId = userCombo.getValue().getId();
           String contactName = contactCombo.getValue().getName();
           String title = titleField.getText().strip();
           String description = descriptionField.getText().strip();
@@ -397,8 +398,7 @@ public class AppointmentViewController {
 
           if (isNew) {
             currentAppointment = new Appointment(apptId, customerId, contactId, contactName,
-                user.getId(),
-                title, description, type, location, start, end);
+                userId, title, description, type, location, start, end);
             currentAppointment.setId(appointmentDAO.addAppointment(currentAppointment, user));
 
             if (currentAppointment.getId() > 0) {
@@ -415,6 +415,7 @@ public class AppointmentViewController {
             currentAppointment.setContactId(contactId);
             currentAppointment.setContactName(contactName);
             currentAppointment.setCustomerId(customerId);
+            currentAppointment.setUserId(userId);
             int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
             if (rowsAffected > 0) {
               NotificationHandler.warningPopup("Update Complete", "Appointment\n" +

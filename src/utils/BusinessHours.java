@@ -124,15 +124,6 @@ public class BusinessHours {
     ZonedDateTime openingZDT = ZonedDateTime.of(startZDT.toLocalDate(), openHours, businessZone);
     ZonedDateTime closingZDT = openingZDT.plusHours(SHIFT_LENGTH);
 
-    System.out.println(start);
-    System.out.println(end);
-
-    System.out.println(startZDT);
-    System.out.println(endZDT);
-
-    System.out.println(openingZDT);
-    System.out.println(closingZDT);
-
     if (startZDT.compareTo(endZDT) > 0) {
       inside = false;
     }

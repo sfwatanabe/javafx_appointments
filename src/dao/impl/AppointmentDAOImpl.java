@@ -186,7 +186,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     String newAppointment = "INSERT INTO appointments (Title, Description, Location, Type,"
         + " Start, End, Create_Date, Created_By, Last_Update,"
         + " Last_Updated_By, Customer_ID, User_ID, Contact_ID)"
-        + " VALUES (?,?,?, ?, ?, ?, NOW(), ?, NOW(), ?, ?, ?, ?)";
+        + " VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, ?, ?, ?)";
 
     try (PreparedStatement ps = conn
         .prepareStatement(newAppointment, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -199,7 +199,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
       ps.setString(7, user.getName());
       ps.setString(8, user.getName());
       ps.setInt(9, appointment.getCustomerId());
-      ps.setInt(10, user.getId());
+      ps.setInt(10, appointment.getUserId());
       ps.setInt(11, appointment.getContactId());
 
       rowsAffected = ps.executeUpdate();
@@ -245,7 +245,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
       ps.setTimestamp(5, Timestamp.valueOf(appointment.getEndTime()));
       ps.setString(6, user.getName());
       ps.setInt(7, appointment.getCustomerId());
-      ps.setInt(8, user.getId());
+      ps.setInt(8, appointment.getUserId());
       ps.setInt(9, appointment.getContactId());
       ps.setInt(10, appointment.getId());
 

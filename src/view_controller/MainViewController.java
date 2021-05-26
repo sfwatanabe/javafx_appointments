@@ -625,7 +625,7 @@ public class MainViewController implements Initializable {
       appointmentsFiltered.setPredicate(a -> true);
     } else if (viewByGroup.getSelectedToggle().equals(weekRadioButton)) {
       appointmentsFiltered
-          .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusDays(7)));
+          .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusWeeks(1)));
     } else if (viewByGroup.getSelectedToggle().equals(monthRadioButton)) {
       appointmentsFiltered
           .setPredicate(a -> a.getStartTime().isBefore(LocalDateTime.now().plusMonths(1)));

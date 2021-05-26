@@ -3,6 +3,7 @@ package view_controller;
 import dao.impl.AppointmentDAOImpl;
 import dao.impl.ContactDAOImpl;
 import dao.impl.CustomerDAOImpl;
+import dao.impl.UserDAOImpl;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -86,14 +87,24 @@ public class AppointmentViewController {
   private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
 
   /**
+   * UserDAO implementation for data retrieval.
+   */
+  private final UserDAOImpl userDAO = new UserDAOImpl();
+
+  /**
    * List of contacts for use in the contact combo box.
    */
-  private ObservableList<Contact> contacts = contactDAO.getAll();
+  private ObservableList<Contact> contacts;
 
   /**
    * List of customers for use in the customer combo box.
    */
-  private ObservableList<Customer> customers = customerDAO.getAll();
+  private ObservableList<Customer> customers;
+
+  /**
+   * List of users for use in user combo box.
+   */
+  private ObservableList<User> users;
 
   /**
    * FilteredList of starting times for appointments.
@@ -164,6 +175,12 @@ public class AppointmentViewController {
    */
   @FXML
   private ComboBox<LocalTime> endTime;
+
+  /**
+   * Contains list of available users to assign to appointment.
+   */
+  @FXML
+  private ComboBox<User> userCombo;
 
   /**
    * Date picker for appointment start date.
@@ -238,17 +255,19 @@ public class AppointmentViewController {
   public void initialize() {
     contacts = contactDAO.getAll();
     customers = customerDAO.getAll();
+    users = userDAO.getAll();
 
     startTimes = BusinessHours.getStartTimes().filtered(s -> true);
     endTimes = BusinessHours.getEndTimes().filtered(e -> true);
 
     contactCombo.setItems(contacts);
     customerCombo.setItems(customers);
+    userCombo.setItems(users);
     startTime.setItems(startTimes);
     endTime.setItems(endTimes);
 
     fieldControls.addAll(Arrays.asList(titleField, locationField, typeField, contactCombo,
-        customerCombo, startTime, endTime, startDate, endTime, endDate, descriptionField));
+        customerCombo, userCombo, startTime, endTime, startDate, endTime, endDate, descriptionField));
     fieldControls.forEach(c -> ControlValidation
         .checkEmptySelections(c, fieldControlStatus, emptyWarning, saveButton));
 
@@ -257,6 +276,14 @@ public class AppointmentViewController {
   /**
    * Overloaded method for initializes user data and isNew flag for appointment
    * record scene,preparing appropriate scene labels as well.
+   *
+   * <p>
+   *   <strong>DISCUSSION OF LAMBDA</strong> -
+   *   <blockquote>
+   *     Use of lambda function to initialize the field status map that indicates
+   *     if the field has been completed. The BiFunction interface of replaceAll
+   *     allows better code readability and removes the need for an iterative loop.
+   *   </blockquote>
    *
    * @param isNew Indicates if we are adding a new appointment record.
    * @param user  User currently accessing the application.
@@ -267,7 +294,6 @@ public class AppointmentViewController {
     this.isNew = isNew;
     this.currentAppointment = null;
     updateAppointmentLabels();
-    fieldControlStatus.replaceAll((k, v) -> v = false);
   }
 
   /**
@@ -284,7 +310,6 @@ public class AppointmentViewController {
     this.isNew = isNew;
     this.currentAppointment = appointment;
     updateAppointmentLabels();
-    fieldControlStatus.replaceAll((k, v) -> v = true);
   }
 
 
@@ -293,8 +318,10 @@ public class AppointmentViewController {
    */
   private void updateAppointmentLabels() {
     if (isNew) {
+      fieldControlStatus.replaceAll((k, v) -> v = false);
       appointmentType.setText("Create New");
       startDate.setValue(LocalDate.now());
+      userCombo.setValue(user);
 
     } else if (!isNew && currentAppointment != null) {
       appointmentType.setText("Update Existing");
@@ -308,9 +335,12 @@ public class AppointmentViewController {
 
       contactCombo.setValue((Contact)findPersonById(contacts, currentAppointment.getContactId()));
       customerCombo.setValue((Customer)findPersonById(customers, currentAppointment.getCustomerId()));
+      userCombo.setValue((User)findPersonById(users, currentAppointment.getUserId()));
 
       startTime.setValue(currentAppointment.getLocalStartTime());
       endTime.setValue(currentAppointment.getLocalEndTime());
+
+      fieldControlStatus.replaceAll((k, v) -> v = true);
     }
 
   }
@@ -359,6 +389,7 @@ public class AppointmentViewController {
         if (conflictList.isEmpty()) {
           int customerId = customerCombo.getValue().getId();
           int contactId = contactCombo.getValue().getId();
+          int userId = userCombo.getValue().getId();
           String contactName = contactCombo.getValue().getName();
           String title = titleField.getText().strip();
           String description = descriptionField.getText().strip();
@@ -367,8 +398,7 @@ public class AppointmentViewController {
 
           if (isNew) {
             currentAppointment = new Appointment(apptId, customerId, contactId, contactName,
-                user.getId(),
-                title, description, type, location, start, end);
+                userId, title, description, type, location, start, end);
             currentAppointment.setId(appointmentDAO.addAppointment(currentAppointment, user));
 
             if (currentAppointment.getId() > 0) {
@@ -385,6 +415,7 @@ public class AppointmentViewController {
             currentAppointment.setContactId(contactId);
             currentAppointment.setContactName(contactName);
             currentAppointment.setCustomerId(customerId);
+            currentAppointment.setUserId(userId);
             int rowsAffected = appointmentDAO.updateAppointment(currentAppointment, user);
             if (rowsAffected > 0) {
               NotificationHandler.warningPopup("Update Complete", "Appointment\n" +

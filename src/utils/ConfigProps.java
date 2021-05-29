@@ -23,6 +23,8 @@ public class ConfigProps {
   private static String password;
   /** String for path to config.properties. */
   private static final String propFile = "resources/config/config.properties";
+  /** Url address for database connection. */
+  private static String dbUrl;
 
   public ConfigProps() { }
 
@@ -42,6 +44,7 @@ public class ConfigProps {
         prop.load(inputStream);
         username = prop.getProperty("userName");
         password = prop.getProperty("password");
+        dbUrl = prop.getProperty("dbUrl");
       } else {
         System.out.println("Unable to load from specified path " + propFile);
         throw new FileNotFoundException("Properties File '" + propFile + "' not found.");
@@ -87,5 +90,24 @@ public class ConfigProps {
       }
     }
     return password;
+  }
+
+  /**
+   * Returns a string value for the user password.
+   *
+   * @return String representing user name for login credentials.
+   */
+  public String getDbUrl() {
+    if(!loaded) {
+      try {
+        getPropValues();
+        loaded = true;
+      } catch (IOException e) {
+        e.printStackTrace();
+        NotificationHandler.warningPopup(e.getMessage(),
+            "Unable to get connection url.");
+      }
+    }
+    return dbUrl;
   }
 }

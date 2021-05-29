@@ -14,13 +14,13 @@ public class DBConnector {
   //===========================================================================
   // JDBC Connection Information
   //===========================================================================
+
+  /**
+   * Connection protocol settings for MySQL database connection.
+   */
   private static final String protocol = "jdbc";
   private static final String vendor = ":mysql:";
-  private static final String ipAddress = "//wgudb.ucertify.com/WJ08Eq0";
   private static final String timeZone = "?connectionTimeZone=SERVER";
-
-  private static final String jdbcURL = protocol + vendor + ipAddress + timeZone;
-
   private static final String MYSQL_JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
   /** Connection object for the utility. */
@@ -38,8 +38,10 @@ public class DBConnector {
    */
   public static void startConnection() throws ClassNotFoundException, SQLException{
     if(conn == null){
-
       ConfigProps config = new ConfigProps();
+
+      String jdbcURL = protocol + vendor + config.getDbUrl() + timeZone;
+
       Class.forName(MYSQL_JDBC_DRIVER);
       conn = DriverManager.getConnection(jdbcURL, config.getUsername(),
           config.getPassword());

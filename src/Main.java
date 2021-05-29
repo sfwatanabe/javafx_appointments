@@ -32,7 +32,6 @@ public class Main extends Application {
     }
 
     private void confirmClose(WindowEvent event) {
-        System.out.println("We did this");
         if(!NotificationHandler.confirmPopup(event, "Changes will not be saved.")) {
             event.consume();
         }
